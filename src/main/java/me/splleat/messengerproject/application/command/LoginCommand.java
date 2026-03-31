@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.application.auth.command;
+package me.splleat.messengerproject.application.command;
 
 import me.splleat.messengerproject.interfaces.rest.request.LoginRequest;
 

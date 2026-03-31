@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.interfaces.rest.response;
 
-import me.splleat.messengerproject.application.auth.result.LoginResult;
+import me.splleat.messengerproject.application.result.LoginResult;
 
 public record LoginResponse(
     String accessToken,

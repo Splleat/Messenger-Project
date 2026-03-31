@@ -3,7 +3,7 @@ package me.splleat.messengerproject.interfaces.rest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.auth.LoginUseCase;
-import me.splleat.messengerproject.application.auth.command.LoginCommand;
+import me.splleat.messengerproject.application.command.LoginCommand;
 import me.splleat.messengerproject.interfaces.rest.request.LoginRequest;
 import me.splleat.messengerproject.interfaces.rest.response.LoginResponse;
 import org.springframework.http.ResponseEntity;

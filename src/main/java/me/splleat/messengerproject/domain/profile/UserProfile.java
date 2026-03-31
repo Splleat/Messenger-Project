@@ -3,6 +3,7 @@ package me.splleat.messengerproject.domain.profile;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.domain.user.User;
 
@@ -18,20 +19,28 @@ public class UserProfile {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Getter
+    @Column(name = "name")
+    private String name;
+
+    @Getter
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Getter
     @Column(name = "status_message")
     private String statusMessage;
 
     @Builder
-    private UserProfile(User user) {
+    private UserProfile(User user, String name) {
         this.user = user;
+        this.name = name;
     }
 
-    public static UserProfile create(User user) {
+    public static UserProfile create(User user, String name) {
         return UserProfile.builder()
                 .user(user)
+                .name(name)
                 .build();
     }
 }

@@ -7,7 +7,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.global.exception.BusinessException;
 import me.splleat.messengerproject.global.exception.ErrorCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

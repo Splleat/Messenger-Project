@@ -28,7 +28,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             errorCode = ErrorCode.UNAUTHORIZED;
         }
 
-        ApiErrorResponse errorResponse = ApiErrorResponse.of(errorCode);
+        ApiErrorResponse errorResponse = ApiErrorResponse.from(errorCode);
 
         objectMapper.writeValue(response.getWriter(), errorResponse);
     }

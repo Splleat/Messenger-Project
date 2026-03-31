@@ -3,8 +3,11 @@ package me.splleat.messengerproject.domain.user;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.splleat.messengerproject.domain.user.exception.UserPasswordMismatchException;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +15,6 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends SoftDeletableEntity {
-    @Column(name = "name")
-    private String name;
 
     @Column(name = "email")
     private String email;
@@ -21,6 +22,7 @@ public class User extends SoftDeletableEntity {
     @Column(name = "password_hash")
     private String passwordHash;
 
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private UserRole role;
@@ -33,8 +35,7 @@ public class User extends SoftDeletableEntity {
     private LocalDateTime lastLoginAt;
 
     @Builder
-    private User(String name, String email, String passwordHash, UserRole role, UserStatus status, LocalDateTime lastLoginAt) {
-        this.name = name;
+    private User(String email, String passwordHash, UserRole role, UserStatus status, LocalDateTime lastLoginAt) {
         this.email = email;
         this.passwordHash = passwordHash;
         this.role = role;
@@ -42,13 +43,20 @@ public class User extends SoftDeletableEntity {
         this.lastLoginAt = lastLoginAt;
     }
 
-    public static User create(String name, String email, String passwordHash, UserRole role) {
+    public static User create(String email, String passwordHash, UserRole role) {
         return User.builder()
-                .name(name)
                 .email(email)
                 .passwordHash(passwordHash)
                 .role(role)
                 .status(UserStatus.ACTIVE)
                 .build();
+    }
+
+    public void login(String rawPassword, PasswordEncoder encoder) {
+        if (!encoder.matches(rawPassword, this.passwordHash)) {
+            throw new UserPasswordMismatchException();
+        }
+
+        this.lastLoginAt = LocalDateTime.now();
     }
 }

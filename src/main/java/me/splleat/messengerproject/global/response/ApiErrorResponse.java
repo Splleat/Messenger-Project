@@ -9,7 +9,7 @@ public record ApiErrorResponse(
         String message,
         LocalDateTime timestamp
 ) {
-    public static ApiErrorResponse of(ErrorCode errorCode) {
+    public static ApiErrorResponse from(ErrorCode errorCode) {
         return new ApiErrorResponse(
                 errorCode.getCode(),
                 errorCode.getMessage(),

@@ -31,7 +31,7 @@ public class JwtProvider {
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
 
-    public String createAccessToken(long userId, UserRole role) {
+    public String createAccessToken(Long userId, UserRole role) {
         Date accessExpiration = new Date();
 
         accessExpiration.setTime(accessExpiration.getTime() + accessTokenExpiration);
@@ -44,7 +44,7 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String createRefreshToken(long userId) {
+    public String createRefreshToken(Long userId) {
         Date refreshExpiration = new Date();
 
         refreshExpiration.setTime(refreshExpiration.getTime() + refreshTokenExpiration);

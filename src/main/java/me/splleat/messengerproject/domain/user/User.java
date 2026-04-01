@@ -31,6 +31,7 @@ public class User extends SoftDeletableEntity {
     @Column(name = "status")
     private UserStatus status;
 
+    @Getter
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 

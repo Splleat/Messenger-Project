@@ -1,15 +1,16 @@
 package me.splleat.messengerproject.interfaces.rest.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.Length;
+import me.splleat.messengerproject.application.command.LoginCommand;
 
 public record LoginRequest(
-        @NotBlank
-        @Email
+        @NotBlank(message = "이메일은 필수 입력값입니다.")
         String email,
 
-        @NotBlank
-        @Length(min = 8, max = 72)
+        @NotBlank(message = "비밀번호는 필수 입력값입니다.")
         String password
-) {}
+) {
+    public LoginCommand toCommand() {
+        return new LoginCommand(email, password);
+    }
+}

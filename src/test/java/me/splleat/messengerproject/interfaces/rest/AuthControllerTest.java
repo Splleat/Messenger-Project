@@ -1,8 +1,10 @@
 package me.splleat.messengerproject.interfaces.rest;
 
 import me.splleat.messengerproject.application.auth.LoginUseCase;
+import me.splleat.messengerproject.application.auth.SignUpUseCase;
 import me.splleat.messengerproject.application.result.LoginResult;
 import me.splleat.messengerproject.interfaces.rest.request.LoginRequest;
+import me.splleat.messengerproject.interfaces.rest.request.SignUpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ class AuthControllerTest {
 
     @MockitoBean
     private LoginUseCase mockLoginUseCase;
+
+    @MockitoBean
+    private SignUpUseCase mockSignUpUseCase;
 
     @Test
     @DisplayName("올바른 이메일과 비밀번호로 로그인을 시도하면 200 OK를 반환한다.")
@@ -58,6 +63,58 @@ class AuthControllerTest {
         mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(request)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("올바른 사용자 정보로 회원가입을 시도하면 201 Created를 반환한다.")
+    void signUp_WhenValidRequest_ReturnCreated() throws Exception {
+        // given
+        SignUpRequest request = new SignUpRequest("테스트", "test@test.com", "password1234");
+
+        // when & then
+        mockMvc.perform(post("/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request)))
+            .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("요청 사용자 정보가 null이거나 빈 값이면 400 Bad Request를 반환한다.")
+    void signUp_WhenEmptyRequest_ReturnBadRequest() throws Exception {
+        // given
+        SignUpRequest request = new SignUpRequest("", null, "");
+
+        // when & then
+        mockMvc.perform(post("/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("이메일 형식이 올바르지 않으면 400 Bad Request를 반환한다.")
+    void signUp_WhenInvalidEmail_ReturnBadRequest() throws Exception{
+        // given
+        SignUpRequest request = new SignUpRequest("테스트", "test", "password123");
+
+        // when & then
+        mockMvc.perform(post("/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("비밀번호가 8자 미만이면 400 Bad Request를 반환한다.")
+    void signUp_WhenShortPassword_ReturnBadRequest() throws Exception {
+        // given
+        SignUpRequest request = new SignUpRequest("테스트", "test@test.com", "pw");
+
+        // when & then
+        mockMvc.perform(post("/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isBadRequest());
     }
 }

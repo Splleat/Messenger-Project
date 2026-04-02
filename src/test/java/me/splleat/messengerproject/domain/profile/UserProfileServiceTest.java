@@ -1,5 +1,6 @@
 package me.splleat.messengerproject.domain.profile;
 
+import me.splleat.messengerproject.domain.profile.exception.UserProfileAlreadyExistsException;
 import me.splleat.messengerproject.domain.profile.exception.UserProfileNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -13,9 +14,11 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class UserProfileServiceTest {
@@ -24,6 +27,28 @@ class UserProfileServiceTest {
 
     @InjectMocks
     private UserProfileService userProfileService;
+
+    @Test
+    @DisplayName("이미 존재하는 사용자 아이디로 프로필을 등록하면 UserProfileAlreadyExistsException이 발생한다.")
+    void register_WhenExistsUserId_ThrowsException() {
+        // given
+        long id = 1L;
+        UserProfile userProfile = mock(UserProfile.class);
+
+        given(userProfile.getId())
+                .willReturn(id);
+
+        given(mockUserProfileRepository.existsById(id))
+                .willReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> userProfileService.register(userProfile))
+                .isInstanceOf(UserProfileAlreadyExistsException.class);
+
+        then(mockUserProfileRepository)
+                .should(never())
+                .save(any(UserProfile.class));
+    }
 
     @Test
     @DisplayName("올바른 사용자 아이디로 프로필을 조회하면 프로필 정보를 반환한다.")

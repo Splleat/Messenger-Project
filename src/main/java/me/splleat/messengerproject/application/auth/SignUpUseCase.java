@@ -24,9 +24,9 @@ public class SignUpUseCase {
 
         User user = User.create(command.email(), encryptedPassword, UserRole.USER);
 
-        UserProfile profile = UserProfile.create(user, command.name());
+        User savedUser = userService.register(user);
 
-        userService.register(user);
+        UserProfile profile = UserProfile.create(savedUser, command.name());
 
         userProfileService.register(profile);
     }

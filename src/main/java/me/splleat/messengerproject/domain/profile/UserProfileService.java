@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
 
-    public void register(UserProfile userProfile) {
+    public UserProfile register(UserProfile userProfile) {
         if (userProfileRepository.existsById(userProfile.getId())) {
             throw new UserProfileAlreadyExistsException();
         }
 
-        userProfileRepository.save(userProfile);
+        return userProfileRepository.save(userProfile);
     }
 
     public UserProfile getUserProfile(Long id) {

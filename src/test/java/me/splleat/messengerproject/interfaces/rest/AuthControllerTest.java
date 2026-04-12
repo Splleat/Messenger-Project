@@ -36,7 +36,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("올바른 이메일과 비밀번호로 로그인을 시도하면 200 OK를 반환한다.")
-    void login_WhenValidCredential_ReturnOk() throws Exception {
+    void login_WhenValidCredential_ReturnsOk() throws Exception {
         // given
         LoginRequest request = new LoginRequest("test@test.com", "password123");
         LoginResult result = new LoginResult("accessToken", "refreshToken", "test", "profileImage", "statusMessage");
@@ -55,7 +55,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("요청 이메일과 비밀번호가 null이거나 빈 값이면 400 Bad Request를 반환한다.")
-    void login_WhenEmptyCredential_ReturnConflict() throws Exception {
+    void login_WhenEmptyCredential_ReturnsBadRequest() throws Exception {
         // given
         LoginRequest request = new LoginRequest(null, "");
 
@@ -68,7 +68,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("올바른 사용자 정보로 회원가입을 시도하면 201 Created를 반환한다.")
-    void signUp_WhenValidRequest_ReturnCreated() throws Exception {
+    void signUp_WhenValidRequest_ReturnsCreated() throws Exception {
         // given
         SignUpRequest request = new SignUpRequest("테스트", "test@test.com", "password1234");
 
@@ -81,7 +81,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("요청 사용자 정보가 null이거나 빈 값이면 400 Bad Request를 반환한다.")
-    void signUp_WhenEmptyRequest_ReturnBadRequest() throws Exception {
+    void signUp_WhenEmptyRequest_ReturnsBadRequest() throws Exception {
         // given
         SignUpRequest request = new SignUpRequest("", null, "");
 
@@ -94,7 +94,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("이메일 형식이 올바르지 않으면 400 Bad Request를 반환한다.")
-    void signUp_WhenInvalidEmail_ReturnBadRequest() throws Exception{
+    void signUp_WhenInvalidEmail_ReturnsBadRequest() throws Exception{
         // given
         SignUpRequest request = new SignUpRequest("테스트", "test", "password123");
 
@@ -107,7 +107,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("비밀번호가 8자 미만이면 400 Bad Request를 반환한다.")
-    void signUp_WhenShortPassword_ReturnBadRequest() throws Exception {
+    void signUp_WhenShortPassword_ReturnsBadRequest() throws Exception {
         // given
         SignUpRequest request = new SignUpRequest("테스트", "test@test.com", "pw");
 

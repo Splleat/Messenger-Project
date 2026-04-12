@@ -32,7 +32,7 @@ class UserTest {
 
     @Test
     @DisplayName("올바른 비밀번호로 로그인을 시도하면 예외가 발생하지 않는다.")
-    void login_WhenValidPassword_NotThrows() {
+    void login_WhenValidPassword_DoesNotThrows() {
         // given
         User user = UserFixture.defaultUser();
         String password = "validPassword";

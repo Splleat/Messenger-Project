@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -35,6 +36,9 @@ class LoginUseCaseTest {
     @Mock
     private RefreshTokenRepository mockRefreshTokenRepository;
 
+    @Mock
+    private PasswordEncoder mockPasswordEncoder;
+
     @InjectMocks
     private LoginUseCase loginUseCase;
 
@@ -42,8 +46,9 @@ class LoginUseCaseTest {
     @DisplayName("이메일과 비밀번호가 일치하면 토큰과 프로필 정보를 반환한다.")
     void execute_WhenValidCredentials_ReturnsLoginResult() {
         // given
-        LoginCommand command = new LoginCommand("test@test.com", "password123");
+        String password = "password123";
 
+        LoginCommand command = new LoginCommand("test@test.com", password);
         User user = mock(User.class);
 
         Long userId = 1L;
@@ -83,5 +88,9 @@ class LoginUseCaseTest {
         then(mockRefreshTokenRepository)
                 .should()
                 .save(userId, result.refreshToken());
+
+        then(user)
+                .should()
+                .login(password, mockPasswordEncoder);
     }
 }

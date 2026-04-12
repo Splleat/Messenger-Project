@@ -52,7 +52,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("올바른 이메일로 사용자를 조회하면 사용자 정보를 반환한다.")
-    void getUser_WhenValidEmail_ReturnUser() {
+    void getUser_WhenValidEmail_ReturnsUser() {
         // given
         String email = "test@test.com";
         User user = mock(User.class);

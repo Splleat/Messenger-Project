@@ -52,7 +52,7 @@ class UserProfileServiceTest {
 
     @Test
     @DisplayName("올바른 사용자 아이디로 프로필을 조회하면 프로필 정보를 반환한다.")
-    void getUserProfile_WhenValidUserId_ReturnUserProfile() {
+    void getUserProfile_WhenValidUserId_ReturnsUserProfile() {
         // given
         Long userId = 1L;
         UserProfile profile = mock(UserProfile.class);

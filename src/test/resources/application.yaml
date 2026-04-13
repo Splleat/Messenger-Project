@@ -14,13 +14,6 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: 1234
-      connect-timeout: 2000ms
-
 jwt:
   secret: this-is-a-test-secret-key-with-at-least-32-characters-long
   access-token-expiration: 1800000 # 30분 (ms)

@@ -12,6 +12,7 @@ public class TestContainerConfig {
 
     @Bean
     @ServiceConnection(name = "mysql")
+    @SuppressWarnings("resource")
     MySQLContainer mySQLContainer() {
         return new MySQLContainer(DockerImageName.parse("mysql:9.6.0"))
                 .withDatabaseName("test_db")
@@ -22,6 +23,7 @@ public class TestContainerConfig {
 
     @Bean
     @ServiceConnection(name = "redis")
+    @SuppressWarnings("resource")
     GenericContainer<?> redisContainer() {
         return new GenericContainer<>(DockerImageName.parse("redis:7.4-alpine"))
                 .withExposedPorts(6379)

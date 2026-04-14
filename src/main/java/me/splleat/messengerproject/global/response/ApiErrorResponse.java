@@ -16,4 +16,12 @@ public record ApiErrorResponse(
                 LocalDateTime.now()
         );
     }
+
+    public static ApiErrorResponse of(ErrorCode errorCode, String message) {
+        return new ApiErrorResponse(
+                errorCode.getCode(),
+                message,
+                LocalDateTime.now()
+        );
+    }
 }

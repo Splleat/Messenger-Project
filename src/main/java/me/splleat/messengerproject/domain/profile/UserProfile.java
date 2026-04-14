@@ -11,6 +11,7 @@ import me.splleat.messengerproject.domain.user.User;
 @Table(name = "user_profiles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserProfile {
+    @Getter
     @Id
     private Long id;
 

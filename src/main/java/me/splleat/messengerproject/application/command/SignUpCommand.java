@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.application.command;
 
-public record LoginCommand(
+public record SignUpCommand(
+        String name,
         String email,
         String password
 ) {}

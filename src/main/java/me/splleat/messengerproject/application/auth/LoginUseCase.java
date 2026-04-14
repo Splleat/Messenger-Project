@@ -39,6 +39,6 @@ public class LoginUseCase {
 
         refreshTokenRepository.save(userId, refreshToken);
 
-        return LoginResult.of(accessToken, refreshToken, userProfile);
+        return LoginResult.of(accessToken, refreshToken, userId, userProfile);
     }
 }

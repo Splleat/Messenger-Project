@@ -4,4 +4,5 @@ import me.splleat.messengerproject.domain.profile.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
+    boolean existsByName(String name);
 }

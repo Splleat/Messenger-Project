@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends SoftDeletableEntity {
 
-    @Column(name = "email")
+    @Getter
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password_hash")
@@ -31,6 +32,7 @@ public class User extends SoftDeletableEntity {
     @Column(name = "status")
     private UserStatus status;
 
+    @Getter
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 

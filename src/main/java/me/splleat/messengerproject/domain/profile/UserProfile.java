@@ -6,29 +6,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.domain.user.User;
+import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
 @Table(name = "user_profiles")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserProfile {
-    @Getter
-    @Id
-    private Long id;
+@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class UserProfile extends BaseEntity {
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Getter
     @Column(name = "name")
     private String name;
 
-    @Getter
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Getter
     @Column(name = "status_message")
     private String statusMessage;
 

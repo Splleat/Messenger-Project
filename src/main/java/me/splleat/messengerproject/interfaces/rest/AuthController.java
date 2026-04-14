@@ -32,8 +32,6 @@ public class AuthController {
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpRequest request) {
         signUpUseCase.execute(request.toCommand());
 
-        // TODO: 리다이렉트 할 URL 생각
-
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

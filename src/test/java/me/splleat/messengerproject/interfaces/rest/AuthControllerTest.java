@@ -39,7 +39,7 @@ class AuthControllerTest {
     void login_WhenValidCredential_ReturnsOk() throws Exception {
         // given
         LoginRequest request = new LoginRequest("test@test.com", "password123");
-        LoginResult result = new LoginResult("accessToken", "refreshToken", "test", "profileImage", "statusMessage");
+        LoginResult result = new LoginResult("accessToken", "refreshToken", 1L, "test", "profileImage", "statusMessage");
 
         given(mockLoginUseCase.execute(request.toCommand()))
                 .willReturn(result);

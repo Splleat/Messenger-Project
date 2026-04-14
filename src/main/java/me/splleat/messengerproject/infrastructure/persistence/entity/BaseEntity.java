@@ -13,12 +13,14 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Persistable<Long> {
     @Id @Tsid
+    @Column(name = "id")
     private Long id;
 
     @Transient
     private boolean isNew = true;
 
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Override

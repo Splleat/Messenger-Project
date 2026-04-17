@@ -16,7 +16,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class UserTest {
     @Mock
-    private PasswordEncoder mockPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     static class UserFixture {
         static final String PASSWORD_HASH = "encryptedPassword";
@@ -37,11 +37,11 @@ class UserTest {
         User user = UserFixture.defaultUser();
         String password = "validPassword";
 
-        given(mockPasswordEncoder.matches(password, UserFixture.PASSWORD_HASH))
+        given(passwordEncoder.matches(password, UserFixture.PASSWORD_HASH))
                 .willReturn(true);
 
         // when & then
-        assertThatCode(() -> user.login(password, mockPasswordEncoder))
+        assertThatCode(() -> user.login(password, passwordEncoder))
                 .doesNotThrowAnyException();
 
         assertThat(user.getLastLoginAt())
@@ -55,11 +55,11 @@ class UserTest {
         User user = UserFixture.defaultUser();
         String wrongPassword = "wrongPassword";
 
-        given(mockPasswordEncoder.matches(wrongPassword, UserFixture.PASSWORD_HASH))
+        given(passwordEncoder.matches(wrongPassword, UserFixture.PASSWORD_HASH))
                 .willReturn(false);
 
         // when & then
-        assertThatThrownBy(() -> user.login(wrongPassword, mockPasswordEncoder))
+        assertThatThrownBy(() -> user.login(wrongPassword, passwordEncoder))
                 .isInstanceOf(UserPasswordMismatchException.class);
     }
 }

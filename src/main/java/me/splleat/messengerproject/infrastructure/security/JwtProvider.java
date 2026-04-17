@@ -8,12 +8,14 @@ import io.jsonwebtoken.security.Keys;
 import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.global.exception.BusinessException;
 import me.splleat.messengerproject.global.exception.ErrorCode;
+import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtProvider {
@@ -31,29 +33,36 @@ public class JwtProvider {
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
 
-    public String createAccessToken(Long userId, UserRole role) {
+    public TokenResult createAccessToken(Long userId, UserRole role) {
+        String jti = UUID.randomUUID().toString();
         Date accessExpiration = new Date();
 
         accessExpiration.setTime(accessExpiration.getTime() + accessTokenExpiration);
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .subject(String.valueOf(userId))
+                .id(jti)
                 .claim("role", role)
                 .expiration(accessExpiration)
                 .signWith(secretKey)
                 .compact();
+
+        return new TokenResult(jti, accessToken, accessExpiration.getTime());
     }
 
-    public String createRefreshToken(Long userId) {
+    public TokenResult createRefreshToken(Long userId) {
+        String jti = UUID.randomUUID().toString();
         Date refreshExpiration = new Date();
 
         refreshExpiration.setTime(refreshExpiration.getTime() + refreshTokenExpiration);
 
-        return Jwts.builder()
+        String refreshToken = Jwts.builder()
                 .subject(String.valueOf(userId))
                 .expiration(refreshExpiration)
                 .signWith(secretKey)
                 .compact();
+
+        return new TokenResult(jti, refreshToken, refreshExpiration.getTime());
     }
 
     public Claims getClaims(String token) {
@@ -76,5 +85,13 @@ public class JwtProvider {
 
     public String getUserRole(Claims claims) {
         return claims.get("role").toString();
+    }
+
+    public String getJti(Claims claims) {
+        return claims.getId();
+    }
+
+    public long getExpiration(Claims claims) {
+        return claims.getExpiration().getTime();
     }
 }

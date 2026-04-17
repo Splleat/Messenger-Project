@@ -3,23 +3,23 @@ package me.splleat.messengerproject.interfaces.rest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.auth.LoginUseCase;
-import me.splleat.messengerproject.application.auth.SignUpUseCase;
+import me.splleat.messengerproject.application.auth.LogoutUseCase;
+import me.splleat.messengerproject.application.auth.RegisterUseCase;
 import me.splleat.messengerproject.interfaces.rest.request.LoginRequest;
-import me.splleat.messengerproject.interfaces.rest.request.SignUpRequest;
+import me.splleat.messengerproject.interfaces.rest.request.LogoutRequest;
+import me.splleat.messengerproject.interfaces.rest.request.RegisterRequest;
 import me.splleat.messengerproject.interfaces.rest.response.LoginResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final LoginUseCase loginUseCase;
-    private final SignUpUseCase signUpUseCase;
+    private final RegisterUseCase registerUseCase;
+    private final LogoutUseCase logoutUseCase;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
@@ -28,10 +28,17 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpRequest request) {
-        signUpUseCase.execute(request.toCommand());
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
+        registerUseCase.execute(request.toCommand());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody LogoutRequest request) {
+        logoutUseCase.execute(request.toCommand());
+
+        return ResponseEntity.ok().build();
     }
 }

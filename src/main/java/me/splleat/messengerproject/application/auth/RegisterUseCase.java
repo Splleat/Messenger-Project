@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.application.auth;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.command.SignUpCommand;
+import me.splleat.messengerproject.application.command.RegisterCommand;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @RequiredArgsConstructor
-public class SignUpUseCase {
+public class RegisterUseCase {
     private final UserService userService;
     private final UserProfileService userProfileService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void execute(SignUpCommand command) {
+    public void execute(RegisterCommand command) {
         String encryptedPassword = passwordEncoder.encode(command.password());
 
         User user = User.create(command.email(), encryptedPassword, UserRole.USER);

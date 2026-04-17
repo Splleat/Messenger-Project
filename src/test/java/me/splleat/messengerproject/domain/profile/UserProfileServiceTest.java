@@ -2,6 +2,7 @@ package me.splleat.messengerproject.domain.profile;
 
 import me.splleat.messengerproject.domain.profile.exception.UserProfileAlreadyExistsException;
 import me.splleat.messengerproject.domain.profile.exception.UserProfileNotFoundException;
+import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.never;
 @ExtendWith(MockitoExtension.class)
 class UserProfileServiceTest {
     @Mock
-    private UserProfileRepository mockUserProfileRepository;
+    private UserProfileRepository userProfileRepository;
 
     @InjectMocks
     private UserProfileService userProfileService;
@@ -33,19 +34,21 @@ class UserProfileServiceTest {
     void register_WhenExistsUserId_ThrowsException() {
         // given
         long id = 1L;
+        User user = mock(User.class);
         UserProfile userProfile = mock(UserProfile.class);
 
-        given(userProfile.getId())
-                .willReturn(id);
+        given(user.getId())
+                .willReturn(id);given(userProfile.getUser())
+                .willReturn(user);
 
-        given(mockUserProfileRepository.existsById(id))
+        given(userProfileRepository.existsById(id))
                 .willReturn(true);
 
         // when & then
         assertThatThrownBy(() -> userProfileService.register(userProfile))
                 .isInstanceOf(UserProfileAlreadyExistsException.class);
 
-        then(mockUserProfileRepository)
+        then(userProfileRepository)
                 .should(never())
                 .save(any(UserProfile.class));
     }
@@ -57,14 +60,14 @@ class UserProfileServiceTest {
         Long userId = 1L;
         UserProfile profile = mock(UserProfile.class);
 
-        given(mockUserProfileRepository.findById(userId))
+        given(userProfileRepository.findById(userId))
                 .willReturn(Optional.of(profile));
 
         // when
         UserProfile found = userProfileService.getUserProfile(userId);
 
         // then
-        then(mockUserProfileRepository)
+        then(userProfileRepository)
                 .should()
                 .findById(userId);
 
@@ -78,7 +81,7 @@ class UserProfileServiceTest {
         // given
         Long userId = 1L;
 
-        given(mockUserProfileRepository.findById(userId))
+        given(userProfileRepository.findById(userId))
                 .willReturn(Optional.empty());
 
         // when & then

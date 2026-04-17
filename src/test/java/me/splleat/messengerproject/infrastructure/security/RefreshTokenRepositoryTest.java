@@ -22,16 +22,17 @@ class RefreshTokenRepositoryTest {
     private RefreshTokenRepository refreshTokenRepository;
 
     @Test
-    @DisplayName("저장한 리프레시 토큰은 userId로 조회할 수 있다.")
+    @DisplayName("저장한 리프레시 토큰은 jti로 조회할 수 있다.")
     void save_WhenRefreshToken_CanFindByUserId() {
         // given
-        long userId = 1L;
+        String jti = "test";
         String token = "token";
+        long expirationMillis = 60 * 60 * 60;
 
-        refreshTokenRepository.save(userId, token);
+        refreshTokenRepository.save(jti, token, expirationMillis);
 
         // when
-        Optional<String> found = refreshTokenRepository.findById(userId);
+        Optional<String> found = refreshTokenRepository.findByJti(jti);
 
         // then
         assertThat(found)

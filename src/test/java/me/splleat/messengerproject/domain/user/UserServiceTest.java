@@ -23,7 +23,7 @@ import static org.mockito.Mockito.never;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
     @Mock
-    private UserRepository mockUserRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
     private UserService userService;
@@ -38,14 +38,14 @@ class UserServiceTest {
         given(user.getEmail())
                 .willReturn(email);
 
-        given(mockUserRepository.existsByEmail(email))
+        given(userRepository.existsByEmail(email))
                 .willReturn(true);
 
         // when & then
         assertThatThrownBy(() -> userService.register(user))
                 .isInstanceOf(UserEmailDuplicatedException.class);
 
-        then(mockUserRepository)
+        then(userRepository)
                 .should(never())
                 .save(any(User.class));
     }
@@ -57,14 +57,14 @@ class UserServiceTest {
         String email = "test@test.com";
         User user = mock(User.class);
 
-        given(mockUserRepository.findByEmail(email))
+        given(userRepository.findByEmail(email))
                 .willReturn(Optional.of(user));
 
         // when
         User found = userService.getUser(email);
 
         // then
-        then(mockUserRepository)
+        then(userRepository)
                 .should()
                 .findByEmail(email);
 
@@ -78,7 +78,7 @@ class UserServiceTest {
         // given
         String email = "test@test.com";
 
-        given(mockUserRepository.findByEmail(email))
+        given(userRepository.findByEmail(email))
                 .willReturn(Optional.empty());
 
         // when & then

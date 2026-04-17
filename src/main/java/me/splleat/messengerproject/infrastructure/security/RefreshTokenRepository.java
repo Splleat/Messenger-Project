@@ -1,10 +1,10 @@
 package me.splleat.messengerproject.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.global.constant.RedisTtl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @Repository
@@ -13,17 +13,17 @@ public class RefreshTokenRepository {
     private static final String KEY_PREFIX = "refresh:";
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void save(Long userId, String refreshToken) {
+    public void save(String jti, String refreshToken, long expirationMillis) {
         redisTemplate.opsForValue()
-                .set(KEY_PREFIX + userId, refreshToken, RedisTtl.REFRESH_TOKEN);
+                .set(KEY_PREFIX + jti, refreshToken, Duration.ofMillis(expirationMillis));
     }
 
-    public Optional<String> findById(Long userId) {
+    public Optional<String> findByJti(String jti) {
         return Optional.ofNullable(redisTemplate
-                .opsForValue().get(KEY_PREFIX + userId));
+                .opsForValue().get(KEY_PREFIX + jti));
     }
 
-    public void deleteById(Long userId) {
-        redisTemplate.delete(KEY_PREFIX + userId);
+    public void delete(String jti) {
+        redisTemplate.delete(KEY_PREFIX + jti);
     }
 }

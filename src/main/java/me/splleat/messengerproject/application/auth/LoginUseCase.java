@@ -11,6 +11,7 @@ import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.global.annotation.UseCase;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;
+import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,11 +35,23 @@ public class LoginUseCase {
 
         UserProfile userProfile = userProfileService.getUserProfile(userId);
 
-        String accessToken = jwtProvider.createAccessToken(userId, userRole);
-        String refreshToken = jwtProvider.createRefreshToken(userId);
-
-        refreshTokenRepository.save(userId, refreshToken);
+        String accessToken = getAccessToken(userId, userRole);
+        String refreshToken = getRefreshToken(userId);
 
         return LoginResult.of(accessToken, refreshToken, userId, userProfile);
+    }
+
+    private String getAccessToken(long userId, UserRole userRole) {
+        TokenResult accessTokenResult = jwtProvider.createAccessToken(userId, userRole);
+
+        return accessTokenResult.token();
+    }
+
+    private String getRefreshToken(long userId) {
+        TokenResult refreshTokenResult = jwtProvider.createRefreshToken(userId);
+
+        refreshTokenRepository.save(refreshTokenResult.jti(), refreshTokenResult.token(), refreshTokenResult.expirationMillis());
+
+        return refreshTokenResult.token();
     }
 }

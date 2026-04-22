@@ -1,6 +1,6 @@
-package me.splleat.messengerproject.global.response;
+package me.splleat.messengerproject.common.response;
 
-import me.splleat.messengerproject.global.exception.ErrorCode;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 
 import java.time.LocalDateTime;
 

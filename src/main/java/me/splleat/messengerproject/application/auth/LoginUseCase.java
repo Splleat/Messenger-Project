@@ -8,7 +8,7 @@ import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.domain.user.UserService;
-import me.splleat.messengerproject.global.annotation.UseCase;
+import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;
 import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;

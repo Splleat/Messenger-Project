@@ -7,7 +7,7 @@ import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.domain.user.UserService;
-import me.splleat.messengerproject.global.annotation.UseCase;
+import me.splleat.messengerproject.common.annotation.UseCase;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -4,7 +4,7 @@ import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.domain.user.UserService;
-import me.splleat.messengerproject.interfaces.rest.request.RegisterRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.request.RegisterRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.application.auth;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.command.RegisterCommand;
+import me.splleat.messengerproject.application.auth.command.RegisterCommand;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;

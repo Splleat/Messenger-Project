@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.global.config;
+package me.splleat.messengerproject.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.data.redis.autoconfigure.DataRedisProperties;

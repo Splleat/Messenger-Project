@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.global.config;
+package me.splleat.messengerproject.common.config;
 
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationEntryPoint;

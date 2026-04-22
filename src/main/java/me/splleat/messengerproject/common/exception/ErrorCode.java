@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.global.exception;
+package me.splleat.messengerproject.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

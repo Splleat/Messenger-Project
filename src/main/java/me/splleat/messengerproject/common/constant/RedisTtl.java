@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.global.constant;
+package me.splleat.messengerproject.common.constant;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

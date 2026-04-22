@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.global.annotation;
+package me.splleat.messengerproject.common.annotation;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;

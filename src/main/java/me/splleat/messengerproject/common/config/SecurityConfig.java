@@ -3,7 +3,7 @@ package me.splleat.messengerproject.common.config;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationEntryPoint;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationFilter;
-import me.splleat.messengerproject.infrastructure.security.JwtProvider;
+import me.splleat.messengerproject.infrastructure.security.JwtValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtProvider jwtProvider;
+    private final JwtValidator jwtValidator;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
@@ -30,7 +30,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) {
         http
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtValidator), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(handler -> handler
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)

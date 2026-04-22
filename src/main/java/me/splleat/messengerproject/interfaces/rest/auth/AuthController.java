@@ -1,14 +1,14 @@
-package me.splleat.messengerproject.interfaces.rest;
+package me.splleat.messengerproject.interfaces.rest.auth;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.auth.LoginUseCase;
 import me.splleat.messengerproject.application.auth.LogoutUseCase;
 import me.splleat.messengerproject.application.auth.RegisterUseCase;
-import me.splleat.messengerproject.interfaces.rest.request.LoginRequest;
-import me.splleat.messengerproject.interfaces.rest.request.LogoutRequest;
-import me.splleat.messengerproject.interfaces.rest.request.RegisterRequest;
-import me.splleat.messengerproject.interfaces.rest.response.LoginResponse;
+import me.splleat.messengerproject.interfaces.rest.auth.request.LoginRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.request.LogoutRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.request.RegisterRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.response.LoginResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -55,4 +55,12 @@ public class Member extends SoftDeletableEntity {
                 .role(role)
                 .build();
     }
+
+    public Long getUserId() {
+        return user.getId();
+    }
+
+    public Long getChannelId() {
+        return channel.getId();
+    }
 }

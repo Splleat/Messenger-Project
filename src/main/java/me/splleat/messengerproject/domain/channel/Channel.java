@@ -38,4 +38,12 @@ public class Channel extends SoftDeletableEntity {
                 .type(type)
                 .build();
     }
+
+    public boolean isGroupChannel() {
+        return group != null;
+    }
+
+    public Long getGroupId() {
+        return group.getId();
+    }
 }

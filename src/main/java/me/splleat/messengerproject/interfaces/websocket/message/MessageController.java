@@ -25,10 +25,6 @@ public class MessageController {
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         SendMessageResult result = sendMessageUseCase.execute(request.toCommand(userPrincipal.getUserId(), channelId));
 
-        if (result == null) {
-            return null;
-        }
-
         return SendMessageResponse.from(result);
     }
 }

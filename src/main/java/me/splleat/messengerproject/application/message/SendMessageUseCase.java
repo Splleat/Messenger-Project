@@ -14,7 +14,6 @@ import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.domain.user.UserService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -36,22 +35,17 @@ public class SendMessageUseCase {
 
         Message message = command.toEntity(userReference, channel);
 
-        try {
-            Message created = messageService.register(message);
+        Message created = messageService.registerWithIdempotency(message);
 
-            UserProfile userProfile = userProfileService.getUserProfile(command.senderId());
-            String username = userProfile.getName();
-            String profileUrl = userProfile.getImageUrl();
+        UserProfile userProfile = userProfileService.getUserProfile(command.senderId());
+        String username = userProfile.getName();
+        String profileUrl = userProfile.getImageUrl();
 
-            if (channel.isGroupChannel()) {
-                username = groupMemberService.getNickname(command.senderId(), channel.getGroupId())
-                        .orElse(username);
-            }
-
-            return SendMessageResult.from(created, username, profileUrl);
-        } catch (DataIntegrityViolationException _) {
-            // 중복 전송 - 무시
-            return null;
+        if (channel.isGroupChannel()) {
+            username = groupMemberService.getNickname(command.senderId(), channel.getGroupId())
+                    .orElse(username);
         }
+
+        return SendMessageResult.from(created, username, profileUrl);
     }
 }

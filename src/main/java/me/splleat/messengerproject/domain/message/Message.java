@@ -38,6 +38,7 @@ public class Message extends SoftDeletableEntity {
     @Column(name = "parent_message_id")
     private Long parentMessageId;
 
+    @Getter
     @Column(name = "idempotency_key")
     private UUID idemPotencyKey;
 

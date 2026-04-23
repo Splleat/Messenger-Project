@@ -1,6 +1,8 @@
 package me.splleat.messengerproject.domain.user;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,33 +26,26 @@ public class User extends SoftDeletableEntity {
     private String passwordHash;
 
     @Getter
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private UserRole role;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private UserStatus status;
+    @Column(name = "is_admin")
+    private boolean isAdmin;
 
     @Getter
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 
     @Builder
-    private User(String email, String passwordHash, UserRole role, UserStatus status, LocalDateTime lastLoginAt) {
+    private User(String email, String passwordHash, boolean isAdmin, LocalDateTime lastLoginAt) {
         this.email = email;
         this.passwordHash = passwordHash;
-        this.role = role;
-        this.status = status;
+        this.isAdmin = isAdmin;
         this.lastLoginAt = lastLoginAt;
     }
 
-    public static User create(String email, String passwordHash, UserRole role) {
+    public static User create(String email, String passwordHash, boolean isAdmin) {
         return User.builder()
                 .email(email)
                 .passwordHash(passwordHash)
-                .role(role)
-                .status(UserStatus.ACTIVE)
+                .isAdmin(isAdmin)
                 .build();
     }
 

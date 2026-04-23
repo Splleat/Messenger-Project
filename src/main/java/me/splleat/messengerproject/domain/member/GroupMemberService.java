@@ -7,6 +7,7 @@ import me.splleat.messengerproject.infrastructure.persistence.jpa.GroupMemberRep
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +29,9 @@ public class GroupMemberService {
 
     public List<Long> getAllGroupMemberUserId(long groupId) {
         return groupMemberRepository.findAllUserIdByGroupId(groupId);
+    }
+
+    public Optional<String> getNickname(long userId, long groupId) {
+        return groupMemberRepository.findNicknameByUserIdAndGroupId(userId, groupId);
     }
 }

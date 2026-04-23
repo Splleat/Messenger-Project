@@ -2,6 +2,7 @@ package me.splleat.messengerproject.infrastructure.persistence.entity;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -20,6 +21,7 @@ public abstract class BaseEntity implements Persistable<Long> {
     @Transient
     private boolean isNew = true;
 
+    @Getter
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;

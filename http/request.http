@@ -1,4 +1,17 @@
-POST http://localhost:8080/auth/login
+@host = http://localhost:8080
+
+### 회원가입
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "password123",
+  "name": "admin"
+}
+
+### 로그인
+POST {{host}}/auth/login
 Content-Type: application/json
 
 {

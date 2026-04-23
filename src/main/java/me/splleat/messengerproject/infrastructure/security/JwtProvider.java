@@ -5,7 +5,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
@@ -33,7 +32,7 @@ public class JwtProvider {
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
 
-    public TokenResult createAccessToken(Long userId, UserRole role) {
+    public TokenResult createAccessToken(Long userId, boolean isAdmin) {
         String jti = UUID.randomUUID().toString();
         Date accessExpiration = new Date();
 
@@ -42,7 +41,7 @@ public class JwtProvider {
         String accessToken = Jwts.builder()
                 .subject(String.valueOf(userId))
                 .id(jti)
-                .claim("role", role)
+                .claim("isAdmin", isAdmin)
                 .expiration(accessExpiration)
                 .signWith(secretKey)
                 .compact();
@@ -83,8 +82,8 @@ public class JwtProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    public String getUserRole(Claims claims) {
-        return claims.get("role").toString();
+    public boolean getIsAdmin(Claims claims) {
+        return claims.get("isAdmin",Boolean.class);
     }
 
     public String getJti(Claims claims) {

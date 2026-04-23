@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.domain.member;
 
-public enum MemberRole {
+public enum GroupRole {
     ADMIN,
-    USER
+    MEMBER
 }

@@ -1,7 +1,7 @@
-package me.splleat.messengerproject.interfaces.rest.auth.request;
+package me.splleat.messengerproject.interfaces.rest.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import me.splleat.messengerproject.application.auth.command.LoginCommand;
+import me.splleat.messengerproject.application.auth.dto.LoginCommand;
 
 public record LoginRequest(
         @NotBlank(message = "이메일은 필수 입력값입니다.")

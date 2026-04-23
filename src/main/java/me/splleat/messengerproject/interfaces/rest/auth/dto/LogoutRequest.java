@@ -1,6 +1,6 @@
-package me.splleat.messengerproject.interfaces.rest.auth.request;
+package me.splleat.messengerproject.interfaces.rest.auth.dto;
 
-import me.splleat.messengerproject.application.auth.command.LogoutCommand;
+import me.splleat.messengerproject.application.auth.dto.LogoutCommand;
 
 public record LogoutRequest(
         String accessToken,

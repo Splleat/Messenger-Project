@@ -1,10 +1,10 @@
-package me.splleat.messengerproject.interfaces.rest.auth.request;
+package me.splleat.messengerproject.interfaces.rest.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import me.splleat.messengerproject.application.auth.command.RegisterCommand;
+import me.splleat.messengerproject.application.auth.dto.RegisterCommand;
 
 public record RegisterRequest(
         @NotBlank(message = "이름은 필수 입력값입니다.")

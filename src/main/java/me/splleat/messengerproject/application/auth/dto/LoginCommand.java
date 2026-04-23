@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.application.auth.command;
+package me.splleat.messengerproject.application.auth.dto;
 
 public record LoginCommand(
         String email,

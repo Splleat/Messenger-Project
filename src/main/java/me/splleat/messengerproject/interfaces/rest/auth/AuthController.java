@@ -1,0 +1,44 @@
+package me.splleat.messengerproject.interfaces.rest.auth;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.application.auth.LoginUseCase;
+import me.splleat.messengerproject.application.auth.LogoutUseCase;
+import me.splleat.messengerproject.application.auth.RegisterUseCase;
+import me.splleat.messengerproject.interfaces.rest.auth.request.LoginRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.request.LogoutRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.request.RegisterRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.response.LoginResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+public class AuthController {
+    private final LoginUseCase loginUseCase;
+    private final RegisterUseCase registerUseCase;
+    private final LogoutUseCase logoutUseCase;
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginResponse response = LoginResponse.from(loginUseCase.execute(request.toCommand()));
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
+        registerUseCase.execute(request.toCommand());
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody LogoutRequest request) {
+        logoutUseCase.execute(request.toCommand());
+
+        return ResponseEntity.ok().build();
+    }
+}

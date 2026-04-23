@@ -2,9 +2,9 @@ package me.splleat.messengerproject.application.auth;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.command.LogoutCommand;
-import me.splleat.messengerproject.global.annotation.UseCase;
-import me.splleat.messengerproject.global.exception.BusinessException;
+import me.splleat.messengerproject.application.auth.command.LogoutCommand;
+import me.splleat.messengerproject.common.annotation.UseCase;
+import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.infrastructure.security.BlacklistTokenRepository;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;

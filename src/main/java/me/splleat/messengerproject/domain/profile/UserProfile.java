@@ -10,7 +10,7 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
 @Table(name = "user_profiles")
-@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserProfile extends BaseEntity {
 
     @MapsId
@@ -18,12 +18,15 @@ public class UserProfile extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Getter
     @Column(name = "name")
     private String name;
 
+    @Getter
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Getter
     @Column(name = "status_message")
     private String statusMessage;
 
@@ -38,5 +41,9 @@ public class UserProfile extends BaseEntity {
                 .user(user)
                 .name(name)
                 .build();
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 }

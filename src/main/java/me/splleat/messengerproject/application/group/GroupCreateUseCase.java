@@ -27,7 +27,7 @@ public class GroupCreateUseCase {
 
         Group created = groupService.register(group);
 
-        GroupMember groupMember = GroupMember.create(user, created, command.nickname(), GroupRole.ADMIN);
+        GroupMember groupMember = GroupMember.create(user, created, command.nickname(), GroupRole.OWNER);
 
         groupMemberService.register(groupMember);
     }

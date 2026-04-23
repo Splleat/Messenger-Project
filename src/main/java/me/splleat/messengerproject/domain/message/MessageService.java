@@ -2,7 +2,10 @@ package me.splleat.messengerproject.domain.message;
 
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,8 +14,13 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
 
-    public Message register(Message message) {
-        return messageRepository.save(message);
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Message registerWithIdempotency(Message message) {
+        try {
+            return messageRepository.save(message);
+        } catch (DataIntegrityViolationException _) {
+            return messageRepository.findByIdemPotencyKey(message.getIdemPotencyKey());
+        }
     }
 
     // 디버깅용

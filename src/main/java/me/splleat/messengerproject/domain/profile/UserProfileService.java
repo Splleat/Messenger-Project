@@ -12,9 +12,7 @@ public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
 
     public UserProfile register(UserProfile userProfile) {
-        Long userId = userProfile.getUser().getId();
-
-        if (userProfileRepository.existsById(userId)) {
+        if (userProfileRepository.existsById(userProfile.getUserId())) {
             throw new UserProfileAlreadyExistsException();
         }
 

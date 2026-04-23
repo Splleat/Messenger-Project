@@ -1,11 +1,10 @@
 package me.splleat.messengerproject.application.auth;
 
-import me.splleat.messengerproject.application.auth.command.LoginCommand;
-import me.splleat.messengerproject.application.auth.result.LoginResult;
+import me.splleat.messengerproject.application.auth.dto.LoginCommand;
+import me.splleat.messengerproject.application.auth.dto.LoginResult;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
-import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;
@@ -19,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
@@ -61,8 +59,8 @@ class LoginUseCaseTest {
 
         given(user.getId())
                 .willReturn(userId);
-        given(user.getRole())
-                .willReturn(UserRole.USER);
+        given(user.isAdmin())
+                .willReturn(false);
 
         UserProfile userProfile = mock(UserProfile.class);
 
@@ -79,7 +77,7 @@ class LoginUseCaseTest {
                 .willReturn(user);
         given(userProfileService.getUserProfile(userId))
                 .willReturn(userProfile);
-        given(jwtProvider.createAccessToken(userId, user.getRole()))
+        given(jwtProvider.createAccessToken(userId, user.isAdmin()))
                 .willReturn(new TokenResult(jti, accessToken, expirationMillis));
         given(jwtProvider.createRefreshToken(userId))
                 .willReturn(new TokenResult(jti, refreshToken, expirationMillis));

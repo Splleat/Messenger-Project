@@ -6,10 +6,7 @@ import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +23,10 @@ public class JwtValidator {
         }
 
         long userId = jwtProvider.getUserId(claims);
-        String userRole = jwtProvider.getUserRole(claims);
+        boolean isAdmin = jwtProvider.getIsAdmin(claims);
 
-        return new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority(userRole)));
+        UserPrincipal principal = UserPrincipal.create(userId, isAdmin);
+
+        return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
     }
 }

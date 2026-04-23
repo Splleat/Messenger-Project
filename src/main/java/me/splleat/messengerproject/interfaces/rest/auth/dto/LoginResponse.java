@@ -1,6 +1,6 @@
-package me.splleat.messengerproject.interfaces.rest.auth.response;
+package me.splleat.messengerproject.interfaces.rest.auth.dto;
 
-import me.splleat.messengerproject.application.auth.result.LoginResult;
+import me.splleat.messengerproject.application.auth.dto.LoginResult;
 import tools.jackson.databind.annotation.JsonSerialize;
 import tools.jackson.databind.ser.std.ToStringSerializer;
 

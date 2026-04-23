@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.application.auth.result;
+package me.splleat.messengerproject.application.auth.dto;
 
 import me.splleat.messengerproject.domain.profile.UserProfile;
 

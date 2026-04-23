@@ -9,7 +9,7 @@ public enum ChannelType {
     public static ChannelType from(String value) {
         try {
             return ChannelType.valueOf(value);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             throw new BusinessException(ErrorCode.INVALID_INPUT);
         }
     }

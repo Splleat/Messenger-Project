@@ -6,7 +6,6 @@ import me.splleat.messengerproject.application.auth.result.LoginResult;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
-import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
@@ -31,18 +30,18 @@ public class LoginUseCase {
         user.login(command.password(), passwordEncoder);
 
         Long userId = user.getId();
-        UserRole userRole = user.getRole();
+        boolean isAdmin = user.isAdmin();
 
         UserProfile userProfile = userProfileService.getUserProfile(userId);
 
-        String accessToken = getAccessToken(userId, userRole);
+        String accessToken = getAccessToken(userId, isAdmin);
         String refreshToken = getRefreshToken(userId);
 
         return LoginResult.of(accessToken, refreshToken, userId, userProfile);
     }
 
-    private String getAccessToken(long userId, UserRole userRole) {
-        TokenResult accessTokenResult = jwtProvider.createAccessToken(userId, userRole);
+    private String getAccessToken(long userId, boolean isAdmin) {
+        TokenResult accessTokenResult = jwtProvider.createAccessToken(userId, isAdmin);
 
         return accessTokenResult.token();
     }

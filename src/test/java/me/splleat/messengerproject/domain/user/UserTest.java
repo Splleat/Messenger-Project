@@ -25,7 +25,7 @@ class UserTest {
             return User.create(
                     "test@test.com",
                     PASSWORD_HASH,
-                    UserRole.USER
+                    false
             );
         }
     }

@@ -2,7 +2,6 @@ package me.splleat.messengerproject.domain.profile;
 
 import me.splleat.messengerproject.domain.profile.exception.UserProfileAlreadyExistsException;
 import me.splleat.messengerproject.domain.profile.exception.UserProfileNotFoundException;
-import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,12 +33,10 @@ class UserProfileServiceTest {
     void register_WhenExistsUserId_ThrowsException() {
         // given
         long id = 1L;
-        User user = mock(User.class);
         UserProfile userProfile = mock(UserProfile.class);
 
-        given(user.getId())
-                .willReturn(id);given(userProfile.getUser())
-                .willReturn(user);
+        given(userProfile.getUserId())
+                .willReturn(id);
 
         given(userProfileRepository.existsById(id))
                 .willReturn(true);

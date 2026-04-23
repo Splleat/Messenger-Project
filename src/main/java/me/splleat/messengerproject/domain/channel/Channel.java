@@ -4,14 +4,18 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "channels")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Channel extends SoftDeletableEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
+
     @Column(name = "name")
     private String name;
 
@@ -19,21 +23,19 @@ public class Channel extends SoftDeletableEntity {
     @Column(name = "type")
     private ChannelType type;
 
-    @Column(name = "invite_code")
-    private String inviteCode;
 
     @Builder
-    private Channel(String name, ChannelType type, String inviteCode) {
+    private Channel(Group group, String name, ChannelType type) {
+        this.group = group;
         this.name = name;
         this.type = type;
-        this.inviteCode = inviteCode;
     }
 
-    public static Channel create(String name, ChannelType type) {
+    public static Channel create(Group group, String name, ChannelType type) {
         return Channel.builder()
+                .group(group)
                 .name(name)
                 .type(type)
-                .inviteCode(UUID.randomUUID().toString())
                 .build();
     }
 }

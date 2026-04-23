@@ -5,7 +5,6 @@ import me.splleat.messengerproject.application.auth.command.RegisterCommand;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
-import me.splleat.messengerproject.domain.user.UserRole;
 import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +21,7 @@ public class RegisterUseCase {
     public void execute(RegisterCommand command) {
         String encryptedPassword = passwordEncoder.encode(command.password());
 
-        User user = User.create(command.email(), encryptedPassword, UserRole.USER);
+        User user = User.create(command.email(), encryptedPassword, false);
 
         User savedUser = userService.register(user);
 

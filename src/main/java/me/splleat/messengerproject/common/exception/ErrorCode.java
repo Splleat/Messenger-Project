@@ -21,10 +21,18 @@ public enum ErrorCode {
 
     CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_001", "채널이 존재하지 않습니다."),
 
-    MEMBER_ALREADY_EXISTS(HttpStatus.CONFLICT, "CHANNEL_MEMBER_001", "이미 존재하는 채널 멤버입니다."),
+    CHANNEL_USER_SETTING_ALREADY_EXISTS(HttpStatus.CONFLICT, "CHANNEL_002", "이미 해당 채널의 사용자 설정이 존재합니다."),
+    CHANNEL_USER_SETTING_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_003", "채널 참여 정보가 존재하지 않습니다."),
+
+    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_001", "그룹이 존재하지 않습니다."),
+
+    GROUP_MEMBER_ALREADY_EXISTS(HttpStatus.CONFLICT, "GROUP_MEMBER_001", "이미 그룹에 포함된 멤버입니다."),
+    GROUP_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_MEMBER_002", "그룹 멤버를 찾을 수 없습니다."),
+    GROUP_MEMBER_NOT_PERMITTED(HttpStatus.FORBIDDEN, "GROUP_MEMBER_003", "해당 작업을 수행할 권한이 없는 그룹 멤버입니다."),
 
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "COMMON_001", "잘못된 입력값입니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_002", "서버 오류가 발생했습니다.");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_002", "서버 오류가 발생했습니다."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_003", "권한이 없습니다.");
 
     private final HttpStatus status;
     private final String code;

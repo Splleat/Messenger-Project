@@ -2,6 +2,7 @@ package me.splleat.messengerproject.domain.channel;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
@@ -27,4 +28,27 @@ public class ChannelUserSetting extends BaseEntity {
 
     @Column(name = "is_muted")
     private boolean isMuted;
+
+    public Long getUserId() {
+        return user.getId();
+    }
+
+    public Long getChannelId() {
+        return channel.getId();
+    }
+
+    @Builder
+    private ChannelUserSetting(User user, Channel channel) {
+        this.user = user;
+        this.channel = channel;
+        isPinned = false;
+        isMuted = false;
+    }
+
+    public static ChannelUserSetting create(User user, Channel channel) {
+        return ChannelUserSetting.builder()
+                .user(user)
+                .channel(channel)
+                .build();
+    }
 }

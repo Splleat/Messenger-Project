@@ -25,6 +25,11 @@ public class ChannelUserSettingService {
 
     @Transactional
     public void registerAll(List<ChannelUserSetting> channelUserSettingList) {
+
+        if (channelUserSettingList == null || channelUserSettingList.isEmpty()) {
+            return;
+        }
+
         channelUserSettingRepository.saveAll(channelUserSettingList);
     }
 

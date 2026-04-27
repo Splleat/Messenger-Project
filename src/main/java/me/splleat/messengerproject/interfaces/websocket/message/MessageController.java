@@ -17,10 +17,10 @@ import org.springframework.stereotype.Controller;
 public class MessageController {
     private final SendMessageUseCase sendMessageUseCase;
 
-    @MessageMapping("/channel/{channelId}")
-    @SendTo("/channel/{channelId}")
+    @MessageMapping("/channel/{channel-id}")
+    @SendTo("/sub/channel/{channel-id}")
     public SendMessageResponse sendMessage(
-            @DestinationVariable Long channelId,
+            @DestinationVariable("channel-id") Long channelId,
             SendMessageRequest request,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         SendMessageResult result = sendMessageUseCase.execute(request.toCommand(userPrincipal.getUserId(), channelId));

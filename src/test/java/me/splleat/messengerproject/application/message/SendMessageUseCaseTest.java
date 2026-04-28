@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.application.message;
 
-import me.splleat.messengerproject.application.message.dto.SendMessageCommand;
+import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
@@ -57,7 +57,7 @@ class SendMessageUseCaseTest {
         // given
         long userId = 1L;
         long channelId = 1L;
-        SendMessageCommand command = new SendMessageCommand(userId, channelId, "test", UUID.randomUUID(), MessageType.DIRECT, null);
+        MessageCreateCommand command = new MessageCreateCommand(userId, channelId, "test", UUID.randomUUID(), MessageType.DIRECT, null);
         User user = mock(User.class);
         Channel channel = mock(Channel.class);
         UserProfile profile = mock(UserProfile.class);

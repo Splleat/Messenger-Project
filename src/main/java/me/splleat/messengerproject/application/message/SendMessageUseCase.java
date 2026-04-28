@@ -1,8 +1,8 @@
 package me.splleat.messengerproject.application.message;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.message.dto.SendMessageCommand;
-import me.splleat.messengerproject.application.message.dto.SendMessageResult;
+import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
+import me.splleat.messengerproject.application.message.dto.MessageResult;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
@@ -27,7 +27,7 @@ public class SendMessageUseCase {
     private final MessageService messageService;
 
     @Transactional
-    public SendMessageResult execute(SendMessageCommand command) {
+    public MessageResult execute(MessageCreateCommand command) {
         channelUserSettingService.validateParticipant(command.senderId(), command.channelId());
 
         User userReference = userService.getReference(command.senderId());
@@ -46,6 +46,6 @@ public class SendMessageUseCase {
                     .orElse(username);
         }
 
-        return SendMessageResult.from(created, username, profileUrl);
+        return MessageResult.from(created, username, profileUrl);
     }
 }

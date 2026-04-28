@@ -7,7 +7,7 @@ import me.splleat.messengerproject.domain.user.User;
 
 import java.util.UUID;
 
-public record SendMessageCommand(
+public record MessageCreateCommand(
         long senderId,
         long channelId,
         String content,

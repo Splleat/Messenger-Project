@@ -3,6 +3,7 @@ package me.splleat.messengerproject.domain.channel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
@@ -12,9 +13,9 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChannelUserSetting extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Getter
+    @Column(name = "user_id")
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id")
@@ -29,25 +30,21 @@ public class ChannelUserSetting extends BaseEntity {
     @Column(name = "is_muted")
     private boolean isMuted;
 
-    public Long getUserId() {
-        return user.getId();
-    }
-
     public Long getChannelId() {
         return channel.getId();
     }
 
     @Builder
-    private ChannelUserSetting(User user, Channel channel) {
-        this.user = user;
+    private ChannelUserSetting(Long userId, Channel channel) {
+        this.userId = userId;
         this.channel = channel;
         isPinned = false;
         isMuted = false;
     }
 
-    public static ChannelUserSetting create(User user, Channel channel) {
+    public static ChannelUserSetting create(Long userId, Channel channel) {
         return ChannelUserSetting.builder()
-                .user(user)
+                .userId(userId)
                 .channel(channel)
                 .build();
     }

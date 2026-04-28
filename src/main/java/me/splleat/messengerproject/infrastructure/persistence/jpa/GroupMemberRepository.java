@@ -12,19 +12,19 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
     @Query("""
         SELECT COUNT(gm) > 1
         FROM GroupMember gm
-        WHERE gm.user.id = :userId AND gm.group.id = :groupId
+        WHERE gm.userId = :userId AND gm.group.id = :groupId
     """)
     boolean existsByUserIdAndGroupId(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
     @Query("""
         SELECT gm
         FROM GroupMember gm
-        WHERE gm.user.id = :userId AND gm.group.id = :groupId
+        WHERE gm.userId = :userId AND gm.group.id = :groupId
     """)
     Optional<GroupMember> findByUserIdAndGroupId(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
     @Query("""
-        SELECT gm.user.id
+        SELECT gm.userId
         FROM GroupMember gm
         WHERE gm.group.id = :groupId
     """)
@@ -33,7 +33,7 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
     @Query("""
         SELECT gm.nickname
         FROM GroupMember gm
-        WHERE gm.user.id = :userId AND gm.group.id = :groupId
+        WHERE gm.userId = :userId AND gm.group.id = :groupId
     """)
     Optional<String> findNicknameByUserIdAndGroupId(@Param("userId") Long userId, @Param("groupId") Long groupId);
 }

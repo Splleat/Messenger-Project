@@ -11,12 +11,12 @@ public interface ChannelUserSettingRepository extends JpaRepository<ChannelUserS
     @Query("""
         SELECT COUNT(cus)
         FROM ChannelUserSetting cus
-        WHERE cus.user.id = :userId AND cus.channel.id = :channelId
+        WHERE cus.userId = :userId AND cus.channel.id = :channelId
     """)
     boolean existsByUserIdAndChannelId(@Param("userId") Long userId, @Param("channelId") Long channelId);
 
     @Query("""
-        SELECT cus.user.id
+        SELECT cus.userId
         FROM ChannelUserSetting cus
         WHERE cus.channel.id = :channelId
     """)

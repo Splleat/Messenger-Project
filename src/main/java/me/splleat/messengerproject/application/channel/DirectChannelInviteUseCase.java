@@ -7,7 +7,6 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.user.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 @UseCase
 @RequiredArgsConstructor
 public class DirectChannelInviteUseCase {
-    private final UserService userService;
     private final ChannelService channelService;
     private final ChannelUserSettingService channelUserSettingService;
 
@@ -30,8 +28,7 @@ public class DirectChannelInviteUseCase {
         
         List<ChannelUserSetting> targetUserSettingList = command.targetIds().stream()
                 .filter(target -> !alreadyJoinedIds.contains(target))
-                .map(userService::getReference)
-                .map(target -> ChannelUserSetting.create(target,channel))
+                .map(target -> ChannelUserSetting.create(target, channel))
                 .toList();
         
         channelUserSettingService.registerAll(targetUserSettingList);

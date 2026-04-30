@@ -10,8 +10,6 @@ import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
-import me.splleat.messengerproject.domain.user.User;
-import me.splleat.messengerproject.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +27,6 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class SendMessageUseCaseTest {
-
-    @Mock
-    private UserService userService;
 
     @Mock
     private ChannelService channelService;
@@ -58,13 +53,10 @@ class SendMessageUseCaseTest {
         long userId = 1L;
         long channelId = 1L;
         MessageCreateCommand command = new MessageCreateCommand(userId, channelId, "test", UUID.randomUUID(), MessageType.DIRECT, null);
-        User user = mock(User.class);
         Channel channel = mock(Channel.class);
         UserProfile profile = mock(UserProfile.class);
         Message message = mock(Message.class);
 
-        given(userService.getReference(userId))
-                .willReturn(user);
         given(channelService.getChannel(channelId))
                 .willReturn(channel);
         given(messageService.registerWithIdempotency(any(Message.class)))

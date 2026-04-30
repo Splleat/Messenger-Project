@@ -18,6 +18,7 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterUseCaseTest {
+
     @Mock
     private UserService userService;
 

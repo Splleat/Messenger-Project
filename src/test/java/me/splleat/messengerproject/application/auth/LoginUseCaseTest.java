@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class LoginUseCaseTest {
+
     @Mock
     private UserService userService;
 

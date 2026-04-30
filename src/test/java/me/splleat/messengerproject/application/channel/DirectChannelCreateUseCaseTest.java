@@ -2,8 +2,6 @@ package me.splleat.messengerproject.application.channel;
 
 import me.splleat.messengerproject.application.channel.dto.DirectChannelCreateCommand;
 import me.splleat.messengerproject.domain.channel.*;
-import me.splleat.messengerproject.domain.user.User;
-import me.splleat.messengerproject.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,9 +19,6 @@ import static org.mockito.Mockito.mock;
 class DirectChannelCreateUseCaseTest {
 
     @Mock
-    private UserService userService;
-
-    @Mock
     private ChannelService channelService;
 
     @Mock
@@ -39,11 +34,8 @@ class DirectChannelCreateUseCaseTest {
         long userId = 1L;
         String channelName = "testChannel";
         DirectChannelCreateCommand command = new DirectChannelCreateCommand(userId, channelName, ChannelType.TEXT);
-        User user = mock(User.class);
         Channel channel = mock(Channel.class);
 
-        given(userService.getUser(command.userId()))
-                .willReturn(user);
         given(channelService.register(any(Channel.class)))
                 .willReturn(channel);
 
@@ -51,10 +43,6 @@ class DirectChannelCreateUseCaseTest {
         assertDoesNotThrow(() -> directChannelCreateUseCase.execute(command));
 
         // then
-        then(userService)
-                .should()
-                .getUser(userId);
-
         then(channelService)
                 .should()
                 .register(any(Channel.class));

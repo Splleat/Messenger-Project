@@ -5,12 +5,9 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelType;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.group.Group;
-import me.splleat.messengerproject.domain.group.GroupService;
 import me.splleat.messengerproject.domain.member.GroupMember;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
 import me.splleat.messengerproject.domain.member.GroupRole;
-import me.splleat.messengerproject.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,12 +28,6 @@ import static org.mockito.Mockito.mock;
 class GroupChannelCreateUseCaseTest {
 
     @Mock
-    private UserService userService;
-
-    @Mock
-    private GroupService groupService;
-
-    @Mock
     private GroupMemberService groupMemberService;
 
     @Mock
@@ -55,18 +46,15 @@ class GroupChannelCreateUseCaseTest {
         long userId = 1L;
         long groupId = 1L;
         GroupChannelCreateCommand command = new GroupChannelCreateCommand(userId, groupId, "testChannel", ChannelType.TEXT);
-        Group group = mock(Group.class);
         GroupMember groupMember = mock(GroupMember.class);
         Channel channel = mock(Channel.class);
         List<Long> groupMemberIds = List.of(1L, 2L, 3L);
 
         given(groupMemberService.getGroupMember(userId, groupId))
                 .willReturn(groupMember);
-        given(groupService.getReference(groupId))
-                .willReturn(group);
         given(channelService.register(any(Channel.class)))
                 .willReturn(channel);
-        given(groupMemberService.getAllGroupMemberUserId(groupId))
+        given(groupMemberService.getAllParticipantUserIds(groupId))
                 .willReturn(groupMemberIds);
 
         // when
@@ -81,17 +69,13 @@ class GroupChannelCreateUseCaseTest {
                 .should()
                 .validatePermission(GroupRole.ADMIN);
 
-        then(groupService)
-                .should()
-                .getReference(groupId);
-
         then(channelService)
                 .should()
                 .register(any(Channel.class));
 
         then(groupMemberService)
                 .should()
-                .getAllGroupMemberUserId(groupId);
+                .getAllParticipantUserIds(groupId);
 
         then(channelUserSettingService)
                 .should()

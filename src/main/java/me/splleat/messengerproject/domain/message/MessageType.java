@@ -4,6 +4,7 @@ import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 
 public enum MessageType {
+    DIRECT,
     GROUP;
 
     public static MessageType from(String value) {

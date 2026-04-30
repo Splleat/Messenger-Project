@@ -35,7 +35,10 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/ws-stomp/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,7 +21,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtValidator jwtValidator;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = getJwtToken(request);
             Authentication authentication = jwtValidator.validateAndGetAuthentication(token);

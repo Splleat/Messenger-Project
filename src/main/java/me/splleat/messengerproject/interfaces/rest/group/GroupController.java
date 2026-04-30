@@ -1,8 +1,8 @@
 package me.splleat.messengerproject.interfaces.rest.group;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.group.GroupCreateUseCase;
-import jakarta.validation.Valid;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupCreateRequest;
 import org.springframework.http.HttpStatus;

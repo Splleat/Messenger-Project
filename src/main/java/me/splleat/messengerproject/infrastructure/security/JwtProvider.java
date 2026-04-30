@@ -57,6 +57,7 @@ public class JwtProvider {
 
         String refreshToken = Jwts.builder()
                 .subject(String.valueOf(userId))
+                .id(jti)
                 .expiration(refreshExpiration)
                 .signWith(secretKey)
                 .compact();

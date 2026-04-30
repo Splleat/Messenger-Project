@@ -3,6 +3,7 @@ package me.splleat.messengerproject.domain.channel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
@@ -16,6 +17,7 @@ public class Channel extends SoftDeletableEntity {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @Getter
     @Column(name = "name")
     private String name;
 

@@ -1,10 +1,9 @@
-package me.splleat.messengerproject.interfaces.rest;
+package me.splleat.messengerproject.interfaces.rest.auth;
 
 import me.splleat.messengerproject.application.auth.LoginUseCase;
 import me.splleat.messengerproject.application.auth.LogoutUseCase;
 import me.splleat.messengerproject.application.auth.RegisterUseCase;
 import me.splleat.messengerproject.application.auth.dto.LoginResult;
-import me.splleat.messengerproject.interfaces.rest.auth.AuthController;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginRequest;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.LogoutRequest;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.RegisterRequest;

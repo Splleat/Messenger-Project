@@ -9,31 +9,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> {
-    @Query("""
-        SELECT COUNT(gm) > 1
-        FROM GroupMember gm
-        WHERE gm.userId = :userId AND gm.group.id = :groupId
-    """)
-    boolean existsByUserIdAndGroupId(@Param("userId") Long userId, @Param("groupId") Long groupId);
+    boolean existsByUserIdAndGroupId(Long userId, Long groupId);
 
-    @Query("""
-        SELECT gm
-        FROM GroupMember gm
-        WHERE gm.userId = :userId AND gm.group.id = :groupId
-    """)
-    Optional<GroupMember> findByUserIdAndGroupId(@Param("userId") Long userId, @Param("groupId") Long groupId);
+    Optional<GroupMember> findByUserIdAndGroupId(Long userId, Long groupId);
 
-    @Query("""
-        SELECT gm.userId
-        FROM GroupMember gm
-        WHERE gm.group.id = :groupId
-    """)
-    List<Long> findAllUserIdByGroupId(@Param("groupId") Long groupId);
+    List<Long> findAllUserIdByGroupId(Long groupId);
 
     @Query("""
         SELECT gm.nickname
         FROM GroupMember gm
-        WHERE gm.userId = :userId AND gm.group.id = :groupId
+        WHERE gm.userId = :userId AND gm.groupId = :groupId
     """)
     Optional<String> findNicknameByUserIdAndGroupId(@Param("userId") Long userId, @Param("groupId") Long groupId);
+
+    void deleteByUserIdAndGroupId(Long userId, Long groupId);
 }

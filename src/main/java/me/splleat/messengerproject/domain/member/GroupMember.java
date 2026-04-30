@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.domain.member.exception.GroupMemberNotPermittedException;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
@@ -18,36 +17,37 @@ public class GroupMember extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @Getter
+    @Column(name = "group_id")
+    private Long groupId;
 
     @Column(name = "nickname")
     private String nickname;
 
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private GroupRole role;
 
-    public Long getGroupId() {
-        return group.getId();
-    }
-
     @Builder
-    private GroupMember(Long userId, Group group, String nickname, GroupRole role) {
+    private GroupMember(Long userId, Long groupId, String nickname, GroupRole role) {
         this.userId = userId;
-        this.group = group;
+        this.groupId = groupId;
         this.nickname = nickname;
         this.role = role;
     }
 
-    public static GroupMember create(Long userId, Group group, String nickname, GroupRole role) {
-        return new GroupMember(userId, group, nickname, role);
+    public static GroupMember create(Long userId, Long groupId, String nickname, GroupRole role) {
+        return new GroupMember(userId, groupId, nickname, role);
     }
 
     public void validatePermission(GroupRole requiredRole) {
         if (!role.hasPermission(requiredRole)) {
             throw new GroupMemberNotPermittedException();
         }
+    }
+
+    public boolean isGroupOwner() {
+        return role == GroupRole.OWNER;
     }
 }

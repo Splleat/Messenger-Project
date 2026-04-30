@@ -18,11 +18,9 @@ public class GroupCreateUseCase {
 
     @Transactional
     public void execute(GroupCreateCommand command) {
-        Group group = Group.create(command.groupName());
+        Group createdGroup = groupService.register(Group.create(command.groupName()));
 
-        Group created = groupService.register(group);
-
-        GroupMember groupMember = GroupMember.create(command.userId(), created, command.nickname(), GroupRole.OWNER);
+        GroupMember groupMember = GroupMember.create(command.userId(), createdGroup.getId(), command.nickname(), GroupRole.OWNER);
 
         groupMemberService.register(groupMember);
     }

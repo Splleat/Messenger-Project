@@ -9,7 +9,8 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletab
 
 @Entity
 @Table(name = "channels")
-@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Channel extends SoftDeletableEntity {
 
     @Column(name = "group_id")

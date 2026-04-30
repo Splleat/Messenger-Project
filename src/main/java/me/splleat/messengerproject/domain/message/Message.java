@@ -13,7 +13,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "messages")
-@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message extends SoftDeletableEntity {
 
     @Column(name = "user_id")

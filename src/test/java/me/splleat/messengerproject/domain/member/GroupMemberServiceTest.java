@@ -1,9 +1,7 @@
 package me.splleat.messengerproject.domain.member;
 
-import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.domain.member.exception.GroupMemberAlreadyExistsException;
 import me.splleat.messengerproject.domain.member.exception.GroupMemberNotFoundException;
-import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.GroupMemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class GroupMemberServiceTest {
@@ -36,14 +33,7 @@ class GroupMemberServiceTest {
         long userId = 1L;
         long groupId = 1L;
 
-        User user = mock(User.class);
-        Group group = mock(Group.class);
-        GroupMember groupMember = GroupMember.create(user, group, "test", GroupRole.MEMBER);
-
-        given(groupMember.getUserId())
-                .willReturn(userId);
-        given(groupMember.getGroupId())
-                .willReturn(groupId);
+        GroupMember groupMember = GroupMember.create(userId, groupId, "test", GroupRole.MEMBER);
 
         given(groupMemberRepository.existsByUserIdAndGroupId(groupMember.getUserId(), groupMember.getGroupId()))
                 .willReturn(true);
@@ -70,9 +60,9 @@ class GroupMemberServiceTest {
 
     @Test
     @DisplayName("멤버가 존재하지 않는 그룹의 사용자 아이디 목록을 조회하면, 빈 리스트가 반환된다.")
-    void getAllGroupMemberUserId_WhenEmpty_ReturnsEmptyList() {
+    void getAllParticipantUserIds_WhenEmpty_ReturnsEmptyList() {
         // when
-        List<Long> userIdList = groupMemberService.getAllGroupMemberUserId(1L);
+        List<Long> userIdList = groupMemberService.getAllParticipantUserIds(1L);
 
         // then
         assertThat(userIdList)

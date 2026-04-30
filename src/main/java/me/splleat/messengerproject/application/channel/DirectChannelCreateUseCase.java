@@ -18,8 +18,10 @@ public class DirectChannelCreateUseCase {
     @Transactional
     public void execute(DirectChannelCreateCommand command) {
         Channel channel = Channel.create(null, command.channelName(), command.type());
+
         Channel created = channelService.register(channel);
-        ChannelUserSetting setting = ChannelUserSetting.create(command.userId(), created);
+
+        ChannelUserSetting setting = ChannelUserSetting.create(command.userId(), created.getId());
 
         channelUserSettingService.register(setting);
     }

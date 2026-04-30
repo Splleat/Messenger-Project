@@ -24,15 +24,15 @@ public class GroupChannelCreateUseCase {
     @Transactional
     public void execute(GroupChannelCreateCommand command) {
         GroupMember groupMember = groupMemberService.getGroupMember(command.userId(), command.groupId());
+
         groupMember.validatePermission(GroupRole.ADMIN);
 
-        Channel channel = Channel.create(command.groupId(), command.channelName(), command.type());
-        Channel created = channelService.register(channel);
+        Channel createdChannel = channelService.register(Channel.create(command.groupId(), command.channelName(), command.type()));
 
-        List<Long> groupMemberIdList = groupMemberService.getAllGroupMemberUserId(command.groupId());
+        List<Long> groupParticipantUserIds = groupMemberService.getAllParticipantUserIds(command.groupId());
 
-        List<ChannelUserSetting> channelUserSettingList = groupMemberIdList.stream()
-                .map(userId -> ChannelUserSetting.create(userId, created))
+        List<ChannelUserSetting> channelUserSettingList = groupParticipantUserIds.stream()
+                .map(userId -> ChannelUserSetting.create(userId, createdChannel.getId()))
                 .toList();
 
         channelUserSettingService.registerAll(channelUserSettingList);

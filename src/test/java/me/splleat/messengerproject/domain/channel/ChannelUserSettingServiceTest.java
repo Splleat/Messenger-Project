@@ -2,7 +2,6 @@ package me.splleat.messengerproject.domain.channel;
 
 import me.splleat.messengerproject.domain.channel.exception.ChannelUserSettingAlreadyExistsException;
 import me.splleat.messengerproject.domain.channel.exception.ChannelUserSettingNotFoundException;
-import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelUserSettingRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,16 +34,11 @@ class ChannelUserSettingServiceTest {
     @DisplayName("이미 존재하는 채널 사용자 설정 정보를 등록하려 하면, ChannelUserSettingAlreadyExistsException이 발생한다.")
     void register_WhenExists_ThrowsException() {
         // given
-        long id = 1L;
-        User user = mock(User.class);
-        Channel channel = mock(Channel.class);
-        ChannelUserSetting channelUserSetting = ChannelUserSetting.create(user, channel);
+        long userId = 1L;
+        long channelId = 1L;
+        ChannelUserSetting channelUserSetting = ChannelUserSetting.create(userId, channelId);
 
-        given(user.getId())
-                .willReturn(id);
-        given(channel.getId())
-                .willReturn(id);
-        given(channelUserSettingRepository.existsByUserIdAndChannelId(id, id))
+        given(channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId))
                 .willReturn(true);
 
         // when & then
@@ -77,7 +70,7 @@ class ChannelUserSettingServiceTest {
     @DisplayName("채널에 등록된 사용자 설정 정보가 없다면, 빈 리스트를 반환한다.")
     void alreadyJoinedIds_WhenNotExists_ReturnsEmptyList() {
         // when
-        List<Long> foundIds = channelUserSettingService.alreadyJoinedIds(1L);
+        List<Long> foundIds = channelUserSettingService.alreadyJoinedIds(1L, List.of(1L, 2L, 3L));
 
         // then
         assertThat(foundIds)

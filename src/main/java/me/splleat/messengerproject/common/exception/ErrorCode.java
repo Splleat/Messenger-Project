@@ -29,6 +29,7 @@ public enum ErrorCode {
     GROUP_MEMBER_ALREADY_EXISTS(HttpStatus.CONFLICT, "GROUP_MEMBER_001", "이미 그룹에 포함된 멤버입니다."),
     GROUP_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_MEMBER_002", "그룹 멤버를 찾을 수 없습니다."),
     GROUP_MEMBER_NOT_PERMITTED(HttpStatus.FORBIDDEN, "GROUP_MEMBER_003", "해당 작업을 수행할 권한이 없는 그룹 멤버입니다."),
+    GROUP_OWNER_CANNOT_LEAVE(HttpStatus.CONFLICT, "GROUP_MEMBER_004", "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "COMMON_001", "잘못된 입력값입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_002", "서버 오류가 발생했습니다."),

@@ -1,7 +1,6 @@
 package me.splleat.messengerproject.application.channel;
 
 import me.splleat.messengerproject.application.channel.dto.DirectChannelInviteCommand;
-import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.user.UserService;
@@ -19,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class DirectChannelInviteUseCaseTest {
@@ -43,12 +41,9 @@ class DirectChannelInviteUseCaseTest {
         long userId = 1L;
         long channelId = 1L;
         List<Long> targetIds = List.of(2L, 3L, 4L);
-        Channel channel = mock(Channel.class);
         DirectChannelInviteCommand command = new DirectChannelInviteCommand(userId, channelId, targetIds);
 
-        given(channelService.getChannel(channelId))
-                .willReturn(channel);
-        given(channelUserSettingService.alreadyJoinedIds(command.channelId()))
+        given(channelUserSettingService.alreadyJoinedIds(command.channelId(), targetIds))
                 .willReturn(Collections.emptyList());
 
         // when
@@ -59,13 +54,9 @@ class DirectChannelInviteUseCaseTest {
                 .should()
                 .validateParticipant(command.userId(), command.channelId());
 
-        then(channelService)
-                .should()
-                .getChannel(channelId);
-
         then(channelUserSettingService)
                 .should()
-                .alreadyJoinedIds(channelId);
+                .alreadyJoinedIds(channelId, targetIds);
 
         then(channelUserSettingService)
                 .should()

@@ -5,7 +5,6 @@ import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.domain.group.GroupService;
 import me.splleat.messengerproject.domain.member.GroupMember;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
-import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,11 +40,8 @@ class GroupCreateUseCaseTest {
         // given
         long userId = 1L;
         GroupCreateCommand command = new GroupCreateCommand(userId, "testName", "testGroup");
-        User user = mock(User.class);
         Group group = mock(Group.class);
 
-        given(userService.getUser(userId))
-                .willReturn(user);
         given(groupService.register(any(Group.class)))
                 .willReturn(group);
 
@@ -53,9 +49,6 @@ class GroupCreateUseCaseTest {
         assertDoesNotThrow(() -> groupCreateUseCase.execute(command));
 
         // then
-        then(userService)
-                .should()
-                .getUser(userId);
 
         then(groupService)
                 .should()

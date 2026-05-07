@@ -5,19 +5,17 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
 
 @Entity
 @Table(name = "channels")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Channel extends SoftDeletableEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @Column(name = "group_id")
+    private Long groupId;
 
-    @Getter
     @Column(name = "name")
     private String name;
 
@@ -27,25 +25,21 @@ public class Channel extends SoftDeletableEntity {
 
 
     @Builder
-    private Channel(Group group, String name, ChannelType type) {
-        this.group = group;
+    private Channel(Long groupId, String name, ChannelType type) {
+        this.groupId = groupId;
         this.name = name;
         this.type = type;
     }
 
-    public static Channel create(Group group, String name, ChannelType type) {
+    public static Channel create(Long groupId, String name, ChannelType type) {
         return Channel.builder()
-                .group(group)
+                .groupId(groupId)
                 .name(name)
                 .type(type)
                 .build();
     }
 
     public boolean isGroupChannel() {
-        return group != null;
-    }
-
-    public Long getGroupId() {
-        return group.getId();
+        return groupId != null;
     }
 }

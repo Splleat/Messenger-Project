@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.domain.user;
 
 import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.domain.user.exception.UserDeactivatedException;
 import me.splleat.messengerproject.domain.user.exception.UserEmailDuplicatedException;
 import me.splleat.messengerproject.domain.user.exception.UserNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserRepository;
@@ -28,12 +29,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User getUser(long id) {
-        return userRepository.findById(id)
+    public User getActiveUser(long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
-    }
 
-    public User getReference(long id) {
-        return userRepository.getReferenceById(id);
+        if (user.isDeleted()) {
+            throw new UserDeactivatedException();
+        }
+
+        return user;
     }
 }

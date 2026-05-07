@@ -23,7 +23,6 @@ public class Channel extends SoftDeletableEntity {
     @Column(name = "type")
     private ChannelType type;
 
-
     @Builder
     private Channel(Long groupId, String name, ChannelType type) {
         this.groupId = groupId;

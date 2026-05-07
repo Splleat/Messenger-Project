@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.interfaces.rest.group;
 
 import me.splleat.messengerproject.application.group.GroupCreateUseCase;
+import me.splleat.messengerproject.application.group.GroupListGetUseCase;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupCreateRequest;
 import me.splleat.messengerproject.support.TestSecurityConfig;
 import me.splleat.messengerproject.support.WithMockPrincipal;
@@ -30,6 +31,9 @@ class GroupControllerTest {
 
     @MockitoBean
     private GroupCreateUseCase groupCreateUseCase;
+
+    @MockitoBean
+    private GroupListGetUseCase groupListGetUseCase;
 
     @Test
     @WithMockPrincipal

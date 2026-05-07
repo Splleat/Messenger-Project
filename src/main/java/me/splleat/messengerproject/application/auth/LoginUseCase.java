@@ -34,23 +34,12 @@ public class LoginUseCase {
 
         UserProfile userProfile = userProfileService.getUserProfile(userId);
 
-        String accessToken = getAccessToken(userId, isAdmin);
-        String refreshToken = getRefreshToken(userId);
+        TokenResult accessToken = jwtProvider.createAccessToken(userId, isAdmin);
+        TokenResult refreshToken = jwtProvider.createRefreshToken(userId);
 
-        return LoginResult.of(accessToken, refreshToken, userId, userProfile);
-    }
+        refreshTokenRepository.save(refreshToken.jti(), refreshToken.token(), refreshToken.expirationMillis());
 
-    private String getAccessToken(long userId, boolean isAdmin) {
-        TokenResult accessTokenResult = jwtProvider.createAccessToken(userId, isAdmin);
 
-        return accessTokenResult.token();
-    }
-
-    private String getRefreshToken(long userId) {
-        TokenResult refreshTokenResult = jwtProvider.createRefreshToken(userId);
-
-        refreshTokenRepository.save(refreshTokenResult.jti(), refreshTokenResult.token(), refreshTokenResult.expirationMillis());
-
-        return refreshTokenResult.token();
+        return LoginResult.of(accessToken.token(), refreshToken.token(), userId, userProfile, accessToken.expirationMillis());
     }
 }

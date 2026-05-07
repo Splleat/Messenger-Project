@@ -27,7 +27,7 @@ class RefreshTokenRepositoryTest {
         // given
         String jti = "test";
         String token = "token";
-        long expirationMillis = 60 * 60 * 60;
+        long expirationMillis = System.currentTimeMillis() + 60 * 60 * 60;
 
         refreshTokenRepository.save(jti, token, expirationMillis);
 

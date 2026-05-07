@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/refresh").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/ws-stomp/**").permitAll()
                         .anyRequest().authenticated()

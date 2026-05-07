@@ -52,4 +52,9 @@ public class GroupMemberService {
 
         groupMemberRepository.deleteByUserIdAndGroupId(userId, groupId);
     }
+
+    @Transactional(readOnly = true)
+    public List<Long> getAllJoinedGroupIds(long userId) {
+        return groupMemberRepository.findAllGroupIdByUserId(userId);
+    }
 }

@@ -79,6 +79,20 @@ public class JwtProvider {
         }
     }
 
+    public Claims getClaimsIgnoreExpiration(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        } catch (JwtException _) {
+            throw new BusinessException(ErrorCode.TOKEN_INVALID);
+        }
+    }
+
     public long getUserId(Claims claims) {
         return Long.parseLong(claims.getSubject());
     }

@@ -14,8 +14,11 @@ public class RefreshTokenRepository {
     private final RedisTemplate<String, String> redisTemplate;
 
     public void save(String jti, String refreshToken, long expirationMillis) {
-        redisTemplate.opsForValue()
-                .set(KEY_PREFIX + jti, refreshToken, Duration.ofMillis(expirationMillis));
+        long ttl = expirationMillis - System.currentTimeMillis();
+        if (ttl > 0) {
+            redisTemplate.opsForValue()
+                    .set(KEY_PREFIX + jti, refreshToken, Duration.ofMillis(ttl));
+        }
     }
 
     public Optional<String> findByJti(String jti) {
@@ -25,5 +28,9 @@ public class RefreshTokenRepository {
 
     public void delete(String jti) {
         redisTemplate.delete(KEY_PREFIX + jti);
+    }
+
+    public boolean existsByJti(String jti) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(KEY_PREFIX + jti));
     }
 }

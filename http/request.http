@@ -19,12 +19,24 @@ Content-Type: application/json
   "password": "password123"
 }
 
-> {% client.global.set("auth_token", response.body.accessToken); %}
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}
+
+### 토큰 재발급
+POST {{host}}/auth/refresh
+Content-Type: application/json
+
+{
+  "accessToken": "{{auth_token}}",
+  "refreshToken": "{{refresh_token}}"
+}
 
 ### 그룹 생성
 POST {{host}}/groups
 Content-Type: application/json
-Cookie: Authorization={{auth_token}}
+Authorization: Bearer {{auth_token}}
 
 {
   "groupName": "testGroup",
@@ -32,9 +44,9 @@ Cookie: Authorization={{auth_token}}
 }
 
 ### 채널 생성
-POST {{host}}/groups/836821889904162045/channels
+POST {{host}}/groups/839757893646845175/channels
 Content-Type: application/json
-Cookie: Authorization={{auth_token}}
+Authorization: Bearer {{auth_token}}
 
 {
   "channelName": "testChannel",

@@ -2,10 +2,10 @@ package me.splleat.messengerproject.interfaces.websocket.message;
 
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.message.SendMessageUseCase;
-import me.splleat.messengerproject.application.message.dto.SendMessageResult;
+import me.splleat.messengerproject.application.message.dto.MessageResult;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.SendMessageRequest;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.SendMessageResponse;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCreateRequest;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -19,12 +19,12 @@ public class MessageController {
 
     @MessageMapping("/channel/{channel-id}")
     @SendTo("/sub/channel/{channel-id}")
-    public SendMessageResponse sendMessage(
+    public MessageResponse sendMessage(
             @DestinationVariable("channel-id") Long channelId,
-            SendMessageRequest request,
+            MessageCreateRequest request,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        SendMessageResult result = sendMessageUseCase.execute(request.toCommand(userPrincipal.getUserId(), channelId));
+        MessageResult result = sendMessageUseCase.execute(request.toCommand(userPrincipal.getUserId(), channelId));
 
-        return SendMessageResponse.from(result);
+        return MessageResponse.from(result);
     }
 }

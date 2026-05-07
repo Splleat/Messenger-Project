@@ -10,6 +10,7 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletab
 @Table(name = "attachments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Attachment extends SoftDeletableEntity {
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "message_id")
     private Message message;

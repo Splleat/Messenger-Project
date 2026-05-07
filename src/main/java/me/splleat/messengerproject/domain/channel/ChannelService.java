@@ -6,6 +6,8 @@ import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelReposit
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ChannelService {
@@ -20,5 +22,10 @@ public class ChannelService {
     public Channel getChannel(long channelId) {
         return channelRepository.findById(channelId)
                 .orElseThrow(ChannelNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> getGroupChannelIds(long groupId) {
+        return channelRepository.findAllByGroupId(groupId);
     }
 }

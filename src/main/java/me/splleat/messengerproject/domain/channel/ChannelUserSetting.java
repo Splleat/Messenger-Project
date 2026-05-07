@@ -1,24 +1,27 @@
 package me.splleat.messengerproject.domain.channel;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
+import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
 
 @Entity
 @Table(name = "channel_user_settings")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChannelUserSetting extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Getter
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
+    @Getter
+    @Column(name = "channel_id")
+    private Long channelId;
 
     @Column(name = "last_read_message_id")
     private Long lastReadMessageId;
@@ -29,26 +32,18 @@ public class ChannelUserSetting extends BaseEntity {
     @Column(name = "is_muted")
     private boolean isMuted;
 
-    public Long getUserId() {
-        return user.getId();
-    }
-
-    public Long getChannelId() {
-        return channel.getId();
-    }
-
     @Builder
-    private ChannelUserSetting(User user, Channel channel) {
-        this.user = user;
-        this.channel = channel;
+    private ChannelUserSetting(Long userId, Long channelId) {
+        this.userId = userId;
+        this.channelId = channelId;
         isPinned = false;
         isMuted = false;
     }
 
-    public static ChannelUserSetting create(User user, Channel channel) {
+    public static ChannelUserSetting create(Long userId, Long channelId) {
         return ChannelUserSetting.builder()
-                .user(user)
-                .channel(channel)
+                .userId(userId)
+                .channelId(channelId)
                 .build();
     }
 }

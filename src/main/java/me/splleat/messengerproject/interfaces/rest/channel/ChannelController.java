@@ -28,7 +28,8 @@ public class ChannelController {
     public ResponseEntity<Void> createGroupChannel(
             @PathVariable("group-id") long groupId,
             @Valid @RequestBody GroupChannelCreateRequest request,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
         groupChannelCreateUseCase.execute(request.toCommand(userPrincipal.getUserId(), groupId));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -37,17 +38,20 @@ public class ChannelController {
     @PostMapping("/channels")
     public ResponseEntity<Void> createDirectChannel(
             @Valid @RequestBody DirectChannelCreateRequest request,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
         directChannelCreateUseCase.execute(request.toCommand(userPrincipal.getUserId()));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+
     @PostMapping("/channels/{channel-id}/members")
     public ResponseEntity<Void> inviteDirectChannel(
             @PathVariable("channel-id") long channelId,
             @Valid @RequestBody DirectChannelInviteRequest request,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
         directChannelInviteUseCase.execute(request.toCommand(userPrincipal.getUserId(), channelId));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

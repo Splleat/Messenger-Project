@@ -1,11 +1,11 @@
 package me.splleat.messengerproject.interfaces.websocket.message.dto;
 
-import me.splleat.messengerproject.application.message.dto.SendMessageResult;
+import me.splleat.messengerproject.application.message.dto.MessageResult;
 import me.splleat.messengerproject.domain.message.MessageType;
 
 import java.time.LocalDateTime;
 
-public record SendMessageResponse(
+public record MessageResponse(
         long userId,
         long channelId,
         String username,
@@ -15,8 +15,8 @@ public record SendMessageResponse(
         Long parentMessageId,
         LocalDateTime createdAt
 ) {
-    public static SendMessageResponse from(SendMessageResult result) {
-        return new SendMessageResponse(
+    public static MessageResponse from(MessageResult result) {
+        return new MessageResponse(
             result.userId(),
             result.channelId(),
             result.username(),

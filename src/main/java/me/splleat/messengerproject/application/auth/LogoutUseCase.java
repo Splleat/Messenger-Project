@@ -18,15 +18,15 @@ public class LogoutUseCase {
 
     public void execute(LogoutCommand command) {
         try {
-            saveBlackList(command.accessToken());
-        } catch (BusinessException _) {
-            // 액세스 토큰이 만료되었다면, 블랙 리스트에 넣을 필요가 없으므로 무시
-        }
-
-        try {
             removeRefreshToken(command.refreshToken());
         } catch (BusinessException _) {
             // 리프레시 토큰이 만료되었다면, 새로운 액세스 토큰을 발급받지 못하므로 무시
+        }
+
+        try {
+            saveBlackList(command.accessToken());
+        } catch (BusinessException _) {
+            // 액세스 토큰이 만료되었다면, 블랙 리스트에 넣을 필요가 없으므로 무시
         }
     }
 

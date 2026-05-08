@@ -6,12 +6,16 @@ import me.splleat.messengerproject.domain.profile.exception.UserProfileNotFoundE
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
 
+    @Transactional
     public UserProfile register(UserProfile userProfile) {
         if (userProfileRepository.existsById(userProfile.getUserId())) {
             throw new UserProfileAlreadyExistsException();
@@ -20,9 +24,15 @@ public class UserProfileService {
         return userProfileRepository.save(userProfile);
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "userProfile", key = "#id")
     public UserProfile getUserProfile(Long id) {
         return userProfileRepository.findById(id)
                 .orElseThrow(UserProfileNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserProfile> getUserProfiles(List<Long> userIds) {
+        return userProfileRepository.findAllByIdIn(userIds);
     }
 }

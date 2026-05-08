@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MessageService {
@@ -19,5 +21,10 @@ public class MessageService {
         } catch (DataIntegrityViolationException _) {
             return messageRepository.findByIdemPotencyKey(message.getIdemPotencyKey());
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Message> getChannelMessages(long channelId) {
+        return messageRepository.findAllByChannelId(channelId);
     }
 }

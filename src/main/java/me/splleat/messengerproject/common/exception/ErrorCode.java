@@ -10,11 +10,14 @@ public enum ErrorCode {
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "AUTH_002", "유효하지 않은 토큰입니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "AUTH_003", "토큰이 만료되었습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_004", "인증이 필요한 서비스입니다."),
+    TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "AUTH_006", "토큰 정보가 일치하지 않습니다."),
 
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "AUTH_005", "이미 사용 중인 이메일입니다."),
 
     USER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH_001", "아이디나 비밀번호가 일치하지 않습니다."),
     USER_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "AUTH_001", "아이디나 비밀번호가 일치하지 않습니다."),
+
+    USER_DEACTIVATED(HttpStatus.FORBIDDEN, "USER_001", "비활성화된 사용자입니다."),
 
     USER_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_PROFILE_001", "사용자 프로필이 존재하지 않습니다."),
     USER_PROFILE_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_PROFILE_002", "사용자 프로필이 이미 존재합니다."),

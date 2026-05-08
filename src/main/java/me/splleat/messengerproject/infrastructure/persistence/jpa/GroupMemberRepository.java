@@ -13,7 +13,12 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
 
     Optional<GroupMember> findByUserIdAndGroupId(Long userId, Long groupId);
 
-    List<Long> findAllUserIdByGroupId(Long groupId);
+    @Query("""
+        SELECT gm.userId
+        FROM GroupMember gm
+        WHERE gm.groupId = :groupId
+    """)
+    List<Long> findAllUserIdByGroupId(@Param("groupId") Long groupId);
 
     @Query("""
         SELECT gm.nickname
@@ -21,6 +26,13 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
         WHERE gm.userId = :userId AND gm.groupId = :groupId
     """)
     Optional<String> findNicknameByUserIdAndGroupId(@Param("userId") Long userId, @Param("groupId") Long groupId);
+
+    @Query("""
+        SELECT gm.groupId
+        FROM GroupMember gm
+        WHERE gm.userId = :userId
+    """)
+    List<Long> findAllGroupIdByUserId(@Param("userId") Long userId);
 
     void deleteByUserIdAndGroupId(Long userId, Long groupId);
 }

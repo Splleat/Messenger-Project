@@ -5,6 +5,8 @@ import me.splleat.messengerproject.infrastructure.persistence.jpa.GroupRepositor
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class GroupService {
@@ -15,7 +17,8 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
-    public Group getReference(long groupId) {
-        return groupRepository.getReferenceById(groupId);
+    @Transactional(readOnly = true)
+    public List<Group> getGroups(List<Long> groupIds) {
+        return groupRepository.findAllByIdIn(groupIds);
     }
 }

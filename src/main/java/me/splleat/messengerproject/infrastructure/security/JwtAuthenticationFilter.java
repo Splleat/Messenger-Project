@@ -2,7 +2,6 @@ package me.splleat.messengerproject.infrastructure.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +13,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtValidator jwtValidator;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+
+        return path.startsWith("/auth/login") || path.startsWith("/auth/register") || path.startsWith("/auth/refresh");
+    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
@@ -28,23 +33,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (BusinessException e) {
             request.setAttribute("error", e.getErrorCode());
+            throw e;
         }
 
         filterChain.doFilter(request, response);
     }
 
     private String getJwtToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
+        String authorization = request.getHeader("Authorization");
 
-        if (cookies == null) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
             throw new BusinessException(ErrorCode.TOKEN_INVALID);
         }
 
-        return Arrays.stream(cookies)
-                .filter(cookie -> "Authorization".equals(cookie.getName()))
-                .map(Cookie::getValue)
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.TOKEN_INVALID));
-
+        return authorization.substring(7);
     }
 }

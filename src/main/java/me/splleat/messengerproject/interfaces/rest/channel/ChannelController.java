@@ -2,15 +2,14 @@ package me.splleat.messengerproject.interfaces.rest.channel;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.channel.ChannelListGetUseCase;
-import me.splleat.messengerproject.application.channel.DirectChannelCreateUseCase;
-import me.splleat.messengerproject.application.channel.DirectChannelInviteUseCase;
-import me.splleat.messengerproject.application.channel.GroupChannelCreateUseCase;
+import me.splleat.messengerproject.application.channel.*;
+import me.splleat.messengerproject.application.channel.dto.ChannelMessageGetCommand;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelInviteRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupChannelCreateRequest;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +24,7 @@ public class ChannelController {
     private final GroupChannelCreateUseCase groupChannelCreateUseCase;
     private final DirectChannelCreateUseCase directChannelCreateUseCase;
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
+    private final ChannelMessageGetUseCase channelMessageGetUseCase;
 
     @PostMapping("/groups/{group-id}/channels")
     public ResponseEntity<Void> createGroupChannel(
@@ -54,6 +54,20 @@ public class ChannelController {
         directChannelCreateUseCase.execute(request.toCommand(userPrincipal.getUserId()));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/channels/{channel-id}/messages")
+    public ResponseEntity<List<MessageResponse>> getChannelMessages(
+            @PathVariable("channel-id") long channelId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        ChannelMessageGetCommand command = new ChannelMessageGetCommand(userPrincipal.getUserId(), channelId);
+
+        List<MessageResponse> response = channelMessageGetUseCase.execute(command).stream()
+                .map(MessageResponse::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
 

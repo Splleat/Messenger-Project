@@ -13,16 +13,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final List<String> PUBLIC_PATH = List.of("/auth/login", "/auth/register", "/auth/refresh", "/h2-console", "/ws-stomp");
     private final JwtValidator jwtValidator;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
 
-        return path.startsWith("/auth/login") || path.startsWith("/auth/register") || path.startsWith("/auth/refresh");
+        return PUBLIC_PATH.stream()
+                .anyMatch(path::startsWith);
     }
 
     @Override

@@ -9,12 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserPrincipal implements UserDetails {
+public class UserPrincipal implements Principal, UserDetails {
 
     private final Long userId;
     private final boolean isAdmin;
@@ -36,6 +37,11 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public @NonNull String getUsername() {
+        return String.valueOf(userId);
+    }
+
+    @Override
+    public String getName() {
         return String.valueOf(userId);
     }
 }

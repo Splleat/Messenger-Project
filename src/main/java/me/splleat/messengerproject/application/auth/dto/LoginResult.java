@@ -8,16 +8,18 @@ public record LoginResult(
         Long id,
         String username,
         String profileImage,
-        String statusMessage
+        String statusMessage,
+        long accessTokenExpiresIn
 ) {
-    public static LoginResult of(String accessToken, String refreshToken, Long id, UserProfile profile) {
+    public static LoginResult of(String accessToken, String refreshToken, Long id, UserProfile profile, long accessTokenExpiresIn) {
         return new LoginResult(
                 accessToken,
                 refreshToken,
                 id,
                 profile.getName(),
                 profile.getImageUrl(),
-                profile.getStatusMessage()
+                profile.getStatusMessage(),
+                accessTokenExpiresIn
         );
     }
 }

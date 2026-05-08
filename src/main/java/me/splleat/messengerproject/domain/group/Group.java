@@ -5,11 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
 
 @Entity
 @Table(name = "groups")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Group extends SoftDeletableEntity {
     @Column(name = "name")

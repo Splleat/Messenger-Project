@@ -3,6 +3,7 @@ package me.splleat.messengerproject.interfaces.rest.auth;
 import me.splleat.messengerproject.application.auth.LoginUseCase;
 import me.splleat.messengerproject.application.auth.LogoutUseCase;
 import me.splleat.messengerproject.application.auth.RegisterUseCase;
+import me.splleat.messengerproject.application.auth.TokenReissueUseCase;
 import me.splleat.messengerproject.application.auth.dto.LoginResult;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginRequest;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.LogoutRequest;
@@ -40,12 +41,15 @@ class AuthControllerTest {
     @MockitoBean
     private LogoutUseCase logoutUseCase;
 
+    @MockitoBean
+    private TokenReissueUseCase tokenReissueUseCase;
+
     @Test
     @DisplayName("올바른 이메일과 비밀번호로 로그인을 시도하면 200 OK를 반환한다.")
     void login_WhenValidCredential_ReturnsOk() throws Exception {
         // given
         LoginRequest request = new LoginRequest("test@test.com", "password123");
-        LoginResult value = new LoginResult("accessToken", "refreshToken", 1L, "test", "profileImage", "statusMessage");
+        LoginResult value = new LoginResult("accessToken", "refreshToken", 1L, "test", "profileImage", "statusMessage", 1000000L);
 
         given(loginUseCase.execute(request.toCommand()))
                 .willReturn(value);

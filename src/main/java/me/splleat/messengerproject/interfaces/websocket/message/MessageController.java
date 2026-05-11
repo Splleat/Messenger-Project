@@ -8,21 +8,28 @@ import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCreat
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.security.Principal;
+
+@RestController
 @RequiredArgsConstructor
 public class MessageController {
     private final SendMessageUseCase sendMessageUseCase;
 
-    @MessageMapping("/channel/{channel-id}")
-    @SendTo("/sub/channel/{channel-id}")
+    @MessageMapping("/channels/{channel-id}/messages")
+    @SendTo("/sub/channels/{channel-id}/messages")
     public MessageResponse sendMessage(
             @DestinationVariable("channel-id") Long channelId,
-            MessageCreateRequest request,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @Payload MessageCreateRequest request,
+            Principal principal) {
+        Authentication authentication = (Authentication) principal;
+
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
         MessageResult result = sendMessageUseCase.execute(request.toCommand(userPrincipal.getUserId(), channelId));
 
         return MessageResponse.from(result);

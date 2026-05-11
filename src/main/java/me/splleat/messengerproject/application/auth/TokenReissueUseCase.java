@@ -54,11 +54,11 @@ public class TokenReissueUseCase {
         TokenResult newAccessToken = jwtProvider.createAccessToken(userId, user.isAdmin());
         TokenResult newRefreshToken = jwtProvider.createRefreshToken(userId);
 
-        // 기존에 저장된 리프레시 토큰 삭제
-        refreshTokenRepository.delete(rtJti);
-
         // 새로운 리프레시 토큰 저장
         refreshTokenRepository.save(newRefreshToken.jti(), newRefreshToken.token(), newRefreshToken.expirationMillis());
+
+        // 기존에 저장된 리프레시 토큰 삭제
+        refreshTokenRepository.delete(rtJti);
 
         log.info("토큰 재발급 완료");
 

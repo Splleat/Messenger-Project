@@ -6,6 +6,7 @@ import me.splleat.messengerproject.domain.message.MessageType;
 import java.time.LocalDateTime;
 
 public record MessageResult(
+        long id,
         long userId,
         long channelId,
         String username,
@@ -17,6 +18,7 @@ public record MessageResult(
 ) {
     public static MessageResult from(Message message, String username, String profileUrl) {
         return new MessageResult(
+            message.getId(),
             message.getUserId(),
             message.getChannelId(),
             username,

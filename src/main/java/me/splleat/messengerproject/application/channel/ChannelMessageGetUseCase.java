@@ -37,7 +37,14 @@ public class ChannelMessageGetUseCase {
                 .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
 
         return channelMessages.stream()
-                .map(message -> MessageResult.from(message, userProfileMap.get(message.getUserId()).getName(), userProfileMap.get(message.getUserId()).getImageUrl()))
+                .map(message -> {
+                    UserProfile userProfile = userProfileMap.get(message.getUserId());
+
+                    String username = (userProfile != null) ? userProfile.getName() : "탈퇴한 사용자";
+                    String profileUrl = (userProfile != null) ? userProfile.getImageUrl() : null;
+
+                    return MessageResult.from(message, username, profileUrl);
+                })
                 .toList();
     }
 }

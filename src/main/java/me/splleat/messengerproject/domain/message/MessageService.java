@@ -23,6 +23,7 @@ public class MessageService {
         }
     }
 
+    // TODO: 커서 기반 페이징 추가
     @Transactional(readOnly = true)
     public List<Message> getChannelMessages(long channelId) {
         return messageRepository.findAllByChannelId(channelId);

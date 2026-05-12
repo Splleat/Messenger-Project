@@ -64,5 +64,13 @@ public class ChannelUserSettingService {
 
         channelUserSettingRepository.deleteAllByUserIdAndChannelIdIn(userId, channelIds);
     }
+
+    @Transactional
+    public void registerIfAbsent(long userId, long channelId) {
+        if (!channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId)) {
+            ChannelUserSetting channelUserSetting = ChannelUserSetting.create(userId, channelId);
+            channelUserSettingRepository.save(channelUserSetting);
+        }
+    }
 }
 

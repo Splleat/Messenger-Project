@@ -46,7 +46,7 @@ class ChannelControllerTest {
     private ChannelListGetUseCase channelListGetUseCase;
 
     @MockitoBean
-    private ChannelMessageGetUseCase channelMessageGetUseCase;
+    private DirectChannelMessageGetUseCase directChannelMessageGetUseCase;
 
     @Test
     @WithMockPrincipal

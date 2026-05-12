@@ -2,13 +2,15 @@ package me.splleat.messengerproject.interfaces.rest.channel;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.channel.*;
-import me.splleat.messengerproject.application.channel.dto.ChannelMessageGetCommand;
+import me.splleat.messengerproject.application.channel.ChannelListGetUseCase;
+import me.splleat.messengerproject.application.channel.DirectChannelCreateUseCase;
+import me.splleat.messengerproject.application.channel.DirectChannelInviteUseCase;
+import me.splleat.messengerproject.application.channel.DirectChannelMessageGetUseCase;
+import me.splleat.messengerproject.application.channel.dto.DirectChannelMessageGetCommand;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelInviteRequest;
-import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,26 +20,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/channels")
 @RequiredArgsConstructor
 public class ChannelController {
     private final ChannelListGetUseCase channelListGetUseCase;
-    private final GroupChannelCreateUseCase groupChannelCreateUseCase;
     private final DirectChannelCreateUseCase directChannelCreateUseCase;
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
-    private final ChannelMessageGetUseCase channelMessageGetUseCase;
+    private final DirectChannelMessageGetUseCase directChannelMessageGetUseCase;
 
-    @PostMapping("/groups/{group-id}/channels")
-    public ResponseEntity<Void> createGroupChannel(
-            @PathVariable("group-id") long groupId,
-            @Valid @RequestBody GroupChannelCreateRequest request,
-            @AuthenticationPrincipal UserPrincipal userPrincipal
-    ) {
-        groupChannelCreateUseCase.execute(request.toCommand(userPrincipal.getUserId(), groupId));
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @GetMapping("/channels")
+    @GetMapping
     public ResponseEntity<List<ChannelListResponse>> getDirectChannels(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         long userId = userPrincipal.getUserId();
 
@@ -46,7 +37,7 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/channels")
+    @PostMapping
     public ResponseEntity<Void> createDirectChannel(
             @Valid @RequestBody DirectChannelCreateRequest request,
             @AuthenticationPrincipal UserPrincipal userPrincipal
@@ -56,20 +47,20 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/channels/{channel-id}/messages")
+    @GetMapping("/{channel-id}/messages")
     public ResponseEntity<List<MessageResponse>> getChannelMessages(
             @PathVariable("channel-id") long channelId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        ChannelMessageGetCommand command = new ChannelMessageGetCommand(userPrincipal.getUserId(), channelId);
+        DirectChannelMessageGetCommand command = new DirectChannelMessageGetCommand(userPrincipal.getUserId(), channelId);
 
-        List<MessageResponse> response = channelMessageGetUseCase.execute(command);
+        List<MessageResponse> response = directChannelMessageGetUseCase.execute(command);
 
         return ResponseEntity.ok(response);
     }
 
 
-    @PostMapping("/channels/{channel-id}/members")
+    @PostMapping("/{channel-id}/members")
     public ResponseEntity<Void> inviteDirectChannel(
             @PathVariable("channel-id") long channelId,
             @Valid @RequestBody DirectChannelInviteRequest request,

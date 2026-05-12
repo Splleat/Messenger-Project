@@ -4,8 +4,8 @@ import me.splleat.messengerproject.application.auth.LoginUseCase;
 import me.splleat.messengerproject.application.auth.LogoutUseCase;
 import me.splleat.messengerproject.application.auth.RegisterUseCase;
 import me.splleat.messengerproject.application.auth.TokenReissueUseCase;
-import me.splleat.messengerproject.application.auth.dto.LoginResult;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginResponse;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.LogoutRequest;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.RegisterRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +49,7 @@ class AuthControllerTest {
     void login_WhenValidCredential_ReturnsOk() throws Exception {
         // given
         LoginRequest request = new LoginRequest("test@test.com", "password123");
-        LoginResult value = new LoginResult("accessToken", "refreshToken", 1L, "test", "profileImage", "statusMessage", 1000000L);
+        LoginResponse value = new LoginResponse("accessToken", "refreshToken", 1L, "test", "profileImage", "statusMessage", 1000000L);
 
         given(loginUseCase.execute(request.toCommand()))
                 .willReturn(value);

@@ -2,6 +2,7 @@ package me.splleat.messengerproject.domain.channel;
 
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.domain.channel.exception.ChannelNotFoundException;
+import me.splleat.messengerproject.domain.channel.exception.GroupChannelNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,19 @@ public class ChannelService {
     }
 
     @Transactional(readOnly = true)
-    public List<Channel> getAllChannelByChannelIds(List<Long> channelIds) {
-        return channelRepository.findAllByIdIn(channelIds);
+    public List<Channel> getGroupChannels(long groupId) {
+        return channelRepository.findAllByGroupId(groupId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Channel> getDirectChannels(List<Long> channelIds) {
+        return channelRepository.findAllByGroupIdIsNullAndIdIn(channelIds);
+    }
+
+    @Transactional(readOnly = true)
+    public void validateInGroup(long groupId, long channelId) {
+        if (!channelRepository.existsByIdAndGroupId(channelId, groupId)) {
+            throw new GroupChannelNotFoundException();
+        }
     }
 }

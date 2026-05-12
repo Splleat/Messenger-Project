@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.domain.group;
 
 import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.domain.group.exception.GroupNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.GroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,5 +21,11 @@ public class GroupService {
     @Transactional(readOnly = true)
     public List<Group> getGroups(List<Long> groupIds) {
         return groupRepository.findAllByIdIn(groupIds);
+    }
+
+    @Transactional(readOnly = true)
+    public Group getGroup(long groupId) {
+        return groupRepository.findById(groupId)
+                .orElseThrow(GroupNotFoundException::new);
     }
 }

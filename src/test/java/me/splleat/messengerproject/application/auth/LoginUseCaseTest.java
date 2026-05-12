@@ -1,7 +1,6 @@
 package me.splleat.messengerproject.application.auth;
 
 import me.splleat.messengerproject.application.auth.dto.LoginCommand;
-import me.splleat.messengerproject.application.auth.dto.LoginResult;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
@@ -9,6 +8,7 @@ import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;
 import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
+import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -84,7 +84,7 @@ class LoginUseCaseTest {
                 .willReturn(new TokenResult(jti, refreshToken, expirationMillis));
 
         // when
-        LoginResult result = loginUseCase.execute(command);
+        LoginResponse result = loginUseCase.execute(command);
 
         // then
         assertThat(result.accessToken())

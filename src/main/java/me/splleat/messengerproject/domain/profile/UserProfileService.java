@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +36,11 @@ public class UserProfileService {
     @Transactional(readOnly = true)
     public List<UserProfile> getUserProfiles(List<Long> userIds) {
         return userProfileRepository.findAllByIdIn(userIds);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Long, UserProfile> getUserProfileMap(List<Long> userIds) {
+        return userProfileRepository.findAllByIdIn(userIds).stream()
+                .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
     }
 }

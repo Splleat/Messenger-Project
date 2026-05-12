@@ -39,6 +39,11 @@ public class ChannelUserSettingService {
     }
 
     @Transactional(readOnly = true)
+    public List<Long> getJoinedUserIds(long channelId) {
+        return channelUserSettingRepository.findAllUserIdByChannelId(channelId);
+    }
+
+    @Transactional(readOnly = true)
     public List<Long> alreadyJoinedIds(long channelId, List<Long> targetIds) {
         return channelUserSettingRepository.findAllUserIdByChannelIdAndUserIdIn(channelId, targetIds);
     }
@@ -61,8 +66,15 @@ public class ChannelUserSettingService {
 
     @Transactional
     public void leaveChannels(long userId, List<Long> channelIds) {
-
         channelUserSettingRepository.deleteAllByUserIdAndChannelIdIn(userId, channelIds);
+    }
+
+    @Transactional
+    public void registerIfAbsent(long userId, long channelId) {
+        if (!channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId)) {
+            ChannelUserSetting channelUserSetting = ChannelUserSetting.create(userId, channelId);
+            channelUserSettingRepository.save(channelUserSetting);
+        }
     }
 }
 

@@ -2,7 +2,6 @@ package me.splleat.messengerproject.application.message;
 
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
-import me.splleat.messengerproject.application.message.dto.MessageResult;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
@@ -12,6 +11,7 @@ import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -24,7 +24,7 @@ public class SendMessageUseCase {
     private final MessageService messageService;
 
     @Transactional
-    public MessageResult execute(MessageCreateCommand command) {
+    public MessageResponse execute(MessageCreateCommand command) {
         channelUserSettingService.validateParticipant(command.senderId(), command.channelId());
 
         Channel channel = channelService.getChannel(command.channelId());
@@ -42,6 +42,6 @@ public class SendMessageUseCase {
                     .orElse(username);
         }
 
-        return MessageResult.from(created, username, profileUrl);
+        return MessageResponse.of(username, profileUrl, created);
     }
 }

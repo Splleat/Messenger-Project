@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,11 +36,19 @@ public class UserProfileService {
 
     @Transactional(readOnly = true)
     public List<UserProfile> getUserProfiles(List<Long> userIds) {
+        if (userIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return userProfileRepository.findAllByIdIn(userIds);
     }
 
     @Transactional(readOnly = true)
     public Map<Long, UserProfile> getUserProfileMap(List<Long> userIds) {
+        if (userIds.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
         return userProfileRepository.findAllByIdIn(userIds).stream()
                 .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
     }

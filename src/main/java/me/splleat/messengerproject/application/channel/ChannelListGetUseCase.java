@@ -20,7 +20,7 @@ public class ChannelListGetUseCase {
     public List<ChannelListResponse> execute(long userId) {
         List<Long> joinedChannelIds = channelUserSettingService.getJoinedChannelIds(userId);
 
-        List<Channel> joinedChannels = channelService.getAllChannelByChannelIds(joinedChannelIds);
+        List<Channel> joinedChannels = channelService.getDirectChannels(joinedChannelIds);
 
         return joinedChannels.stream()
                 .map(ChannelListResponse::from)

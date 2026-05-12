@@ -38,7 +38,7 @@ public class ChannelController {
     }
 
     @GetMapping("/channels")
-    public ResponseEntity<List<ChannelListResponse>> getChannels(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<List<ChannelListResponse>> getDirectChannels(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         long userId = userPrincipal.getUserId();
 
         List<ChannelListResponse> response = channelListGetUseCase.execute(userId);

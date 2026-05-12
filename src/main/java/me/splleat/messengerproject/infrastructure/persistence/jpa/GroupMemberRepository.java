@@ -34,5 +34,12 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
     """)
     List<Long> findAllGroupIdByUserId(@Param("userId") Long userId);
 
+    @Query("""
+        SELECT gm.userId
+        FROM GroupMember gm
+        WHERE gm.groupId = :groupId AND gm.userId IN :userIds
+    """)
+    List<Long> findAllUserIdByGroupIdAndUserIdIn(@Param("groupId") Long groupId, @Param("userIds") List<Long> userIds);
+
     void deleteByUserIdAndGroupId(Long userId, Long groupId);
 }

@@ -52,7 +52,11 @@ public class GroupMemberService {
                 .orElseThrow(GroupMemberNotFoundException::new);
 
         if (groupMember.isGroupOwner()) {
-            throw new GroupOwnerLeaveException();
+            boolean hasOtherMember = groupMemberRepository.existsByGroupIdAndUserIdNot(groupId, userId);
+
+            if (hasOtherMember) {
+                throw new GroupOwnerLeaveException();
+            }
         }
 
         groupMemberRepository.deleteByUserIdAndGroupId(userId, groupId);

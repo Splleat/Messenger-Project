@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.*;
 import me.splleat.messengerproject.application.channel.dto.ChannelParticipantGetCommand;
+import me.splleat.messengerproject.application.channel.dto.DirectChannelLeaveCommand;
 import me.splleat.messengerproject.application.channel.dto.DirectChannelMessageGetCommand;
-import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelParticipantResponse;
@@ -23,8 +23,7 @@ import java.util.List;
 @RequestMapping("/channels")
 @RequiredArgsConstructor
 public class ChannelController {
-    private final ChannelUserSettingService channelUserSettingService;
-
+    private final DirectChannelLeaveUseCase directChannelLeaveUseCase;
     private final ChannelListGetUseCase channelListGetUseCase;
     private final DirectChannelCreateUseCase directChannelCreateUseCase;
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
@@ -57,7 +56,7 @@ public class ChannelController {
     ) {
         long userId = userPrincipal.getUserId();
 
-        channelUserSettingService.leaveChannel(userId, channelId);
+        directChannelLeaveUseCase.execute(DirectChannelLeaveCommand.of(userId, channelId));
 
         return ResponseEntity.noContent().build();
     }

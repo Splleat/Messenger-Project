@@ -32,5 +32,12 @@ public interface ChannelUserSettingRepository extends JpaRepository<ChannelUserS
     """)
     List<Long> findAllChannelIdByUserId(@Param("userId") Long userId);
 
+    @Query("""
+        SELECT cus.userId
+        FROM ChannelUserSetting cus
+        WHERE cus.channelId = :channelId
+    """)
+    List<Long> findAllUserIdByChannelId(@Param("channelId") Long channelId);
+
     void deleteByUserIdAndChannelId(Long userId, Long channelId);
 }

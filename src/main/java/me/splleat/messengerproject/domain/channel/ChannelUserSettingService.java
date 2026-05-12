@@ -66,7 +66,6 @@ public class ChannelUserSettingService {
 
     @Transactional
     public void leaveChannels(long userId, List<Long> channelIds) {
-
         channelUserSettingRepository.deleteAllByUserIdAndChannelIdIn(userId, channelIds);
     }
 

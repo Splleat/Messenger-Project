@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.GroupChannelCreateUseCase;
 import me.splleat.messengerproject.application.channel.GroupChannelMessageGetUseCase;
 import me.splleat.messengerproject.application.channel.dto.GroupChannelMessageGetCommand;
-import me.splleat.messengerproject.application.group.GroupCreateUseCase;
-import me.splleat.messengerproject.application.group.GroupGetUseCase;
-import me.splleat.messengerproject.application.group.GroupInviteUseCase;
-import me.splleat.messengerproject.application.group.GroupListGetUseCase;
+import me.splleat.messengerproject.application.group.*;
 import me.splleat.messengerproject.application.group.dto.GroupGetCommand;
+import me.splleat.messengerproject.application.group.dto.GroupLeaveCommand;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupListResponse;
@@ -34,6 +32,7 @@ public class GroupController {
     private final GroupInviteUseCase groupInviteUseCase;
     private final GroupChannelMessageGetUseCase groupChannelMessageGetUseCase;
     private final GroupChannelCreateUseCase groupChannelCreateUseCase;
+    private final GroupLeaveUseCase groupLeaveUseCase;
 
     @PostMapping
     public ResponseEntity<Void> createGroup(
@@ -76,6 +75,18 @@ public class GroupController {
         GroupResponse response = groupGetUseCase.execute(GroupGetCommand.of(userId, groupId));
 
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{group-id}")
+    public ResponseEntity<Void> leaveGroup(
+            @PathVariable("group-id") long groupId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        long userId = userPrincipal.getUserId();
+
+        groupLeaveUseCase.execute(GroupLeaveCommand.of(userId, groupId));
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{group-id}/channels")

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.*;
 import me.splleat.messengerproject.application.channel.dto.ChannelParticipantGetCommand;
 import me.splleat.messengerproject.application.channel.dto.DirectChannelMessageGetCommand;
+import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelParticipantResponse;
@@ -22,6 +23,8 @@ import java.util.List;
 @RequestMapping("/channels")
 @RequiredArgsConstructor
 public class ChannelController {
+    private final ChannelUserSettingService channelUserSettingService;
+
     private final ChannelListGetUseCase channelListGetUseCase;
     private final DirectChannelCreateUseCase directChannelCreateUseCase;
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
@@ -45,6 +48,18 @@ public class ChannelController {
         directChannelCreateUseCase.execute(request.toCommand(userPrincipal.getUserId()));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{channel-id}")
+    public ResponseEntity<Void> leaveChannel(
+            @PathVariable("channel-id") long channelId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        long userId = userPrincipal.getUserId();
+
+        channelUserSettingService.leaveChannel(userId, channelId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{channel-id}/participants")

@@ -1,6 +1,6 @@
 @host = http://localhost:8080
 
-### 회원가입
+### 회원가입1
 POST {{host}}/auth/register
 Content-Type: application/json
 
@@ -8,6 +8,16 @@ Content-Type: application/json
   "email": "admin@test.com",
   "password": "password123",
   "name": "admin"
+}
+
+### 회원가입2
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "password123",
+  "name": "test"
 }
 
 ### 로그인

@@ -1,15 +1,15 @@
 package me.splleat.messengerproject.interfaces.rest.channel.dto;
 
-import me.splleat.messengerproject.application.group.dto.GroupListResult;
+import me.splleat.messengerproject.domain.group.Group;
 
 public record GroupListResponse(
         long groupId,
         String groupName
 ) {
-    public static GroupListResponse from(GroupListResult result) {
+    public static GroupListResponse from(Group group) {
         return new GroupListResponse(
-                result.groupId(),
-                result.groupName()
+                group.getId(),
+                group.getName()
         );
     }
 }

@@ -1,14 +1,14 @@
 package me.splleat.messengerproject.application.channel;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.channel.dto.ChannelMessageGetCommand;
-import me.splleat.messengerproject.application.message.dto.MessageResult;
+import me.splleat.messengerproject.application.channel.dto.DirectChannelMessageGetCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
-public class ChannelMessageGetUseCase {
+public class DirectChannelMessageGetUseCase {
     private final ChannelUserSettingService channelUserSettingService;
     private final UserProfileService userProfileService;
     private final MessageService messageService;
 
     @Transactional(readOnly = true)
-    public List<MessageResult> execute(ChannelMessageGetCommand command) {
+    public List<MessageResponse> execute(DirectChannelMessageGetCommand command) {
         channelUserSettingService.validateParticipant(command.userId(), command.channelId());
 
         List<Message> channelMessages = messageService.getChannelMessages(command.channelId());
@@ -43,7 +43,7 @@ public class ChannelMessageGetUseCase {
                     String username = (userProfile != null) ? userProfile.getName() : "탈퇴한 사용자";
                     String profileUrl = (userProfile != null) ? userProfile.getImageUrl() : null;
 
-                    return MessageResult.from(message, username, profileUrl);
+                    return MessageResponse.of(username, profileUrl, message);
                 })
                 .toList();
     }

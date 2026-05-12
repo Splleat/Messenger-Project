@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 import org.jspecify.annotations.NonNull;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> PUBLIC_PATH = List.of("/auth/login", "/auth/register", "/auth/refresh", "/h2-console", "/ws-stomp");
@@ -23,6 +25,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
+
+        log.info("[요청 URL]: {} {}", request.getMethod(), path);
 
         return PUBLIC_PATH.stream()
                 .anyMatch(path::startsWith);
@@ -36,7 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (BusinessException e) {
             request.setAttribute("error", e.getErrorCode());
-            throw e;
         }
 
         filterChain.doFilter(request, response);

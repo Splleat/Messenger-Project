@@ -28,4 +28,9 @@ public class MessageService {
     public List<Message> getChannelMessages(long channelId) {
         return messageRepository.findAllByChannelId(channelId);
     }
+
+    @Transactional(readOnly = true)
+    public List<Long> getUserIdsByChannelMessages(long channelId) {
+        return messageRepository.findAllUserIdByChannelId(channelId);
+    }
 }

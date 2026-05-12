@@ -23,6 +23,7 @@ public enum ErrorCode {
     USER_PROFILE_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_PROFILE_002", "사용자 프로필이 이미 존재합니다."),
 
     CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_001", "채널이 존재하지 않습니다."),
+    GROUP_CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_002", "채널이 그룹에 속하지 않거나 존재하지 않습니다."),
 
     CHANNEL_USER_SETTING_ALREADY_EXISTS(HttpStatus.CONFLICT, "CHANNEL_002", "이미 해당 채널의 사용자 설정이 존재합니다."),
     CHANNEL_USER_SETTING_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_003", "채널 참여 정보가 존재하지 않습니다."),

@@ -1,9 +1,6 @@
 package me.splleat.messengerproject.interfaces.rest.channel;
 
-import me.splleat.messengerproject.application.channel.ChannelListGetUseCase;
-import me.splleat.messengerproject.application.channel.DirectChannelCreateUseCase;
-import me.splleat.messengerproject.application.channel.DirectChannelInviteUseCase;
-import me.splleat.messengerproject.application.channel.GroupChannelCreateUseCase;
+import me.splleat.messengerproject.application.channel.*;
 import me.splleat.messengerproject.domain.channel.ChannelType;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelInviteRequest;
@@ -47,6 +44,9 @@ class ChannelControllerTest {
 
     @MockitoBean
     private ChannelListGetUseCase channelListGetUseCase;
+
+    @MockitoBean
+    private DirectChannelMessageGetUseCase directChannelMessageGetUseCase;
 
     @Test
     @WithMockPrincipal

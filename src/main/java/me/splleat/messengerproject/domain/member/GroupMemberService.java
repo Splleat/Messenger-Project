@@ -25,6 +25,11 @@ public class GroupMemberService {
         return groupMemberRepository.save(groupMember);
     }
 
+    @Transactional
+    public void registerAll(List<GroupMember> groupMembers) {
+        groupMemberRepository.saveAll(groupMembers);
+    }
+
     @Transactional(readOnly = true)
     public GroupMember getGroupMember(long userId, long groupId) {
         return groupMemberRepository.findByUserIdAndGroupId(userId, groupId)
@@ -56,5 +61,17 @@ public class GroupMemberService {
     @Transactional(readOnly = true)
     public List<Long> getAllJoinedGroupIds(long userId) {
         return groupMemberRepository.findAllGroupIdByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public void validateParticipant(long userId, long groupId) {
+        if (!groupMemberRepository.existsByUserIdAndGroupId(userId, groupId)) {
+            throw new GroupMemberNotFoundException();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> getAlreadyJoinedUserIds(long groupId, List<Long> userIds) {
+        return groupMemberRepository.findAllUserIdByGroupIdAndUserIdIn(groupId, userIds);
     }
 }

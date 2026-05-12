@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
@@ -36,11 +35,9 @@ public class GroupChannelMessageGetUseCase {
 
         List<Long> userIds = messageService.getUserIdsByChannelMessages(command.channelId());
 
-        Map<Long, UserProfile> profileMap = userProfileService.getUserProfiles(userIds).stream()
-                .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
+        Map<Long, UserProfile> profileMap = userProfileService.getUserProfileMap(userIds);
 
         List<Message> messages = messageService.getChannelMessages(command.channelId());
-
 
         return messages.stream()
                 .map(message -> {

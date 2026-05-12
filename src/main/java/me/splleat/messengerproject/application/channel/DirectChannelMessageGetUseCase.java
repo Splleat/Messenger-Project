@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
@@ -33,8 +32,7 @@ public class DirectChannelMessageGetUseCase {
                 .distinct()
                 .toList();
 
-        Map<Long, UserProfile> userProfileMap = userProfileService.getUserProfiles(distinctUserIds).stream()
-                .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
+        Map<Long, UserProfile> userProfileMap = userProfileService.getUserProfileMap(distinctUserIds);
 
         return channelMessages.stream()
                 .map(message -> {

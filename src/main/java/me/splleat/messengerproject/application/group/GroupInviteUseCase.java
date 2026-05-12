@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
@@ -32,8 +31,7 @@ public class GroupInviteUseCase {
                 .filter(targetId -> !alreadyJoinedUserIds.contains(targetId))
                 .toList();
 
-        Map<Long, UserProfile> userProfileMap = userProfileService.getUserProfiles(targetIds).stream()
-                .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
+        Map<Long, UserProfile> userProfileMap = userProfileService.getUserProfileMap(targetIds);
 
         List<GroupMember> newGroupMembers = targetIds.stream()
                 .map(targetId -> {

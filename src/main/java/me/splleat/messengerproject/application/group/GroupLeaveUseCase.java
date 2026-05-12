@@ -19,8 +19,6 @@ public class GroupLeaveUseCase {
 
     @Transactional
     public void execute(GroupLeaveCommand command) {
-        groupMemberService.validateParticipant(command.userId(), command.groupId());
-
         groupMemberService.leaveGroup(command.userId(), command.groupId());
 
         List<Long> groupChannelIds = channelService.getGroupChannelIds(command.groupId());

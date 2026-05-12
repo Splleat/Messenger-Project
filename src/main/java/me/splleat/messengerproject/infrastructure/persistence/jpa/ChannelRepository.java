@@ -19,4 +19,6 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     List<Channel> findAllByGroupIdIsNullAndIdIn(List<Long> ids);
 
     List<Channel> findAllByGroupId(Long groupId);
+
+    boolean existsByIdAndGroupId(Long id, Long groupId);
 }

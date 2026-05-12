@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.application.channel;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.channel.dto.ChannelMessageGetCommand;
+import me.splleat.messengerproject.application.channel.dto.DirectChannelMessageGetCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.message.Message;
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
-public class ChannelMessageGetUseCase {
+public class DirectChannelMessageGetUseCase {
     private final ChannelUserSettingService channelUserSettingService;
     private final UserProfileService userProfileService;
     private final MessageService messageService;
 
     @Transactional(readOnly = true)
-    public List<MessageResponse> execute(ChannelMessageGetCommand command) {
+    public List<MessageResponse> execute(DirectChannelMessageGetCommand command) {
         channelUserSettingService.validateParticipant(command.userId(), command.channelId());
 
         List<Message> channelMessages = messageService.getChannelMessages(command.channelId());

@@ -11,6 +11,7 @@ import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class GroupChannelMessageGetUseCase {
     private final MessageService messageService;
     private final UserProfileService userProfileService;
 
+    @Transactional(readOnly = true)
     public List<MessageResponse> execute(GroupChannelMessageGetCommand command) {
         groupMemberService.validateParticipant(command.userId(), command.groupId());
 

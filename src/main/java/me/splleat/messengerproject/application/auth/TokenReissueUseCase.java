@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.splleat.messengerproject.application.auth.dto.TokenReissueCommand;
-import me.splleat.messengerproject.application.auth.dto.TokenReissueResult;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
@@ -13,6 +12,7 @@ import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;
 import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
+import me.splleat.messengerproject.interfaces.rest.auth.dto.TokenReissueResponse;
 
 import java.util.Objects;
 
@@ -24,9 +24,7 @@ public class TokenReissueUseCase {
     private final UserService userService;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public TokenReissueResult execute(TokenReissueCommand command) {
-        log.info("토큰 재발급 시작");
-
+    public TokenReissueResponse execute(TokenReissueCommand command) {
         String oldAccessToken = command.accessToken();
         String oldRefreshToken = command.refreshToken();
 
@@ -60,8 +58,6 @@ public class TokenReissueUseCase {
         // 기존에 저장된 리프레시 토큰 삭제
         refreshTokenRepository.delete(rtJti);
 
-        log.info("토큰 재발급 완료");
-
-        return new TokenReissueResult(newAccessToken.token(), newRefreshToken.token(), newAccessToken.expirationMillis());
+        return new TokenReissueResponse(newAccessToken.token(), newRefreshToken.token(), newAccessToken.expirationMillis());
     }
 }

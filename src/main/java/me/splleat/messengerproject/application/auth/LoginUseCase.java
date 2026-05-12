@@ -2,15 +2,15 @@ package me.splleat.messengerproject.application.auth;
 
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.auth.dto.LoginCommand;
-import me.splleat.messengerproject.application.auth.dto.LoginResult;
+import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.domain.user.UserService;
-import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;
 import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
+import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class LoginUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public LoginResult execute(LoginCommand command) {
+    public LoginResponse execute(LoginCommand command) {
         User user = userService.getUser(command.email());
 
         user.login(command.password(), passwordEncoder);
@@ -40,6 +40,6 @@ public class LoginUseCase {
         refreshTokenRepository.save(refreshToken.jti(), refreshToken.token(), refreshToken.expirationMillis());
 
 
-        return LoginResult.of(accessToken.token(), refreshToken.token(), userId, userProfile, accessToken.expirationMillis());
+        return LoginResponse.of(user, userProfile, accessToken, refreshToken);
     }
 }

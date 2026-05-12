@@ -22,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        LoginResponse response = LoginResponse.from(loginUseCase.execute(request.toCommand()));
+        LoginResponse response = loginUseCase.execute(request.toCommand());
 
         return ResponseEntity.ok(response);
     }
@@ -43,7 +43,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<TokenReissueResponse> reissue(@RequestBody TokenReissueRequest request) {
-        TokenReissueResponse response = TokenReissueResponse.from(tokenReissueUseCase.execute(request.toCommand()));
+        TokenReissueResponse response = tokenReissueUseCase.execute(request.toCommand());
 
         return ResponseEntity.ok(response);
     }

@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.interfaces.websocket.message.dto;
 
-import me.splleat.messengerproject.application.message.dto.MessageResult;
+import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 
 import java.time.LocalDateTime;
@@ -16,17 +16,17 @@ public record MessageResponse(
         Long parentMessageId,
         LocalDateTime createdAt
 ) {
-    public static MessageResponse from(MessageResult result) {
+    public static MessageResponse of(String username, String profileUrl, Message message) {
         return new MessageResponse(
-            result.id(),
-            result.userId(),
-            result.channelId(),
-            result.username(),
-            result.profileUrl(),
-            result.content(),
-            result.type(),
-            result.parentMessageId(),
-            result.createdAt()
+            message.getId(),
+            message.getUserId(),
+            message.getChannelId(),
+            username,
+            profileUrl,
+            message.getContent(),
+            message.getType(),
+            message.getParentMessageId(),
+            message.getCreatedAt()
         );
     }
 }

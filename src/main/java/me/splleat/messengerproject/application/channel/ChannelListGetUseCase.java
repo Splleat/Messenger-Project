@@ -1,11 +1,11 @@
 package me.splleat.messengerproject.application.channel;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.channel.dto.ChannelListResult;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
+import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,13 +17,13 @@ public class ChannelListGetUseCase {
     private final ChannelUserSettingService channelUserSettingService;
 
     @Transactional(readOnly = true)
-    public List<ChannelListResult> execute(long userId) {
+    public List<ChannelListResponse> execute(long userId) {
         List<Long> joinedChannelIds = channelUserSettingService.getJoinedChannelIds(userId);
 
         List<Channel> joinedChannels = channelService.getAllChannelByChannelIds(joinedChannelIds);
 
         return joinedChannels.stream()
-                .map(ChannelListResult::from)
+                .map(ChannelListResponse::from)
                 .toList();
     }
 }

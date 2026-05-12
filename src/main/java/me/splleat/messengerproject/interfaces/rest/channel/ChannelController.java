@@ -2,13 +2,12 @@ package me.splleat.messengerproject.interfaces.rest.channel;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.channel.ChannelListGetUseCase;
-import me.splleat.messengerproject.application.channel.DirectChannelCreateUseCase;
-import me.splleat.messengerproject.application.channel.DirectChannelInviteUseCase;
-import me.splleat.messengerproject.application.channel.DirectChannelMessageGetUseCase;
+import me.splleat.messengerproject.application.channel.*;
+import me.splleat.messengerproject.application.channel.dto.ChannelParticipantGetCommand;
 import me.splleat.messengerproject.application.channel.dto.DirectChannelMessageGetCommand;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListResponse;
+import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelParticipantResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelInviteRequest;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
@@ -27,6 +26,7 @@ public class ChannelController {
     private final DirectChannelCreateUseCase directChannelCreateUseCase;
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
     private final DirectChannelMessageGetUseCase directChannelMessageGetUseCase;
+    private final ChannelParticipantGetUseCase channelParticipantGetUseCase;
 
     @GetMapping
     public ResponseEntity<List<ChannelListResponse>> getDirectChannels(@AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -45,6 +45,18 @@ public class ChannelController {
         directChannelCreateUseCase.execute(request.toCommand(userPrincipal.getUserId()));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{channel-id}/participants")
+    public ResponseEntity<List<ChannelParticipantResponse>> getChannelParticipants(
+            @PathVariable("channel-id") long channelId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        long userId = userPrincipal.getUserId();
+
+        List<ChannelParticipantResponse> response = channelParticipantGetUseCase.execute(ChannelParticipantGetCommand.of(userId, channelId));
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{channel-id}/messages")

@@ -39,9 +39,9 @@ public class ChannelController {
 
     @GetMapping("/channels")
     public ResponseEntity<List<ChannelListResponse>> getChannels(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        List<ChannelListResponse> response = channelListGetUseCase.execute(userPrincipal.getUserId()).stream()
-                .map(ChannelListResponse::from)
-                .toList();
+        long userId = userPrincipal.getUserId();
+
+        List<ChannelListResponse> response = channelListGetUseCase.execute(userId);
 
         return ResponseEntity.ok(response);
     }
@@ -63,9 +63,7 @@ public class ChannelController {
     ) {
         ChannelMessageGetCommand command = new ChannelMessageGetCommand(userPrincipal.getUserId(), channelId);
 
-        List<MessageResponse> response = channelMessageGetUseCase.execute(command).stream()
-                .map(MessageResponse::from)
-                .toList();
+        List<MessageResponse> response = channelMessageGetUseCase.execute(command);
 
         return ResponseEntity.ok(response);
     }

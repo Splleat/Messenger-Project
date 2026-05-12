@@ -32,9 +32,9 @@ public class GroupController {
 
     @GetMapping
     public ResponseEntity<List<GroupListResponse>> getGroupList(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        List<GroupListResponse> response = groupListGetUseCase.execute(userPrincipal.getUserId()).stream()
-                .map(GroupListResponse::from)
-                .toList();
+        long userId = userPrincipal.getUserId();
+
+        List<GroupListResponse> response = groupListGetUseCase.execute(userId);
 
         return ResponseEntity.ok(response);
     }

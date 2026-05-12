@@ -1,6 +1,8 @@
 package me.splleat.messengerproject.interfaces.rest.auth.dto;
 
-import me.splleat.messengerproject.application.auth.dto.LoginResult;
+import me.splleat.messengerproject.domain.profile.UserProfile;
+import me.splleat.messengerproject.domain.user.User;
+import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
 
 public record LoginResponse(
     String accessToken,
@@ -11,15 +13,15 @@ public record LoginResponse(
     String statusMessage,
     long accessTokenExpiresIn
 ) {
-    public static LoginResponse from(LoginResult result) {
+    public static LoginResponse of(User user, UserProfile userProfile, TokenResult accessToken, TokenResult refreshToken) {
         return new LoginResponse(
-                result.accessToken(),
-                result.refreshToken(),
-                result.id(),
-                result.username(),
-                result.profileImage(),
-                result.statusMessage(),
-                result.accessTokenExpiresIn()
+                accessToken.token(),
+                refreshToken.token(),
+                user.getId(),
+                userProfile.getName(),
+                userProfile.getImageUrl(),
+                userProfile.getStatusMessage(),
+                accessToken.expirationMillis()
         );
     }
 }

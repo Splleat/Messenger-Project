@@ -1,12 +1,12 @@
 package me.splleat.messengerproject.interfaces.rest.channel.dto;
 
-import me.splleat.messengerproject.application.channel.dto.ChannelListResult;
+import me.splleat.messengerproject.domain.channel.Channel;
 
 public record ChannelListResponse(
     long channelId,
     String channelName
 ) {
-    public static ChannelListResponse from(ChannelListResult result) {
-        return new ChannelListResponse(result.channelId(), result.channelName());
+    public static ChannelListResponse from(Channel channel) {
+        return new ChannelListResponse(channel.getId(), channel.getName());
     }
 }

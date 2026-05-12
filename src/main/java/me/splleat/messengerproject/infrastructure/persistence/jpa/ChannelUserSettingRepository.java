@@ -21,10 +21,6 @@ public interface ChannelUserSettingRepository extends JpaRepository<ChannelUserS
     """)
     List<Long> findAllUserIdByChannelIdAndUserIdIn(@Param("channelId") Long channelId, @Param("userIds") Collection<Long> userIds);
 
-    List<ChannelUserSetting> findAllByUserIdAndChannelIdIn(Long userId, Collection<Long> channelIds);
-
-    List<ChannelUserSetting> findAllByChannelIdAndUserIdIn(Long channelId, Collection<Long> userIds);
-
     @Query("""
         SELECT cus.channelId
         FROM ChannelUserSetting cus

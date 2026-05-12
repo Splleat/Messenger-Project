@@ -30,7 +30,12 @@ public class ChannelService {
     }
 
     @Transactional(readOnly = true)
-    public List<Channel> getAllChannelByChannelIds(List<Long> channelIds) {
-        return channelRepository.findAllByIdIn(channelIds);
+    public List<Channel> getGroupChannels(long groupId) {
+        return channelRepository.findAllByGroupId(groupId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Channel> getDirectChannels(List<Long> channelIds) {
+        return channelRepository.findAllByGroupIdIsNullAndIdIn(channelIds);
     }
 }

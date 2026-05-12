@@ -5,7 +5,6 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface ChannelRepository extends JpaRepository<Channel, Long> {
@@ -17,5 +16,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     """)
     List<Long> findAllChannelIdByGroupId(@Param("groupId") Long groupId);
 
-    List<Channel> findAllByIdIn(Collection<Long> ids);
+    List<Channel> findAllByGroupIdIsNullAndIdIn(List<Long> ids);
+
+    List<Channel> findAllByGroupId(Long groupId);
 }

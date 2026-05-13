@@ -7,13 +7,17 @@ import java.util.List;
 public record MessageCursorPrevResponse(
         List<MessageResponse> messages,
         boolean hasPrev,
-        long prevCursorId
+        Long prevCursorId
 ) {
     public static MessageCursorPrevResponse from(Slice<MessageResponse> prev) {
+        List<MessageResponse> prevContent = prev.getContent();
+
+        Long prevCursorId = prevContent.isEmpty() ? null : prevContent.getFirst().id();
+
         return new MessageCursorPrevResponse(
-                prev.getContent(),
+                prevContent,
                 prev.hasNext(),
-                prev.getContent().getFirst().id()
+                prevCursorId
         );
     }
 }

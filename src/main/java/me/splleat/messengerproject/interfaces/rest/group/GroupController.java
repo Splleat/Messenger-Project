@@ -3,8 +3,8 @@ package me.splleat.messengerproject.interfaces.rest.group;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.GroupChannelCreateUseCase;
-import me.splleat.messengerproject.application.channel.GroupChannelMessageGetUseCase;
-import me.splleat.messengerproject.application.channel.dto.GroupChannelMessageGetCommand;
+import me.splleat.messengerproject.application.channel.GroupChannelEnterUseCase;
+import me.splleat.messengerproject.application.channel.dto.GroupChannelEnterCommand;
 import me.splleat.messengerproject.application.group.*;
 import me.splleat.messengerproject.application.group.dto.GroupGetCommand;
 import me.splleat.messengerproject.application.group.dto.GroupLeaveCommand;
@@ -14,7 +14,7 @@ import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupListResponse
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupInviteRequest;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupResponse;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorBothResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,9 +30,9 @@ public class GroupController {
     private final GroupCreateUseCase groupCreateUseCase;
     private final GroupGetUseCase groupGetUseCase;
     private final GroupInviteUseCase groupInviteUseCase;
-    private final GroupChannelMessageGetUseCase groupChannelMessageGetUseCase;
     private final GroupChannelCreateUseCase groupChannelCreateUseCase;
     private final GroupLeaveUseCase groupLeaveUseCase;
+    private final GroupChannelEnterUseCase groupChannelEnterUseCase;
 
     @PostMapping
     public ResponseEntity<Void> createGroup(
@@ -101,14 +101,14 @@ public class GroupController {
     }
 
     @GetMapping("/{group-id}/channels/{channel-id}")
-    public ResponseEntity<List<MessageResponse>> getGroupChannelMessage(
+    public ResponseEntity<MessageCursorBothResponse> enterGroupChannel(
             @PathVariable("group-id") long groupId,
             @PathVariable("channel-id") long channelId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         long userId = userPrincipal.getUserId();
 
-        List<MessageResponse> response = groupChannelMessageGetUseCase.execute(GroupChannelMessageGetCommand.of(userId, groupId, channelId));
+        MessageCursorBothResponse response = groupChannelEnterUseCase.execute(GroupChannelEnterCommand.of(userId, channelId, groupId));
 
         return ResponseEntity.ok(response);
     }

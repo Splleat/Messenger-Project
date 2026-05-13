@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface ChannelUserSettingRepository extends JpaRepository<ChannelUserSetting, Long> {
 
@@ -36,4 +37,6 @@ public interface ChannelUserSettingRepository extends JpaRepository<ChannelUserS
     List<Long> findAllUserIdByChannelId(@Param("channelId") Long channelId);
 
     void deleteByUserIdAndChannelId(Long userId, Long channelId);
+
+    Optional<ChannelUserSetting> findByUserIdAndChannelId(Long userId, Long channelId);
 }

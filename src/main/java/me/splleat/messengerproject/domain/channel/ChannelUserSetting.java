@@ -23,6 +23,7 @@ public class ChannelUserSetting extends BaseEntity {
     @Column(name = "channel_id")
     private Long channelId;
 
+    @Getter
     @Column(name = "last_read_message_id")
     private Long lastReadMessageId;
 

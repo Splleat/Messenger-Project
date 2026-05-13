@@ -1,5 +1,6 @@
 package me.splleat.messengerproject.domain.channel;
 
+import io.jsonwebtoken.lang.Collections;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.domain.channel.exception.ChannelNotFoundException;
 import me.splleat.messengerproject.domain.channel.exception.GroupChannelNotFoundException;
@@ -37,6 +38,10 @@ public class ChannelService {
 
     @Transactional(readOnly = true)
     public List<Channel> getDirectChannels(List<Long> channelIds) {
+        if (channelIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return channelRepository.findAllByGroupIdIsNullAndIdIn(channelIds);
     }
 

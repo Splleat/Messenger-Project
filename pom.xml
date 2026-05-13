@@ -155,6 +155,11 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers-junit-jupiter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.openfeign.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>7.1</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -172,18 +177,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -194,6 +187,80 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                </path>
+                                <path>
+                                    <groupId>io.github.openfeign.querydsl</groupId>
+                                    <artifactId>querydsl-apt</artifactId>
+                                    <version>7.1</version>
+                                    <classifier>jpa</classifier>
+                                </path>
+                                <path>
+                                    <groupId>jakarta.persistence</groupId>
+                                    <artifactId>jakarta.persistence-api</artifactId>
+                                    <version>3.1.0</version>
+                                </path>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                </path>
+                                <path>
+                                    <groupId>io.github.openfeign.querydsl</groupId>
+                                    <artifactId>querydsl-apt</artifactId>
+                                    <version>7.1</version>
+                                    <classifier>jpa</classifier>
+                                </path>
+                                <path>
+                                    <groupId>jakarta.persistence</groupId>
+                                    <artifactId>jakarta.persistence-api</artifactId>
+                                    <version>3.1.0</version>
+                                </path>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generatedSourcesDirectory>target/generated-sources/java</generatedSourcesDirectory>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.github.openfeign.querydsl</groupId>
+                        <artifactId>querydsl-apt</artifactId>
+                        <version>7.1</version>
+                        <classifier>jpa</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>jakarta.persistence</groupId>
+                        <artifactId>jakarta.persistence-api</artifactId>
+                        <version>3.1.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

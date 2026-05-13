@@ -72,11 +72,14 @@ public class ChannelUserSettingService {
     }
 
     @Transactional
-    public void registerIfAbsent(long userId, long channelId) {
+    public ChannelUserSetting registerIfAbsent(long userId, long channelId) {
         if (!channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId)) {
             ChannelUserSetting channelUserSetting = ChannelUserSetting.create(userId, channelId);
-            channelUserSettingRepository.save(channelUserSetting);
+            return channelUserSettingRepository.save(channelUserSetting);
         }
+
+        return channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId)
+                .orElseThrow(ChannelUserSettingNotFoundException::new);
     }
 }
 

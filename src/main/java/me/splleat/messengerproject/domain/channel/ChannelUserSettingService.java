@@ -34,6 +34,12 @@ public class ChannelUserSettingService {
     }
 
     @Transactional(readOnly = true)
+    public ChannelUserSetting getChannelUserSetting(long userId, long channelId) {
+        return channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId)
+                .orElseThrow(ChannelUserSettingNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
     public List<Long> getJoinedChannelIds(long userId) {
         return channelUserSettingRepository.findAllChannelIdByUserId(userId);
     }
@@ -73,13 +79,11 @@ public class ChannelUserSettingService {
 
     @Transactional
     public ChannelUserSetting registerIfAbsent(long userId, long channelId) {
-        if (!channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId)) {
-            ChannelUserSetting channelUserSetting = ChannelUserSetting.create(userId, channelId);
-            return channelUserSettingRepository.save(channelUserSetting);
-        }
-
         return channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId)
-                .orElseThrow(ChannelUserSettingNotFoundException::new);
+                .orElseGet(() -> {
+                    ChannelUserSetting channelUserSetting = ChannelUserSetting.create(userId, channelId);
+                    return channelUserSettingRepository.save(channelUserSetting);
+                });
     }
 }
 

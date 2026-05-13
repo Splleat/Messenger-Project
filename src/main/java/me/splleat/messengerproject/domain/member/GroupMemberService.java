@@ -8,6 +8,7 @@ import me.splleat.messengerproject.infrastructure.persistence.jpa.GroupMemberRep
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,9 @@ public class GroupMemberService {
 
     @Transactional
     public void registerAll(List<GroupMember> groupMembers) {
-        groupMemberRepository.saveAll(groupMembers);
+        if (!groupMembers.isEmpty()) {
+            groupMemberRepository.saveAll(groupMembers);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -76,6 +79,10 @@ public class GroupMemberService {
 
     @Transactional(readOnly = true)
     public List<Long> getAlreadyJoinedUserIds(long groupId, List<Long> userIds) {
+        if (userIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return groupMemberRepository.findAllUserIdByGroupIdAndUserIdIn(groupId, userIds);
     }
 }

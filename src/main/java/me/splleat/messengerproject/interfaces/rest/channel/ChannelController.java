@@ -4,17 +4,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.*;
 import me.splleat.messengerproject.application.channel.dto.ChannelParticipantGetCommand;
+import me.splleat.messengerproject.application.channel.dto.DirectChannelEnterCommand;
 import me.splleat.messengerproject.application.channel.dto.DirectChannelLeaveCommand;
-import me.splleat.messengerproject.application.channel.dto.DirectChannelMessageGetCommand;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelParticipantResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelInviteRequest;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorBothResponse;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorCommand;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorNextResponse;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorPrevResponse;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +30,7 @@ public class ChannelController {
     private final ChannelListGetUseCase channelListGetUseCase;
     private final DirectChannelCreateUseCase directChannelCreateUseCase;
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
-    private final DirectChannelMessageGetUseCase directChannelMessageGetUseCase;
+    private final DirectChannelEnterUseCase directChannelEnterUseCase;
     private final ChannelParticipantGetUseCase channelParticipantGetUseCase;
     private final ChannelMessageCursorPrevGetUseCase channelMessageCursorPrevGetUseCase;
     private final ChannelMessageCursorNextGetUseCase channelMessageCursorNextGetUseCase;
@@ -78,19 +78,19 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{channel-id}/messages")
-    public ResponseEntity<List<MessageResponse>> getChannelMessages(
+    @GetMapping("/{channel-id}")
+    public ResponseEntity<MessageCursorBothResponse> getChannelMessages(
             @PathVariable("channel-id") long channelId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        DirectChannelMessageGetCommand command = new DirectChannelMessageGetCommand(userPrincipal.getUserId(), channelId);
+        long userId = userPrincipal.getUserId();
 
-        List<MessageResponse> response = directChannelMessageGetUseCase.execute(command);
+        MessageCursorBothResponse response = directChannelEnterUseCase.execute(DirectChannelEnterCommand.of(userId, channelId));
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{channel-id}/messages/prev")
+    @GetMapping("/{channel-id}/prev")
     public ResponseEntity<MessageCursorPrevResponse> getPrevChannelMessages(
             @PathVariable("channel-id") long channelId,
             @RequestParam("cursorId") long cursorId,
@@ -103,7 +103,7 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{channel-id}/messages/next")
+    @GetMapping("/{channel-id}/next")
     public ResponseEntity<MessageCursorNextResponse> getNextChannelMessages(
             @PathVariable("channel-id") long channelId,
             @RequestParam("cursorId") long cursorId,

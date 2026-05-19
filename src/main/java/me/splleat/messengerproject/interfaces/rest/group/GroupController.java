@@ -14,7 +14,7 @@ import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupListResponse
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupInviteRequest;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupResponse;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorBothResponse;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessagePageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -100,15 +100,15 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{group-id}/channels/{channel-id}")
-    public ResponseEntity<MessageCursorBothResponse> enterGroupChannel(
+    @GetMapping("/{group-id}/channels/{channel-id}/messages")
+    public ResponseEntity<MessagePageResponse> enterGroupChannel(
             @PathVariable("group-id") long groupId,
             @PathVariable("channel-id") long channelId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         long userId = userPrincipal.getUserId();
 
-        MessageCursorBothResponse response = groupChannelEnterUseCase.execute(GroupChannelEnterCommand.of(userId, channelId, groupId));
+        MessagePageResponse response = groupChannelEnterUseCase.execute(GroupChannelEnterCommand.of(userId, channelId, groupId));
 
         return ResponseEntity.ok(response);
     }

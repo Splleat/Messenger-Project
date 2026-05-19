@@ -3,15 +3,12 @@ package me.splleat.messengerproject.application.channel;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.dto.GroupChannelEnterCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
-import me.splleat.messengerproject.common.constant.CursorConstant;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
 import me.splleat.messengerproject.infrastructure.persistence.querydsl.MessageQueryRepository;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorBothResponse;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
-import org.springframework.data.domain.Slice;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessagePageResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -23,7 +20,7 @@ public class GroupChannelEnterUseCase {
     private final GroupMemberService groupMemberService;
 
     @Transactional(readOnly = true)
-    public MessageCursorBothResponse execute(GroupChannelEnterCommand command) {
+    public MessagePageResponse execute(GroupChannelEnterCommand command) {
         // 요청자가 그룹 멤버인지 확인
         groupMemberService.validateParticipant(command.userId(), command.groupId());
 
@@ -35,19 +32,12 @@ public class GroupChannelEnterUseCase {
 
         Long lastReadMessageId = channelUserSetting.getLastReadMessageId();
 
-        int reqSize = CursorConstant.MESSAGE_SIZE;
-
         // 채널 처음 입장 시 최근 20개 메시지 반환
         if (lastReadMessageId == null) {
-            Slice<MessageResponse> messages = messageQueryRepository.findByNewest(command.channelId(), reqSize);
-
-            return MessageCursorBothResponse.newest(messages);
+            return messageQueryRepository.findByNewest(command.channelId());
         }
 
         // 마지막으로 읽은 메시지 기준으로 앞뒤로 20개씩 반환
-        Slice<MessageResponse> prev = messageQueryRepository.findByPrevId(command.channelId(), lastReadMessageId, reqSize);
-        Slice<MessageResponse> next = messageQueryRepository.findByNextId(command.channelId(), lastReadMessageId, reqSize);
-
-        return MessageCursorBothResponse.of(prev, next);
+        return messageQueryRepository.findByAroundId(command.channelId(), lastReadMessageId);
     }
 }

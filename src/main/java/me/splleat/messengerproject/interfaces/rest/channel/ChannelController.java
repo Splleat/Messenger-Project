@@ -11,7 +11,7 @@ import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelListRespon
 import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelParticipantResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelInviteRequest;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorBothResponse;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessagePageResponse;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorCommand;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorNextResponse;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorPrevResponse;
@@ -78,19 +78,19 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{channel-id}")
-    public ResponseEntity<MessageCursorBothResponse> getChannelMessages(
+    @GetMapping("/{channel-id}/messages")
+    public ResponseEntity<MessagePageResponse> getChannelMessages(
             @PathVariable("channel-id") long channelId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         long userId = userPrincipal.getUserId();
 
-        MessageCursorBothResponse response = directChannelEnterUseCase.execute(DirectChannelEnterCommand.of(userId, channelId));
+        MessagePageResponse response = directChannelEnterUseCase.execute(DirectChannelEnterCommand.of(userId, channelId));
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{channel-id}/prev")
+    @GetMapping("/{channel-id}/messages/prev")
     public ResponseEntity<MessageCursorPrevResponse> getPrevChannelMessages(
             @PathVariable("channel-id") long channelId,
             @RequestParam("cursorId") long cursorId,
@@ -103,7 +103,7 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{channel-id}/next")
+    @GetMapping("/{channel-id}/messages/next")
     public ResponseEntity<MessageCursorNextResponse> getNextChannelMessages(
             @PathVariable("channel-id") long channelId,
             @RequestParam("cursorId") long cursorId,

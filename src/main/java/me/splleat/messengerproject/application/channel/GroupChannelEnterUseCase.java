@@ -8,7 +8,7 @@ import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
 import me.splleat.messengerproject.infrastructure.persistence.querydsl.MessageQueryRepository;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessagePageResponse;
+import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelEnterResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -20,7 +20,7 @@ public class GroupChannelEnterUseCase {
     private final GroupMemberService groupMemberService;
 
     @Transactional(readOnly = true)
-    public MessagePageResponse execute(GroupChannelEnterCommand command) {
+    public ChannelEnterResponse execute(GroupChannelEnterCommand command) {
         // 요청자가 그룹 멤버인지 확인
         groupMemberService.validateParticipant(command.userId(), command.groupId());
 

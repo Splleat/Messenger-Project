@@ -7,13 +7,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.domain.message.QMessage;
 import me.splleat.messengerproject.domain.profile.QUserProfile;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorNextResponse;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCursorPrevResponse;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessagePageResponse;
+import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelEnterResponse;
+import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelMessagePageResponse;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,32 +21,32 @@ public class MessageQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public MessageCursorPrevResponse findByPrevId(long channelId, long cursorId) {
-        Slice<MessageResponse> prev = findBy(channelId, QMessage.message.id.lt(cursorId), QMessage.message.id.desc(), true);
+    public ChannelMessagePageResponse findByPrevId(long channelId, long cursorId) {
+        MessageSlice prev = findBy(channelId, QMessage.message.id.lt(cursorId), QMessage.message.id.desc(), true);
 
-        return MessageCursorPrevResponse.from(prev);
+        return ChannelMessagePageResponse.prev(prev);
     }
 
-    public MessageCursorNextResponse findByNextId(long channelId, long cursorId) {
-        Slice<MessageResponse> next = findBy(channelId, QMessage.message.id.gt(cursorId), QMessage.message.id.asc(), false);
+    public ChannelMessagePageResponse findByNextId(long channelId, long cursorId) {
+        MessageSlice next = findBy(channelId, QMessage.message.id.gt(cursorId), QMessage.message.id.asc(), false);
 
-        return MessageCursorNextResponse.from(next);
+        return ChannelMessagePageResponse.next(next);
     }
 
-    public MessagePageResponse findByNewest(long channelId) {
-        Slice<MessageResponse> newest = findBy(channelId, null, QMessage.message.id.desc(), true);
+    public ChannelEnterResponse findByNewest(long channelId) {
+        MessageSlice newest = findBy(channelId, null, QMessage.message.id.desc(), true);
 
-        return MessagePageResponse.newest(newest);
+        return ChannelEnterResponse.newest(newest);
     }
 
-    public MessagePageResponse findByAroundId(long channelId, long cursorId) {
-        Slice<MessageResponse> prev = findBy(channelId, QMessage.message.id.lt(cursorId), QMessage.message.id.desc(), true);
-        Slice<MessageResponse> next = findBy(channelId, QMessage.message.id.goe(cursorId), QMessage.message.id.asc(), false);
+    public ChannelEnterResponse findByAroundId(long channelId, long lastReadMessageId) {
+        MessageSlice prev = findBy(channelId, QMessage.message.id.lt(lastReadMessageId), QMessage.message.id.desc(), true);
+        MessageSlice next = findBy(channelId, QMessage.message.id.goe(lastReadMessageId), QMessage.message.id.asc(), false);
 
-        return MessagePageResponse.of(prev, next);
+        return ChannelEnterResponse.around(prev, next, lastReadMessageId);
     }
 
-    private Slice<MessageResponse> findBy(long channelId, Predicate predicate, OrderSpecifier<?> orderSpecifier, boolean reverse) {
+    private MessageSlice findBy(long channelId, Predicate predicate, OrderSpecifier<?> orderSpecifier, boolean reverse) {
         QUserProfile userProfile = QUserProfile.userProfile;
         QMessage message = QMessage.message;
 
@@ -84,6 +80,6 @@ public class MessageQueryRepository {
 
         List<MessageResponse> result = reverse ? content.reversed() : content;
 
-        return new SliceImpl<>(result, PageRequest.of(0, MESSAGE_SIZE), hasMore);
+        return new MessageSlice(result, hasMore);
     }
 }

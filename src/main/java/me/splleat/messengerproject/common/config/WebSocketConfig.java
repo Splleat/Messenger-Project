@@ -6,12 +6,15 @@ import me.splleat.messengerproject.infrastructure.websocket.AuthenticationPrinci
 import me.splleat.messengerproject.infrastructure.websocket.StompHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.converter.JacksonJsonMessageConverter;
+import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    private final JsonMapper jsonMapper;
     private final StompHandler stompHandler;
     private final AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver;
 
@@ -49,6 +53,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(authenticationPrincipalArgumentResolver);
+    }
+
+    @Override
+    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
+        JacksonJsonMessageConverter converter = new JacksonJsonMessageConverter(jsonMapper);
+
+        messageConverters.add(converter);
+
+        return false;
     }
 }
 

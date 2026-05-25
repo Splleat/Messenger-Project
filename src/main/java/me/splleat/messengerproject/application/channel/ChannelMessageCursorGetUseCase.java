@@ -19,11 +19,11 @@ public class ChannelMessageCursorGetUseCase {
         channelUserSettingService.validateParticipant(command.userId(), command.channelId());
 
         switch (command.direction()) {
-            case UP -> {
+            case PREV -> {
                 return messageQueryRepository.findByPrevId(command.channelId(), command.cursorId());
             }
 
-            case DOWN -> {
+            case NEXT -> {
                 return messageQueryRepository.findByNextId(command.channelId(), command.cursorId());
             }
 

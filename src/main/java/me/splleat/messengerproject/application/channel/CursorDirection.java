@@ -6,8 +6,8 @@ import me.splleat.messengerproject.common.exception.ErrorCode;
 import java.util.Arrays;
 
 public enum CursorDirection {
-    UP,
-    DOWN;
+    PREV,
+    NEXT;
 
     public static CursorDirection from(String direction) {
         return Arrays.stream(CursorDirection.values())

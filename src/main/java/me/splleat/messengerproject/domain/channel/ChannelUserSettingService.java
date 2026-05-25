@@ -85,5 +85,13 @@ public class ChannelUserSettingService {
                     return channelUserSettingRepository.save(channelUserSetting);
                 });
     }
+
+    @Transactional
+    public void updateLastReadMessage(long userId, long channelId, Long lastReadMessageId) {
+        ChannelUserSetting channelUserSetting = channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId)
+                .orElseThrow(ChannelUserSettingNotFoundException::new);
+
+        channelUserSetting.updateLastReadMessage(lastReadMessageId);
+    }
 }
 

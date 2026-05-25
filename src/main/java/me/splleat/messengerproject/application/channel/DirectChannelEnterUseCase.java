@@ -20,13 +20,9 @@ public class DirectChannelEnterUseCase {
 
         Long lastReadMessageId = channelUserSetting.getLastReadMessageId();
 
-        if (lastReadMessageId == null) {
-            ChannelEnterResult response = messageQueryRepository.findByNewest(channelId);
-            channelUserSetting.updateLastReadMessage(response.nextCursorId());
-            return response;
-        }
-
-        ChannelEnterResult response = messageQueryRepository.findByAroundId(channelId, lastReadMessageId);
+        ChannelEnterResult response = (lastReadMessageId == null) ?
+                messageQueryRepository.findByNewest(channelId) :
+                messageQueryRepository.findByAroundId(channelId, lastReadMessageId);
 
         channelUserSetting.updateLastReadMessage(response.nextCursorId());
 

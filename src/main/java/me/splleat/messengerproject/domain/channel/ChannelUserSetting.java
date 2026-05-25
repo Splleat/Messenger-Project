@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
-import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
 
 @Entity
 @Table(name = "channel_user_settings")
@@ -46,5 +45,11 @@ public class ChannelUserSetting extends BaseEntity {
                 .userId(userId)
                 .channelId(channelId)
                 .build();
+    }
+
+    public void updateLastReadMessage(Long lastReadMessageId) {
+        if (lastReadMessageId != null && lastReadMessageId > this.lastReadMessageId) {
+            this.lastReadMessageId = lastReadMessageId;
+        }
     }
 }

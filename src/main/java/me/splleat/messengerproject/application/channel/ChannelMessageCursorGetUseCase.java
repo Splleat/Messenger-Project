@@ -7,7 +7,7 @@ import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.infrastructure.persistence.querydsl.MessageQueryRepository;
 import me.splleat.messengerproject.application.channel.dto.ChannelMessageCursorCommand;
-import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelMessagePageResponse;
+import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageResult;
 
 @UseCase
 @RequiredArgsConstructor
@@ -15,7 +15,7 @@ public class ChannelMessageCursorGetUseCase {
     private final MessageQueryRepository messageQueryRepository;
     private final ChannelUserSettingService channelUserSettingService;
 
-    public ChannelMessagePageResponse execute(ChannelMessageCursorCommand command) {
+    public ChannelMessagePageResult execute(ChannelMessageCursorCommand command) {
         channelUserSettingService.validateParticipant(command.userId(), command.channelId());
 
         switch (command.direction()) {

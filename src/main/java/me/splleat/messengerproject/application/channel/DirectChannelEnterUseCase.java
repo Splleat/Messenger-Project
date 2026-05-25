@@ -6,7 +6,7 @@ import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.infrastructure.persistence.querydsl.MessageQueryRepository;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessagePageResponse;
+import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelEnterResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -16,7 +16,7 @@ public class DirectChannelEnterUseCase {
     private final ChannelUserSettingService channelUserSettingService;
 
     @Transactional(readOnly = true)
-    public MessagePageResponse execute(DirectChannelEnterCommand command) {
+    public ChannelEnterResponse execute(DirectChannelEnterCommand command) {
         ChannelUserSetting channelUserSetting = channelUserSettingService.getChannelUserSetting(command.userId(), command.channelId());
 
         Long lastReadMessageId = channelUserSetting.getLastReadMessageId();

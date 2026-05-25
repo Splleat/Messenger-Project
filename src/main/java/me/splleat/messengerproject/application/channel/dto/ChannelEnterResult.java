@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.interfaces.rest.channel.dto;
+package me.splleat.messengerproject.application.channel.dto;
 
 import me.splleat.messengerproject.infrastructure.persistence.querydsl.MessageSlice;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
@@ -6,7 +6,7 @@ import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageRespo
 import java.util.List;
 import java.util.stream.Stream;
 
-public record ChannelEnterResponse(
+public record ChannelEnterResult(
         List<MessageResponse> messages,
         boolean hasPrev,
         boolean hasNext,
@@ -14,32 +14,29 @@ public record ChannelEnterResponse(
         Long nextCursorId,
         Long lastReadMessageId
 ) {
-    public static ChannelEnterResponse around(MessageSlice prev, MessageSlice next, Long lastReadMessageId) {
+    public static ChannelEnterResult around(MessageSlice prev, MessageSlice next, Long lastReadMessageId) {
         List<MessageResponse> prevContent = prev.messages();
         List<MessageResponse> nextContent = next.messages();
 
-        Long prevCursorId = prevContent.isEmpty() ? null : prevContent.getFirst().id();
-        Long nextCursorId = nextContent.isEmpty() ? null : nextContent.getLast().id();
-
-        return new ChannelEnterResponse(
+        return new ChannelEnterResult(
                 Stream.concat(prevContent.stream(), nextContent.stream()).toList(),
                 prev.hasMore(),
                 next.hasMore(),
-                prevCursorId,
-                nextCursorId,
+                prev.prevCursorId(),
+                next.nextCursorId(),
                 lastReadMessageId
         );
     }
 
-    public static ChannelEnterResponse newest(MessageSlice newest) {
+    public static ChannelEnterResult newest(MessageSlice newest) {
         List<MessageResponse> newestContent = newest.messages();
 
-        return new ChannelEnterResponse(
+        return new ChannelEnterResult(
                 newestContent,
                 newest.hasMore(),
                 false,
                 newest.prevCursorId(),
-                null,
+                newest.nextCursorId(),
                 null
         );
     }

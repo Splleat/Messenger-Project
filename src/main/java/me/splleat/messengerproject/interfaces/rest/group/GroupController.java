@@ -4,17 +4,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.GroupChannelCreateUseCase;
 import me.splleat.messengerproject.application.channel.GroupChannelEnterUseCase;
-import me.splleat.messengerproject.application.channel.dto.GroupChannelEnterCommand;
+import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
 import me.splleat.messengerproject.application.group.*;
-import me.splleat.messengerproject.application.group.dto.GroupGetCommand;
-import me.splleat.messengerproject.application.group.dto.GroupLeaveCommand;
+import me.splleat.messengerproject.application.group.dto.GroupListResult;
+import me.splleat.messengerproject.application.group.dto.GroupResult;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
-import me.splleat.messengerproject.interfaces.rest.channel.dto.ChannelEnterResponse;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupChannelCreateRequest;
-import me.splleat.messengerproject.interfaces.rest.channel.dto.GroupListResponse;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.group.dto.GroupInviteRequest;
-import me.splleat.messengerproject.interfaces.rest.group.dto.GroupResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,10 +41,10 @@ public class GroupController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GroupListResponse>> getGroupList(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<List<GroupListResult>> getGroupList(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         long userId = userPrincipal.getUserId();
 
-        List<GroupListResponse> response = groupListGetUseCase.execute(userId);
+        List<GroupListResult> response = groupListGetUseCase.execute(userId);
 
         return ResponseEntity.ok(response);
     }
@@ -66,13 +63,13 @@ public class GroupController {
     }
 
     @GetMapping("/{group-id}")
-    public ResponseEntity<GroupResponse> getGroup(
+    public ResponseEntity<GroupResult> getGroup(
             @PathVariable("group-id") long groupId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         long userId = userPrincipal.getUserId();
 
-        GroupResponse response = groupGetUseCase.execute(GroupGetCommand.of(userId, groupId));
+        GroupResult response = groupGetUseCase.execute(userId, groupId);
 
         return ResponseEntity.ok(response);
     }
@@ -84,7 +81,7 @@ public class GroupController {
     ) {
         long userId = userPrincipal.getUserId();
 
-        groupLeaveUseCase.execute(GroupLeaveCommand.of(userId, groupId));
+        groupLeaveUseCase.execute(userId, groupId);
 
         return ResponseEntity.noContent().build();
     }
@@ -101,14 +98,14 @@ public class GroupController {
     }
 
     @GetMapping("/{group-id}/channels/{channel-id}")
-    public ResponseEntity<ChannelEnterResponse> enterGroupChannel(
+    public ResponseEntity<ChannelEnterResult> enterGroupChannel(
             @PathVariable("group-id") long groupId,
             @PathVariable("channel-id") long channelId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         long userId = userPrincipal.getUserId();
 
-        ChannelEnterResponse response = groupChannelEnterUseCase.execute(GroupChannelEnterCommand.of(userId, channelId, groupId));
+        ChannelEnterResult response = groupChannelEnterUseCase.execute(userId, groupId, channelId);
 
         return ResponseEntity.ok(response);
     }

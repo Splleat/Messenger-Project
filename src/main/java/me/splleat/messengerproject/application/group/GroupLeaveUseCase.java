@@ -1,7 +1,6 @@
 package me.splleat.messengerproject.application.group;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.group.dto.GroupLeaveCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
@@ -18,11 +17,11 @@ public class GroupLeaveUseCase {
     private final ChannelUserSettingService channelUserSettingService;
 
     @Transactional
-    public void execute(GroupLeaveCommand command) {
-        groupMemberService.leaveGroup(command.userId(), command.groupId());
+    public void execute(long userId, long groupId) {
+        groupMemberService.leaveGroup(userId, groupId);
 
-        List<Long> groupChannelIds = channelService.getGroupChannelIds(command.groupId());
+        List<Long> groupChannelIds = channelService.getGroupChannelIds(groupId);
 
-        channelUserSettingService.leaveChannels(command.userId(), groupChannelIds);
+        channelUserSettingService.leaveChannels(userId, groupChannelIds);
     }
 }

@@ -1,14 +1,13 @@
 package me.splleat.messengerproject.application.group;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.group.dto.GroupGetCommand;
+import me.splleat.messengerproject.application.group.dto.GroupResult;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.domain.group.GroupService;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
-import me.splleat.messengerproject.interfaces.rest.group.dto.GroupResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -21,13 +20,13 @@ public class GroupGetUseCase {
     private final ChannelService channelService;
 
     @Transactional(readOnly = true)
-    public GroupResponse execute(GroupGetCommand command) {
-        groupMemberService.validateParticipant(command.userId(), command.groupId());
+    public GroupResult execute(long userId, long groupId) {
+        groupMemberService.validateParticipant(userId, groupId);
 
-        Group group = groupService.getGroup(command.groupId());
+        Group group = groupService.getGroup(groupId);
 
-        List<Channel> groupChannels = channelService.getGroupChannels(command.groupId());
+        List<Channel> groupChannels = channelService.getGroupChannels(groupId);
 
-        return GroupResponse.of(group, groupChannels);
+        return GroupResult.of(group, groupChannels);
     }
 }

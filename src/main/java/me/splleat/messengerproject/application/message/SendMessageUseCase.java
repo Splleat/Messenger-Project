@@ -5,6 +5,7 @@ import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
+import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
 import me.splleat.messengerproject.domain.message.Message;
@@ -25,14 +26,18 @@ public class SendMessageUseCase {
 
     @Transactional
     public MessageResponse execute(MessageCreateCommand command) {
-        channelUserSettingService.validateParticipant(command.senderId(), command.channelId());
-
+        // 채널 및 채널 설정 정보 확인
+        ChannelUserSetting setting = channelUserSettingService.getChannelUserSetting(command.senderId(), command.channelId());
         Channel channel = channelService.getChannel(command.channelId());
 
+        // 메시지 생성
         Message message = command.toEntity();
-
         Message created = messageService.registerWithIdempotency(message);
 
+        // 마지막으로 읽은 메시지 업데이트
+        setting.updateLastReadMessage(created.getId());
+
+        // 응답으로 내려줄 프로필 정보 조회
         UserProfile userProfile = userProfileService.getUserProfile(command.senderId());
         String username = userProfile.getName();
         String profileUrl = userProfile.getImageUrl();

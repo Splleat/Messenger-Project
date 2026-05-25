@@ -31,16 +31,14 @@ public class GroupChannelEnterUseCase {
 
         Long lastReadMessageId = channelUserSetting.getLastReadMessageId();
 
-        // 채널 처음 입장 시 최근 20개 메시지 반환
-        if (lastReadMessageId == null) {
-            ChannelEnterResult response = messageQueryRepository.findByNewest(channelId);
-            channelUserSetting.updateLastReadMessage(response.nextCursorId());
-            return response;
-        }
+        // 메시지 응답 생성
+        ChannelEnterResult response = (lastReadMessageId == null) ?
+                messageQueryRepository.findByNewest(channelId) :
+                messageQueryRepository.findByAroundId(channelId, lastReadMessageId);
 
-        // 마지막으로 읽은 메시지 기준으로 앞뒤로 20개씩 반환
-        ChannelEnterResult response = messageQueryRepository.findByAroundId(channelId, lastReadMessageId);
+        // 마지막으로 읽은 메시지 업데이트
         channelUserSetting.updateLastReadMessage(response.nextCursorId());
+
         return response;
     }
 }

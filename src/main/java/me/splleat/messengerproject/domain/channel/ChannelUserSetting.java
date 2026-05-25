@@ -48,7 +48,7 @@ public class ChannelUserSetting extends BaseEntity {
     }
 
     public void updateLastReadMessage(Long lastReadMessageId) {
-        if (lastReadMessageId != null) {
+        if (lastReadMessageId != null && lastReadMessageId > this.lastReadMessageId) {
             this.lastReadMessageId = lastReadMessageId;
         }
     }

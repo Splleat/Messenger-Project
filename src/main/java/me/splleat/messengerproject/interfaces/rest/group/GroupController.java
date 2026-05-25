@@ -100,7 +100,7 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{group-id}/channels/{channel-id}/messages")
+    @GetMapping("/{group-id}/channels/{channel-id}")
     public ResponseEntity<ChannelEnterResponse> enterGroupChannel(
             @PathVariable("group-id") long groupId,
             @PathVariable("channel-id") long channelId,

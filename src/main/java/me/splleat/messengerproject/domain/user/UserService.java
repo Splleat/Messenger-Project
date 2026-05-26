@@ -1,12 +1,15 @@
 package me.splleat.messengerproject.domain.user;
 
 import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.domain.user.exception.TargetUserNotFoundException;
 import me.splleat.messengerproject.domain.user.exception.UserDeactivatedException;
 import me.splleat.messengerproject.domain.user.exception.UserEmailDuplicatedException;
 import me.splleat.messengerproject.domain.user.exception.UserNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +41,12 @@ public class UserService {
         }
 
         return user;
+    }
+
+    @Transactional(readOnly = true)
+    public void validateExistsAll(List<Long> ids) {
+        if (!userRepository.existsAllByIdIn(ids)) {
+            throw new TargetUserNotFoundException();
+        }
     }
 }

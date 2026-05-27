@@ -8,6 +8,7 @@ import me.splleat.messengerproject.domain.member.GroupMemberService;
 import me.splleat.messengerproject.domain.member.GroupRole;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.domain.user.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
@@ -18,12 +19,15 @@ import java.util.Set;
 @UseCase
 @RequiredArgsConstructor
 public class GroupInviteUseCase {
+    private final UserService userService;
     private final UserProfileService userProfileService;
     private final GroupMemberService groupMemberService;
 
     @Transactional
     public void execute(GroupInviteCommand command) {
         groupMemberService.validateParticipant(command.userId(), command.groupId());
+
+        userService.validateExistsAll(command.targetIds());
 
         Set<Long> alreadyJoinedUserIds = new HashSet<>(groupMemberService.getAlreadyJoinedUserIds(command.groupId(), command.targetIds()));
 

@@ -18,6 +18,7 @@ public enum ErrorCode {
     USER_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "AUTH_001", "아이디나 비밀번호가 일치하지 않습니다."),
 
     USER_DEACTIVATED(HttpStatus.FORBIDDEN, "USER_001", "비활성화된 사용자입니다."),
+    TARGET_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_002", "대상 사용자를 찾을 수 없습니다."),
 
     USER_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_PROFILE_001", "사용자 프로필이 존재하지 않습니다."),
     USER_PROFILE_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_PROFILE_002", "사용자 프로필이 이미 존재합니다."),

@@ -9,7 +9,9 @@ import me.splleat.messengerproject.infrastructure.persistence.jpa.UserRepository
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +47,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public void validateExistsAll(List<Long> ids) {
-        if (!userRepository.existsAllByIdIn(ids)) {
+        Set<Long> distinctIds = new HashSet<>(ids);
+
+        int count = userRepository.countAllByIdIn(distinctIds);
+
+        if (count != distinctIds.size()) {
             throw new TargetUserNotFoundException();
         }
     }

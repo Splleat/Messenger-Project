@@ -4,10 +4,7 @@ import me.splleat.messengerproject.application.auth.LoginUseCase;
 import me.splleat.messengerproject.application.auth.LogoutUseCase;
 import me.splleat.messengerproject.application.auth.RegisterUseCase;
 import me.splleat.messengerproject.application.auth.TokenReissueUseCase;
-import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginRequest;
-import me.splleat.messengerproject.interfaces.rest.auth.dto.LoginResponse;
-import me.splleat.messengerproject.interfaces.rest.auth.dto.LogoutRequest;
-import me.splleat.messengerproject.interfaces.rest.auth.dto.RegisterRequest;
+import me.splleat.messengerproject.interfaces.rest.auth.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,7 +139,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("올바른 액세스 토큰과 리프레시 토큰이라면, 200 OK를 반환한다.")
-    void logout_WhenValidTokens_ReturnsOk() throws Exception{
+    void logout_WhenValidTokens_ReturnsOk() throws Exception {
         // given
         LogoutRequest request = new LogoutRequest("accessToken", "refreshToken");
 
@@ -153,5 +150,42 @@ class AuthControllerTest {
 
         // then
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("올바른 토큰으로 재발급을 요청하면 200 OK를 반환한다.")
+    void reissue_WhenValidToken_ReturnsOk() throws Exception {
+        // given
+        TokenReissueRequest request = new TokenReissueRequest("accessToken", "refreshToken");
+        TokenReissueResult expected = new TokenReissueResult("newAccessToken", "newRefreshToken", 1800000L);
+
+        given(tokenReissueUseCase.execute(request.toCommand()))
+                .willReturn(expected);
+
+        // when
+        ResultActions result = mockMvc.perform(post("/auth/refresh")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").value(expected.accessToken()))
+                .andExpect(jsonPath("$.refreshToken").value(expected.refreshToken()))
+                .andExpect(jsonPath("$.accessTokenExpiresIn").value(expected.accessTokenExpiresIn()));
+    }
+
+    @Test
+    @DisplayName("비어있는 토큰으로 재발급을 요청하면 400 Bad Request를 반환한다.")
+    void reissue_WhenEmptyToken_ReturnsBadRequest() throws Exception {
+        // given
+        TokenReissueRequest request = new TokenReissueRequest("", "");
+
+        // when
+        ResultActions result = mockMvc.perform(post("/auth/refresh")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
+
+        // then
+        result.andExpect(status().isBadRequest());
     }
 }

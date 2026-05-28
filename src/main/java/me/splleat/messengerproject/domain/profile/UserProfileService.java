@@ -20,7 +20,7 @@ public class UserProfileService {
 
     @Transactional
     public UserProfile register(UserProfile userProfile) {
-        if (userProfileRepository.existsById(userProfile.getUserId())) {
+        if (userProfileRepository.existsByUserId(userProfile.getUserId())) {
             throw new UserProfileAlreadyExistsException();
         }
 
@@ -30,7 +30,7 @@ public class UserProfileService {
     @Transactional(readOnly = true)
     @Cacheable(value = "userProfile", key = "#id")
     public UserProfile getUserProfile(Long id) {
-        return userProfileRepository.findById(id)
+        return userProfileRepository.findByUserId(id)
                 .orElseThrow(UserProfileNotFoundException::new);
     }
 
@@ -40,7 +40,7 @@ public class UserProfileService {
             return Collections.emptyList();
         }
 
-        return userProfileRepository.findAllByIdIn(userIds);
+        return userProfileRepository.findAllByUserIdIn(userIds);
     }
 
     @Transactional(readOnly = true)
@@ -49,7 +49,7 @@ public class UserProfileService {
             return Collections.emptyMap();
         }
 
-        return userProfileRepository.findAllByIdIn(userIds).stream()
+        return userProfileRepository.findAllByUserIdIn(userIds).stream()
                 .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
     }
 }

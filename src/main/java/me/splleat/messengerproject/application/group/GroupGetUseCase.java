@@ -25,7 +25,7 @@ public class GroupGetUseCase {
 
         Group group = groupService.getGroup(groupId);
 
-        List<ChannelListResult> groupChannels = channelQueryRepository.findAllGroupChannel(userId, groupId);
+        List<ChannelListResult> groupChannels = channelQueryRepository.findGroupChannelList(userId, groupId);
 
         return GroupResult.of(group, groupChannels);
     }

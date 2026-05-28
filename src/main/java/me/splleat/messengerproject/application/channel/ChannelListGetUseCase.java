@@ -15,6 +15,6 @@ public class ChannelListGetUseCase {
 
     @Transactional(readOnly = true)
     public List<ChannelListResult> execute(long userId) {
-        return channelQueryRepository.findAllDirectChannel(userId);
+        return channelQueryRepository.findDirectChannelList(userId);
     }
 }

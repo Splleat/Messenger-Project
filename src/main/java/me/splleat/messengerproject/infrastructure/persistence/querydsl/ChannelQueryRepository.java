@@ -2,13 +2,16 @@ package me.splleat.messengerproject.infrastructure.persistence.querydsl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.dto.ChannelListResult;
 import me.splleat.messengerproject.domain.channel.QChannel;
 import me.splleat.messengerproject.domain.channel.QChannelUserSetting;
+import me.splleat.messengerproject.domain.member.QGroupMember;
 import me.splleat.messengerproject.domain.message.QMessage;
 import org.springframework.stereotype.Repository;
 
@@ -19,17 +22,42 @@ import java.util.List;
 public class ChannelQueryRepository {
     private final JPAQueryFactory queryFactory;
 
-    public List<ChannelListResult> findAllGroupChannel(long userId, long groupId) {
-        return findAllChannelList(userId, groupId);
-    }
-
-    public List<ChannelListResult> findAllDirectChannel(long userId) {
-        return findAllChannelList(userId, null);
-    }
-
-    private List<ChannelListResult> findAllChannelList(long userId, Long groupId) {
+    public List<ChannelListResult> findDirectChannelList(long userId) {
         QChannel channel = QChannel.channel;
-        QChannelUserSetting channelUserSetting = QChannelUserSetting.channelUserSetting;
+        QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;
+
+        JPQLQuery<?> query = queryFactory
+                .from(setting)
+                .join(channel).on(setting.channelId.eq(channel.id))
+                .where(
+                        setting.userId.eq(userId),
+                        channel.groupId.isNull()
+                );
+
+        return findChannelList(query);
+    }
+
+    public List<ChannelListResult> findGroupChannelList(long userId, long groupId) {
+        QChannel channel = QChannel.channel;
+        QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;
+        QGroupMember member = QGroupMember.groupMember;
+
+        JPQLQuery<?> query = queryFactory
+                .from(channel)
+                .leftJoin(setting).on(channel.id.eq(setting.channelId)
+                        .and(setting.userId.eq(userId)))
+                .join(member).on(member.groupId.eq(channel.groupId))
+                .where(
+                        member.groupId.eq(groupId),
+                        member.userId.eq(userId)
+                );
+
+        return findChannelList(query);
+    }
+
+    private List<ChannelListResult> findChannelList(JPQLQuery<?> query) {
+        QChannel channel = QChannel.channel;
+        QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;
         QMessage message = QMessage.message;
 
         JPQLSubQuery<Long> latestMessageId = JPAExpressions
@@ -37,20 +65,14 @@ public class ChannelQueryRepository {
                 .from(message)
                 .where(message.channelId.eq(channel.id));
 
-        BooleanExpression hasUnreadMessage = latestMessageId.gt(channelUserSetting.lastReadMessageId.coalesce(0L));
+        NumberExpression<Long> lastReadMessageId = setting.lastReadMessageId.coalesce(0L);
+        BooleanExpression hasUnreadMessage = latestMessageId.gt(lastReadMessageId);
 
-        return queryFactory
+        return query
                 .select(Projections.constructor(ChannelListResult.class,
                         channel.id,
                         channel.name,
-                        hasUnreadMessage
-                ))
-                .from(channelUserSetting)
-                .join(channel).on(channelUserSetting.channelId.eq(channel.id))
-                .where(
-                        channelUserSetting.userId.eq(userId),
-                        groupId != null ? channel.groupId.eq(groupId) : channel.groupId.isNull()
-                )
+                        hasUnreadMessage))
                 .fetch();
     }
 }

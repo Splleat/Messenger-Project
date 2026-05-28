@@ -17,14 +17,14 @@ import java.util.List;
 @RequestMapping("/channels")
 @RequiredArgsConstructor
 public class ChannelController {
-    private final DirectChannelLeaveUseCase directChannelLeaveUseCase;
     private final ChannelListGetUseCase channelListGetUseCase;
+    private final ChannelMessageCursorGetUseCase channelMessageCursorGetUseCase;
+    private final ChannelParticipantGetUseCase channelParticipantGetUseCase;
+    private final ChannelReadMessageUpdateUseCase channelReadMessageUpdateUseCase;
+    private final DirectChannelEnterUseCase directChannelEnterUseCase;
     private final DirectChannelCreateUseCase directChannelCreateUseCase;
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
-    private final DirectChannelEnterUseCase directChannelEnterUseCase;
-    private final ChannelParticipantGetUseCase channelParticipantGetUseCase;
-    private final ChannelMessageCursorGetUseCase channelMessageCursorGetUseCase;
-    private final ChannelReadMessageUpdateUseCase channelReadMessageUpdateUseCase;
+    private final DirectChannelLeaveUseCase directChannelLeaveUseCase;
 
     @GetMapping
     public ResponseEntity<List<ChannelListResult>> getDirectChannels(@AuthenticationPrincipal UserPrincipal userPrincipal) {

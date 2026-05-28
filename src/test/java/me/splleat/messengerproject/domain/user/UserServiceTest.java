@@ -3,6 +3,7 @@ package me.splleat.messengerproject.domain.user;
 import me.splleat.messengerproject.domain.user.exception.UserEmailDuplicatedException;
 import me.splleat.messengerproject.domain.user.exception.UserNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserRepository;
+import me.splleat.messengerproject.support.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +18,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,13 +32,9 @@ class UserServiceTest {
     @DisplayName("이미 존재하는 이메일로 사용자를 등록하면 UserEmailDuplicatedException이 발생한다.")
     void register_WhenExistsEmail_ThrowsException() {
         // given
-        String email = "test@test.com";
-        User user = mock(User.class);
+        User user = UserFixture.defaultUser();
 
-        given(user.getEmail())
-                .willReturn(email);
-
-        given(userRepository.existsByEmail(email))
+        given(userRepository.existsByEmail(user.getEmail()))
                 .willReturn(true);
 
         // when & then
@@ -54,19 +50,18 @@ class UserServiceTest {
     @DisplayName("올바른 이메일로 사용자를 조회하면 사용자 정보를 반환한다.")
     void getUser_WhenValidEmail_ReturnsUser() {
         // given
-        String email = "test@test.com";
-        User user = mock(User.class);
+        User user = UserFixture.defaultUser();
 
-        given(userRepository.findByEmail(email))
+        given(userRepository.findByEmail(user.getEmail()))
                 .willReturn(Optional.of(user));
 
         // when
-        User found = userService.getUser(email);
+        User found = userService.getUser(user.getEmail());
 
         // then
         then(userRepository)
                 .should()
-                .findByEmail(email);
+                .findByEmail(user.getEmail());
 
         assertThat(found)
                 .isEqualTo(user);

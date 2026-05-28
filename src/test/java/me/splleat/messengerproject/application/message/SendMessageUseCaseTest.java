@@ -3,6 +3,7 @@ package me.splleat.messengerproject.application.message;
 import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
+import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
 import me.splleat.messengerproject.domain.message.Message;
@@ -56,7 +57,10 @@ class SendMessageUseCaseTest {
         Channel channel = mock(Channel.class);
         UserProfile profile = mock(UserProfile.class);
         Message message = mock(Message.class);
+        ChannelUserSetting setting = mock(ChannelUserSetting.class);
 
+        given(channelUserSettingService.getChannelUserSetting(userId, channelId))
+                .willReturn(setting);
         given(channelService.getChannel(channelId))
                 .willReturn(channel);
         given(messageService.registerWithIdempotency(any(Message.class)))
@@ -76,7 +80,7 @@ class SendMessageUseCaseTest {
         // then
         then(channelUserSettingService)
                 .should()
-                .validateParticipant(userId, channelId);
+                .getChannelUserSetting(userId, channelId);
 
         then(messageService)
                 .should()

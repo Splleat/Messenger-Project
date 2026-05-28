@@ -12,7 +12,7 @@ import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.infrastructure.security.JwtProvider;
 import me.splleat.messengerproject.infrastructure.security.RefreshTokenRepository;
 import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
-import me.splleat.messengerproject.interfaces.rest.auth.dto.TokenReissueResponse;
+import me.splleat.messengerproject.interfaces.rest.auth.dto.TokenReissueResult;
 
 import java.util.Objects;
 
@@ -24,7 +24,7 @@ public class TokenReissueUseCase {
     private final UserService userService;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public TokenReissueResponse execute(TokenReissueCommand command) {
+    public TokenReissueResult execute(TokenReissueCommand command) {
         String oldAccessToken = command.accessToken();
         String oldRefreshToken = command.refreshToken();
 
@@ -58,6 +58,6 @@ public class TokenReissueUseCase {
         // 기존에 저장된 리프레시 토큰 삭제
         refreshTokenRepository.delete(rtJti);
 
-        return new TokenReissueResponse(newAccessToken.token(), newRefreshToken.token(), newAccessToken.expirationMillis());
+        return new TokenReissueResult(newAccessToken.token(), newRefreshToken.token(), newAccessToken.expirationMillis());
     }
 }

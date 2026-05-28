@@ -5,7 +5,8 @@ import me.splleat.messengerproject.domain.group.Group;
 import me.splleat.messengerproject.domain.group.GroupService;
 import me.splleat.messengerproject.domain.member.GroupMember;
 import me.splleat.messengerproject.domain.member.GroupMemberService;
-import me.splleat.messengerproject.domain.user.UserService;
+import me.splleat.messengerproject.domain.profile.UserProfile;
+import me.splleat.messengerproject.domain.profile.UserProfileService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.mock;
 class GroupCreateUseCaseTest {
 
     @Mock
-    private UserService userService;
+    private UserProfileService userProfileService;
 
     @Mock
     private GroupService groupService;
@@ -39,9 +40,12 @@ class GroupCreateUseCaseTest {
     void execute_WhenValidCommand_CreatesGroup() {
         // given
         long userId = 1L;
-        GroupCreateCommand command = new GroupCreateCommand(userId, "testName", "testGroup");
+        GroupCreateCommand command = new GroupCreateCommand(userId, "testName");
+        UserProfile profile = mock(UserProfile.class);
         Group group = mock(Group.class);
 
+        given(userProfileService.getUserProfile(userId))
+                .willReturn(profile);
         given(groupService.register(any(Group.class)))
                 .willReturn(group);
 

@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,7 +32,7 @@ class ChannelUserSettingServiceTest {
     private ChannelUserSettingService channelUserSettingService;
 
     @Test
-    @DisplayName("이미 존재하는 채널 사용자 설정 정보를 등록하려 하면, ChannelUserSettingAlreadyExistsException이 발생한다.")
+    @DisplayName("이미 존재하는 채널 설정 정보를 등록하려 하면, ChannelUserSettingAlreadyExistsException이 발생한다.")
     void register_WhenExists_ThrowsException() {
         // given
         long userId = 1L;
@@ -67,7 +68,7 @@ class ChannelUserSettingServiceTest {
     }
 
     @Test
-    @DisplayName("채널에 등록된 사용자 설정 정보가 없다면, 빈 리스트를 반환한다.")
+    @DisplayName("채널에 등록된 설정 정보가 없다면, 빈 리스트를 반환한다.")
     void alreadyJoinedIds_WhenNotExists_ReturnsEmptyList() {
         // when
         List<Long> foundIds = channelUserSettingService.alreadyJoinedIds(1L, List.of(1L, 2L, 3L));
@@ -104,5 +105,62 @@ class ChannelUserSettingServiceTest {
 
         // when & then
         assertDoesNotThrow(() -> channelUserSettingService.validateParticipant(userId, channelId));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 채널 설정 정보를 조회하려 하면, ChannelUserSettingNotFoundException이 발생한다.")
+    void getChannelUserSetting_WhenNotExists_ThrowsException() {
+        // given
+        long userId = 1L;
+        long channelId = 1L;
+
+        given(channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId))
+                .willReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> channelUserSettingService.getChannelUserSetting(userId, channelId))
+                .isInstanceOf(ChannelUserSettingNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("나가려는 채널의 설정 정보가 존재하지 않으면 ChannelUserSettingNotFoundException이 발생한다.")
+    void leaveChannel_WhenNotExists_ThrowsException() {
+        // given
+        long userId = 1L;
+        long channelId = 1L;
+
+        given(channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId))
+                .willReturn(false);
+
+        // when & then
+        assertThatThrownBy(() -> channelUserSettingService.leaveChannel(userId, channelId))
+                .isInstanceOf(ChannelUserSettingNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("가져오려는 채널 설정 정보가 없으면 새로 생성한다.")
+    void registerIfAbsent_WhenNotExists_ReturnsNewChannelUserSetting() {
+        // given
+        long userId = 1L;
+        long channelId = 1L;
+
+        given(channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId))
+                .willReturn(Optional.empty());
+
+        ChannelUserSetting expected = ChannelUserSetting.create(userId, channelId);
+
+        given(channelUserSettingRepository.save(any(ChannelUserSetting.class)))
+                .willReturn(expected);
+
+        // when
+        ChannelUserSetting found = channelUserSettingService.registerIfAbsent(userId, channelId);
+
+        // then
+        assertThat(found)
+                .isEqualTo(expected);
+
+        then(channelUserSettingRepository)
+                .should()
+                .save(any(ChannelUserSetting.class));
     }
 }

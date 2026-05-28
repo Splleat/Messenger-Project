@@ -25,7 +25,7 @@ public class RegisterUseCase {
 
         User savedUser = userService.register(user);
 
-        UserProfile profile = UserProfile.create(savedUser, command.name());
+        UserProfile profile = UserProfile.create(savedUser.getId(), command.name());
 
         userProfileService.register(profile);
     }

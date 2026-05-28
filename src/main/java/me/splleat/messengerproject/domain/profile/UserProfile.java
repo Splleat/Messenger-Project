@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
@@ -13,10 +12,9 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserProfile extends BaseEntity {
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Getter
+    @Column(name = "user_id")
+    private Long userId;
 
     @Getter
     @Column(name = "name")
@@ -31,19 +29,15 @@ public class UserProfile extends BaseEntity {
     private String statusMessage;
 
     @Builder
-    private UserProfile(User user, String name) {
-        this.user = user;
+    private UserProfile(Long userId, String name) {
+        this.userId = userId;
         this.name = name;
     }
 
-    public static UserProfile create(User user, String name) {
+    public static UserProfile create(Long userId, String name) {
         return UserProfile.builder()
-                .user(user)
+                .userId(userId)
                 .name(name)
                 .build();
-    }
-
-    public Long getUserId() {
-        return user.getId();
     }
 }

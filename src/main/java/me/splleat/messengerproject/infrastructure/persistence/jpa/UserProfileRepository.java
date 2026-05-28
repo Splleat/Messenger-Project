@@ -5,9 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
-    boolean existsByName(String name);
+    Optional<UserProfile> findByUserId(Long userId);
 
-    List<UserProfile> findAllByIdIn(Collection<Long> ids);
+    boolean existsByUserId(Long userId);
+
+    List<UserProfile> findAllByUserIdIn(Collection<Long> userIds);
 }
+

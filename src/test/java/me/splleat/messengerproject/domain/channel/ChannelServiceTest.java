@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.domain.channel;
 
 import me.splleat.messengerproject.domain.channel.exception.ChannelNotFoundException;
+import me.splleat.messengerproject.domain.channel.exception.GroupChannelNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,4 +57,32 @@ class ChannelServiceTest {
                 .isInstanceOf(ChannelNotFoundException.class);
     }
 
+    @Test
+    @DisplayName("요청 채널 ID 목록이 비어 있으면, 빈 리스트를 반환한다.")
+    void getDirectChannels_WhenEmptyList_ReturnsEmptyList() {
+        // given
+        List<Long> channelIds = List.of();
+
+        // when
+        List<Channel> found = channelService.getDirectChannels(channelIds);
+
+        // then
+        assertThat(found)
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("해당 채널이 그룹에 속해 있지 않으면, GroupChannelNotFoundException이 발생한다.")
+    void validateInGroup_WhenNotGroupChannel_ThrowsException() {
+        // given
+        long groupId = 1L;
+        long channelId = 1L;
+
+        given(channelRepository.existsByIdAndGroupId(channelId, groupId))
+                .willReturn(false);
+
+        // when
+        assertThatThrownBy(() -> channelService.validateInGroup(groupId, channelId))
+                .isInstanceOf(GroupChannelNotFoundException.class);
+    }
 }

@@ -14,7 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterUseCaseTest {
@@ -36,6 +38,11 @@ class RegisterUseCaseTest {
     void execute_WhenValidCommand_Success() {
         // given
         RegisterRequest request = new RegisterRequest("테스트", "test@test.com", "password1234");
+        User savedUser = mock(User.class);
+        given(savedUser.getId()).willReturn(1L);
+
+        given(userService.register(any(User.class)))
+                .willReturn(savedUser);
 
         // when
         registerUseCase.execute(request.toCommand());

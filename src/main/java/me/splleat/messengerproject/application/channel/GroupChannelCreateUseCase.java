@@ -27,7 +27,7 @@ public class GroupChannelCreateUseCase {
 
         groupMember.validatePermission(GroupRole.ADMIN);
 
-        Channel createdChannel = channelService.register(Channel.create(command.groupId(), command.channelName(), command.type()));
+        Channel createdChannel = channelService.register(Channel.createGroupChannel(command.groupId(), command.channelName(), command.type()));
 
         List<Long> groupParticipantUserIds = groupMemberService.getAllParticipantUserIds(command.groupId());
 

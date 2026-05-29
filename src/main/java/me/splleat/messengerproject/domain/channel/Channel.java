@@ -30,7 +30,14 @@ public class Channel extends SoftDeletableEntity {
         this.type = type;
     }
 
-    public static Channel create(Long groupId, String name, ChannelType type) {
+    public static Channel createDirectChannel(String name, ChannelType type) {
+        return Channel.builder()
+                .name(name)
+                .type(type)
+                .build();
+    }
+
+    public static Channel createGroupChannel(long groupId, String name, ChannelType type) {
         return Channel.builder()
                 .groupId(groupId)
                 .name(name)

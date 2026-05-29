@@ -30,7 +30,7 @@ class ChannelServiceTest {
     @DisplayName("채널을 등록하면, 등록된 채널의 정보가 반환된다.")
     void register_WhenValid_ReturnsRegisteredChannel() {
         // given
-        Channel channel = Channel.create(null, "test", ChannelType.TEXT);
+        Channel channel = Channel.createDirectChannel("test", ChannelType.TEXT);
         given(channelRepository.save(channel))
                 .willReturn(channel);
 

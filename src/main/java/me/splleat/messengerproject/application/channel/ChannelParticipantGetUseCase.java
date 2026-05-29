@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.dto.ChannelParticipantResult;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.profile.UserProfile;
-import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.infrastructure.persistence.querydsl.ChannelQueryRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -14,18 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChannelParticipantGetUseCase {
     private final ChannelUserSettingService channelUserSettingService;
-    private final UserProfileService userProfileService;
+    private final ChannelQueryRepository channelQueryRepository;
 
     @Transactional(readOnly = true)
     public List<ChannelParticipantResult> execute(long userId, long channelId) {
         channelUserSettingService.validateParticipant(userId, channelId);
 
-        List<Long> participantIds = channelUserSettingService.getJoinedUserIds(channelId);
-
-        List<UserProfile> userProfiles = userProfileService.getUserProfiles(participantIds);
-
-        return userProfiles.stream()
-                .map(ChannelParticipantResult::from)
-                .toList();
+        return channelQueryRepository.findChannelParticipant(channelId);
     }
 }

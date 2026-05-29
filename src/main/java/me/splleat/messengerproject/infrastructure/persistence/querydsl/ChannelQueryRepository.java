@@ -9,10 +9,12 @@ import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.dto.ChannelListResult;
+import me.splleat.messengerproject.application.channel.dto.ChannelParticipantResult;
 import me.splleat.messengerproject.domain.channel.QChannel;
 import me.splleat.messengerproject.domain.channel.QChannelUserSetting;
 import me.splleat.messengerproject.domain.member.QGroupMember;
 import me.splleat.messengerproject.domain.message.QMessage;
+import me.splleat.messengerproject.domain.profile.QUserProfile;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,6 +23,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChannelQueryRepository {
     private final JPAQueryFactory queryFactory;
+
+    public List<ChannelParticipantResult> findChannelParticipant(long channelId) {
+        QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;
+        QUserProfile profile = QUserProfile.userProfile;
+
+        return queryFactory
+                .select(Projections.constructor(ChannelParticipantResult.class,
+                        profile.userId,
+                        profile.name,
+                        profile.imageUrl,
+                        profile.statusMessage))
+                .from(setting)
+                .join(profile).on(setting.userId.eq(profile.userId))
+                .where(setting.channelId.eq(channelId))
+                .fetch();
+    }
 
     public List<ChannelListResult> findDirectChannelList(long userId) {
         QChannel channel = QChannel.channel;

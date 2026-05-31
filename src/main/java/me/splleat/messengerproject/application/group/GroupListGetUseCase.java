@@ -3,9 +3,7 @@ package me.splleat.messengerproject.application.group;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.group.dto.GroupListResult;
 import me.splleat.messengerproject.common.annotation.UseCase;
-import me.splleat.messengerproject.domain.group.Group;
-import me.splleat.messengerproject.domain.group.GroupService;
-import me.splleat.messengerproject.domain.member.GroupMemberService;
+import me.splleat.messengerproject.infrastructure.persistence.querydsl.GroupQueryRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -13,17 +11,10 @@ import java.util.List;
 @UseCase
 @RequiredArgsConstructor
 public class GroupListGetUseCase {
-    private final GroupService groupService;
-    private final GroupMemberService groupMemberService;
+    private final GroupQueryRepository groupQueryRepository;
 
     @Transactional(readOnly = true)
     public List<GroupListResult> execute(long userId) {
-        List<Long> joinedGroupIds = groupMemberService.getAllJoinedGroupIds(userId);
-
-        List<Group> joinedGroups = groupService.getGroups(joinedGroupIds);
-
-        return joinedGroups.stream()
-                .map(GroupListResult::from)
-                .toList();
+        return groupQueryRepository.findGroupList(userId);
     }
 }

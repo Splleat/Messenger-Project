@@ -2,7 +2,6 @@ package me.splleat.messengerproject.domain.message;
 
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageRepository;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

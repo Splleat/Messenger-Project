@@ -21,6 +21,7 @@ public class GroupMember extends BaseEntity {
     @Column(name = "group_id")
     private Long groupId;
 
+    @Getter
     @Column(name = "nickname")
     private String nickname;
 

@@ -63,7 +63,7 @@ public class MessageQueryRepository {
                         message.createdAt
                 ))
                 .from(message)
-                .leftJoin(userProfile).on(message.userId.eq(userProfile.id))
+                .leftJoin(userProfile).on(message.userId.eq(userProfile.userId))
                 .where(
                         predicate,
                         message.channelId.eq(channelId)

@@ -2,7 +2,7 @@ package me.splleat.messengerproject.support.fixture;
 
 import me.splleat.messengerproject.domain.user.User;
 
-public class UserFixture {
+public final class UserFixture {
     public static final String PASSWORD_HASH = "encryptedPassword";
 
     public static User defaultUser() {

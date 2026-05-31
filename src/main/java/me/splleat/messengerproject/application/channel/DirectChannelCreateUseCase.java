@@ -17,7 +17,7 @@ public class DirectChannelCreateUseCase {
 
     @Transactional
     public void execute(DirectChannelCreateCommand command) {
-        Channel channel = Channel.create(null, command.channelName(), command.type());
+        Channel channel = Channel.createDirectChannel(command.channelName(), command.type());
 
         Channel created = channelService.register(channel);
 

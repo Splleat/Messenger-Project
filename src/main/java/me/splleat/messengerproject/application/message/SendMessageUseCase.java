@@ -12,7 +12,9 @@ import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.infrastructure.message.outbox.DomainCreatedEvent;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -23,9 +25,10 @@ public class SendMessageUseCase {
     private final GroupMemberService groupMemberService;
     private final UserProfileService userProfileService;
     private final MessageService messageService;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public MessageResponse execute(MessageCreateCommand command) {
+    public void execute(MessageCreateCommand command) {
         // 채널 및 채널 설정 정보 확인
         ChannelUserSetting setting = channelUserSettingService.getChannelUserSetting(command.senderId(), command.channelId());
         Channel channel = channelService.getChannel(command.channelId());
@@ -47,6 +50,6 @@ public class SendMessageUseCase {
                     .orElse(username);
         }
 
-        return MessageResponse.of(username, profileUrl, created);
+        publisher.publishEvent(DomainCreatedEvent.of(created, MessageResponse.of(username, profileUrl, created)));
     }
 }

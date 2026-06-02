@@ -11,12 +11,14 @@ import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.profile.UserProfile;
 import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.infrastructure.message.outbox.DomainCreatedEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.UUID;
 
@@ -44,11 +46,14 @@ class SendMessageUseCaseTest {
     @Mock
     private MessageService messageService;
 
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     @InjectMocks
     private SendMessageUseCase sendMessageUseCase;
 
     @Test
-    @DisplayName("올바른 명령이 주어지면 메시지를 저장하고 결과를 반환한다.")
+    @DisplayName("올바른 명령이 주어지면 메시지를 저장하고 이벤트를 발행한다.")
     void execute_WhenValidCommand_SavesAndReturnMessage() {
         // given
         long userId = 1L;
@@ -89,5 +94,13 @@ class SendMessageUseCaseTest {
         then(userProfileService)
                 .should()
                 .getUserProfile(userId);
+
+        then(setting)
+                .should()
+                .updateLastReadMessage(message.getId());
+
+        then(eventPublisher)
+                .should()
+                .publishEvent(any(DomainCreatedEvent.class));
     }
 }

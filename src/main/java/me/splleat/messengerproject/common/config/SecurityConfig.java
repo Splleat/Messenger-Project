@@ -37,7 +37,9 @@ public class SecurityConfig {
     {
         this.jwtValidator = jwtValidator;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.publicPaths = publicPaths;
+        this.publicPaths = publicPaths.stream()
+                .map(String::trim)
+                .toList();
     }
 
     @Bean

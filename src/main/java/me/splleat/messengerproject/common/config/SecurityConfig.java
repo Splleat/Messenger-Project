@@ -1,9 +1,9 @@
 package me.splleat.messengerproject.common.config;
 
-import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationEntryPoint;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationFilter;
 import me.splleat.messengerproject.infrastructure.security.JwtValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,13 +24,21 @@ import java.util.List;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtValidator jwtValidator;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final List<String> publicPaths;
 
-    @Value("${jwt.public-paths}")
-    private List<String> publicPaths;
+    @Autowired
+    public SecurityConfig(
+            JwtValidator jwtValidator,
+            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+            @Value("${jwt.public-paths}") List<String> publicPaths)
+    {
+        this.jwtValidator = jwtValidator;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.publicPaths = publicPaths;
+    }
 
     @Bean
     PasswordEncoder passwordEncoder() {

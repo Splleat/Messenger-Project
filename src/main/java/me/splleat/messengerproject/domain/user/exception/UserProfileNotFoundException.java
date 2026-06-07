@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.domain.profile.exception;
+package me.splleat.messengerproject.domain.user.exception;
 
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.member.GroupMemberService;
+import me.splleat.messengerproject.domain.group.GroupMemberService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

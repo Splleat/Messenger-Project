@@ -15,6 +15,7 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
 
 jwt:
+  public-paths: /auth/login, /auth/register, /auth/refresh, /h2-console, /ws-stomp
   secret: this-is-a-test-secret-key-with-at-least-32-characters-long
   access-token-expiration: 1800000 # 30분 (ms)
   refresh-token-expiration: 604800000 # 7일 (ms)

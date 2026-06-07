@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.infrastructure.persistence.jpa;
 
 import io.lettuce.core.dynamic.annotation.Param;
-import me.splleat.messengerproject.domain.member.GroupMember;
+import me.splleat.messengerproject.domain.group.GroupMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

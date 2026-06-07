@@ -12,9 +12,9 @@ import me.splleat.messengerproject.application.channel.dto.ChannelListResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelParticipantResult;
 import me.splleat.messengerproject.domain.channel.QChannel;
 import me.splleat.messengerproject.domain.channel.QChannelUserSetting;
-import me.splleat.messengerproject.domain.member.QGroupMember;
+import me.splleat.messengerproject.domain.group.QGroupMember;
 import me.splleat.messengerproject.domain.message.QMessage;
-import me.splleat.messengerproject.domain.profile.QUserProfile;
+import me.splleat.messengerproject.domain.user.QUserProfile;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

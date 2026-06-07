@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.domain.member;
+package me.splleat.messengerproject.domain.group;
 
 public enum GroupRole {
     OWNER,

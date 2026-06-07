@@ -1,9 +1,8 @@
-package me.splleat.messengerproject.domain.attachment;
+package me.splleat.messengerproject.domain.message;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
 
 @Entity

@@ -1,8 +1,8 @@
-package me.splleat.messengerproject.domain.member;
+package me.splleat.messengerproject.domain.group;
 
-import me.splleat.messengerproject.domain.member.exception.GroupMemberAlreadyExistsException;
-import me.splleat.messengerproject.domain.member.exception.GroupMemberNotFoundException;
-import me.splleat.messengerproject.domain.member.exception.GroupOwnerLeaveException;
+import me.splleat.messengerproject.domain.group.exception.GroupMemberAlreadyExistsException;
+import me.splleat.messengerproject.domain.group.exception.GroupMemberNotFoundException;
+import me.splleat.messengerproject.domain.group.exception.GroupOwnerLeaveException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.GroupMemberRepository;
 import me.splleat.messengerproject.support.fixture.GroupMemberFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -134,7 +134,7 @@ class GroupMemberServiceTest {
         assertThat(found)
                 .isEmpty();
     }
-    
+
     @Test
     @DisplayName("이미 참여 중인 사용자 목록을 조회하면, 해당 그룹에 속한 사용자 ID 목록이 반환된다.")
     void getAlreadyJoinedUserIds_WhenCalled_ReturnsJoinedUserIds() {

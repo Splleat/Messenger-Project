@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.infrastructure.persistence.jpa;
 
-import me.splleat.messengerproject.domain.profile.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;

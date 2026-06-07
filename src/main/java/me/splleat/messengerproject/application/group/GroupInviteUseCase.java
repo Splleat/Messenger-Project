@@ -3,11 +3,11 @@ package me.splleat.messengerproject.application.group;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.group.dto.GroupInviteCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
-import me.splleat.messengerproject.domain.member.GroupMember;
-import me.splleat.messengerproject.domain.member.GroupMemberService;
-import me.splleat.messengerproject.domain.member.GroupRole;
-import me.splleat.messengerproject.domain.profile.UserProfile;
-import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.domain.group.GroupMember;
+import me.splleat.messengerproject.domain.group.GroupMemberService;
+import me.splleat.messengerproject.domain.group.GroupRole;
+import me.splleat.messengerproject.domain.user.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.domain.user.UserService;
 import org.springframework.transaction.annotation.Transactional;
 

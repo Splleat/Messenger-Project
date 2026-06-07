@@ -20,11 +20,11 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final List<String> PUBLIC_PATH = List.of("/auth/login", "/auth/register", "/auth/refresh", "/h2-console", "/ws-stomp");
     private final JwtValidator jwtValidator;
+    private final List<String> publicPaths;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
         String path = ServletUriComponentsBuilder.fromRequestUri(request)
                 .replaceQuery(request.getQueryString())
                 .build()
@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info("[요청 URL]: {} {}", request.getMethod(), path);
 
-        return PUBLIC_PATH.stream()
+        return publicPaths.stream()
                 .anyMatch(path::startsWith);
     }
 

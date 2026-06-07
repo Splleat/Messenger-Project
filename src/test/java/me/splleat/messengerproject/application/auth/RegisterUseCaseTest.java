@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.application.auth;
 
-import me.splleat.messengerproject.domain.profile.UserProfile;
-import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.domain.user.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.interfaces.rest.auth.dto.RegisterRequest;

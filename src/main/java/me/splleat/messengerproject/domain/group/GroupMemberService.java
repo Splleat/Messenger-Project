@@ -1,9 +1,9 @@
-package me.splleat.messengerproject.domain.member;
+package me.splleat.messengerproject.domain.group;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.member.exception.GroupMemberAlreadyExistsException;
-import me.splleat.messengerproject.domain.member.exception.GroupMemberNotFoundException;
-import me.splleat.messengerproject.domain.member.exception.GroupOwnerLeaveException;
+import me.splleat.messengerproject.domain.group.exception.GroupMemberAlreadyExistsException;
+import me.splleat.messengerproject.domain.group.exception.GroupMemberNotFoundException;
+import me.splleat.messengerproject.domain.group.exception.GroupOwnerLeaveException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.GroupMemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

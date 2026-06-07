@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.attachment.Attachment;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
 
 import java.util.List;

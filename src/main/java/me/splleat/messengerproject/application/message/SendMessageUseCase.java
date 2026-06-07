@@ -7,11 +7,11 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.member.GroupMemberService;
+import me.splleat.messengerproject.domain.group.GroupMemberService;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
-import me.splleat.messengerproject.domain.profile.UserProfile;
-import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.domain.user.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,6 +1,4 @@
-package me.splleat.messengerproject.common.response;
-
-import me.splleat.messengerproject.common.exception.ErrorCode;
+package me.splleat.messengerproject.common.exception;
 
 import java.time.LocalDateTime;
 

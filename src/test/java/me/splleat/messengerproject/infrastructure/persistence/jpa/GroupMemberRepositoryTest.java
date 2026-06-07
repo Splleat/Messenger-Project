@@ -2,8 +2,8 @@ package me.splleat.messengerproject.infrastructure.persistence.jpa;
 
 import jakarta.persistence.EntityManager;
 import me.splleat.messengerproject.domain.group.Group;
-import me.splleat.messengerproject.domain.member.GroupMember;
-import me.splleat.messengerproject.domain.member.GroupRole;
+import me.splleat.messengerproject.domain.group.GroupMember;
+import me.splleat.messengerproject.domain.group.GroupRole;
 import me.splleat.messengerproject.support.fixture.GroupFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

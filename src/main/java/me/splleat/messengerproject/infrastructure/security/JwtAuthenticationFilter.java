@@ -11,6 +11,7 @@ import me.splleat.messengerproject.common.exception.ErrorCode;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,8 +21,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final List<String> PUBLIC_PATH = List.of("/auth/login", "/auth/register", "/auth/refresh", "/h2-console", "/ws-stomp");
     private final JwtValidator jwtValidator;
+    private final List<String> publicPaths;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
@@ -32,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info("[요청 URL]: {} {}", request.getMethod(), path);
 
-        return PUBLIC_PATH.stream()
+        return publicPaths.stream()
                 .anyMatch(path::startsWith);
     }
 

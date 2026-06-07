@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.support.fixture;
 
-import me.splleat.messengerproject.domain.member.GroupMember;
-import me.splleat.messengerproject.domain.member.GroupRole;
+import me.splleat.messengerproject.domain.group.GroupMember;
+import me.splleat.messengerproject.domain.group.GroupRole;
 
 public final class GroupMemberFixture {
     public static GroupMember defaultGroupMember(long userId, long groupId) {

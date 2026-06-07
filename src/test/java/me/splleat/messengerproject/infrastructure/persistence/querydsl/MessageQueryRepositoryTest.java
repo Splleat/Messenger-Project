@@ -6,7 +6,7 @@ import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageRes
 import me.splleat.messengerproject.common.config.QueryDslConfig;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
-import me.splleat.messengerproject.domain.profile.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.BeforeEach;

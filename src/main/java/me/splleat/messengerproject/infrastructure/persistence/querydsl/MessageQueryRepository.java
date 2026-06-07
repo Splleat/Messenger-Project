@@ -6,7 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.domain.message.QMessage;
-import me.splleat.messengerproject.domain.profile.QUserProfile;
+import me.splleat.messengerproject.domain.user.QUserProfile;
 import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageResult;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;

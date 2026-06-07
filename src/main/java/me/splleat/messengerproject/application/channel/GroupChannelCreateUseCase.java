@@ -7,9 +7,9 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.member.GroupMember;
-import me.splleat.messengerproject.domain.member.GroupMemberService;
-import me.splleat.messengerproject.domain.member.GroupRole;
+import me.splleat.messengerproject.domain.group.GroupMember;
+import me.splleat.messengerproject.domain.group.GroupMemberService;
+import me.splleat.messengerproject.domain.group.GroupRole;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

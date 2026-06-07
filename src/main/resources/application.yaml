@@ -1,0 +1,7 @@
+jwt:
+  public-paths:
+    - /auth/login
+    - /auth/register
+    - /auth/refresh
+    - /h2-console
+    - /ws-stomp

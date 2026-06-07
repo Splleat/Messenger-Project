@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.exception.ErrorCode;
-import me.splleat.messengerproject.common.response.ApiErrorResponse;
+import me.splleat.messengerproject.common.exception.ApiErrorResponse;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

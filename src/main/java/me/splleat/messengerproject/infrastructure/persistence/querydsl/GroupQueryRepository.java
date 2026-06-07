@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.group.dto.GroupListResult;
 import me.splleat.messengerproject.domain.group.QGroup;
-import me.splleat.messengerproject.domain.member.QGroupMember;
+import me.splleat.messengerproject.domain.group.QGroupMember;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

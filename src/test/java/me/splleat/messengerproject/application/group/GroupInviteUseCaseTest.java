@@ -1,9 +1,9 @@
 package me.splleat.messengerproject.application.group;
 
 import me.splleat.messengerproject.application.group.dto.GroupInviteCommand;
-import me.splleat.messengerproject.domain.member.GroupMemberService;
-import me.splleat.messengerproject.domain.profile.UserProfile;
-import me.splleat.messengerproject.domain.profile.UserProfileService;
+import me.splleat.messengerproject.domain.group.GroupMemberService;
+import me.splleat.messengerproject.domain.user.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.domain.user.UserService;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;

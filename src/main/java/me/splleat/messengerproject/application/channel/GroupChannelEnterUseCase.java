@@ -6,7 +6,7 @@ import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.member.GroupMemberService;
+import me.splleat.messengerproject.domain.group.GroupMemberService;
 import me.splleat.messengerproject.infrastructure.persistence.querydsl.MessageQueryRepository;
 import org.springframework.transaction.annotation.Transactional;
 

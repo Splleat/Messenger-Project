@@ -1,11 +1,11 @@
-package me.splleat.messengerproject.domain.member;
+package me.splleat.messengerproject.domain.group;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.member.exception.GroupMemberNotPermittedException;
+import me.splleat.messengerproject.domain.group.exception.GroupMemberNotPermittedException;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity

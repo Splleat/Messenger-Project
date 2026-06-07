@@ -1,8 +1,8 @@
-package me.splleat.messengerproject.domain.profile;
+package me.splleat.messengerproject.domain.user;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.profile.exception.UserProfileAlreadyExistsException;
-import me.splleat.messengerproject.domain.profile.exception.UserProfileNotFoundException;
+import me.splleat.messengerproject.domain.user.exception.UserProfileAlreadyExistsException;
+import me.splleat.messengerproject.domain.user.exception.UserProfileNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

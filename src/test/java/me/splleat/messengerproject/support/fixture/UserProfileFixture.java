@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.support.fixture;
 
-import me.splleat.messengerproject.domain.profile.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfile;
 
 public final class UserProfileFixture {
     public static final String NAME = "testUser";

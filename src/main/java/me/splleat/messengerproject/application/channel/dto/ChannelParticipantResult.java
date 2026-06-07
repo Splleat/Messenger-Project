@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.application.channel.dto;
 
-import me.splleat.messengerproject.domain.profile.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfile;
 
 public record ChannelParticipantResult(
         long userId,

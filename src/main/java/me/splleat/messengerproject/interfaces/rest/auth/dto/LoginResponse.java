@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.interfaces.rest.auth.dto;
 
-import me.splleat.messengerproject.domain.profile.UserProfile;
+import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.User;
 import me.splleat.messengerproject.infrastructure.security.dto.TokenResult;
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationEntryPoint;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationFilter;
 import me.splleat.messengerproject.infrastructure.security.JwtValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -28,6 +29,9 @@ public class SecurityConfig {
     private final JwtValidator jwtValidator;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    @Value("${jwt.public-paths}")
+    private List<String> publicPaths;
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -37,7 +41,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 .cors(Customizer.withDefaults())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtValidator), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtValidator, publicPaths), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(handler -> handler
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)

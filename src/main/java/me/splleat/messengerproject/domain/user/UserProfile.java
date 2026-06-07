@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.domain.profile;
+package me.splleat.messengerproject.domain.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,7 +1,5 @@
 jwt:
-  public-paths:
-    - /auth/login
-    - /auth/register
-    - /auth/refresh
-    - /h2-console
-    - /ws-stomp
+  public-paths: /auth/login, /auth/register, /auth/refresh, /h2-console, /ws-stomp
+  secret: ${SECRET_KEY}
+  access-token-expiration: 1800000 # 30분 (ms)
+  refresh-token-expiration: 604800000 # 7일 (ms)

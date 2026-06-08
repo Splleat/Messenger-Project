@@ -140,7 +140,7 @@ API는 두 가지로 분리했다.
                         message.createdAt
                 ))
                 .from(message)
-                .leftJoin(userProfile).on(message.userId.eq(userProfile.userId))
+                .leftJoin(userProfile).on(message.userId.eq(userProfile.userId)) // 탈퇴한 회원의 프로필 유실 가능성 때문에 leftJoin 사용
                 .where(
                         predicate, // 커서 조건
                         message.channelId.eq(channelId)
@@ -222,7 +222,7 @@ API는 두 가지로 분리했다.
 
 `prev`는 기준 메시지보다 과거 20개, `next`는 기준 메시지를 포함한 이후 메시지 20개를 조회한다. `next`에서 `gt` 대신 `goe`를 사용하는 이유는 마지막으로 읽은 메시지(`lastReadMessageId`) 자체도 결과에 포함되어야 하기 때문이다.
 
-두 메시지 슬라이스를 합쳐 React Query의 양방향 무한 스크롤 초기값으로 사용할 수 있도록 `hasPrev`, `hasNext`, `prevCursorId`, `nextCursorId`, `lastReadMessageId`를 함께 반환한다.
+이렇게 조회된 두 슬라이스를 `ChannelEnterResult`로 묶어 반환함으로써, 클라이언트(React Query)는 사용자가 위(과거), 아래(최신) 중 어느 방향으로 스크롤을 이동하더라도 양방향 무한 스크롤을 즉시 수행할 수 있는 초기 상태를 확보할 수 있다.
 
 ---
 

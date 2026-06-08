@@ -88,7 +88,30 @@ JWT는 토큰의 소유권이 클라이언트에게 있다. 서버는 토큰을 
             }
         }
     
-        // saveBlackList, removeRefreshToken...
+        private void saveBlackList(String accessToken) {
+            Claims accessTokenClaims = jwtProvider.getClaims(accessToken);
+    
+            long expiration = jwtProvider.getExpiration(accessTokenClaims);
+    
+            long now = System.currentTimeMillis();
+    
+            String jti = jwtProvider.getJti(accessTokenClaims);
+            long ttlMillis = expiration - now; // 액세스 토큰의 남은 만료 시간 만큼만 Redis TTL로 설정
+    
+            if (ttlMillis < 0) {
+                return; // 이미 만료된 액세스 토큰의 경우 무시
+            }
+    
+            blacklistTokenRepository.save(jti, ttlMillis);
+        }
+    
+        private void removeRefreshToken(String refreshToken) {
+            Claims refreshTokenClaims = jwtProvider.getClaims(refreshToken);
+    
+            String jti = jwtProvider.getJti(refreshTokenClaims);
+    
+            refreshTokenRepository.delete(jti);
+        }
     }
 ```
 
@@ -242,7 +265,7 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NTEzMDgzNDEwMzY3MjU3MzYiLCJqdGkiOiIwY2MyNDE5NC0
 
 **JWT는 페이로드에 사용자 정보를 담아 DB 조회를 줄여준다**
 
-Redis 세션 방식도 세션 생성 시 필요한 정보(권한 등)를 직렬화하여 함께 저장하면 Blacklist JWT와 마찬가지로 단 1회의 Redis 조회로 정보를 얻을 수 있어서 효율 면에서 차이가 없다.
+Redis 세션 방식도 세션 생성 시 필요한 정보(권한 등)를 직렬화하여 함께 저장하면 Blacklist JWT와 마찬가지로 요청당 외부 저장소 조회가 필요하다는 점에서는 유사하다.
 
 **API 게이트웨이/MSA 환경에서 인프라 병목을 분산한다**
 

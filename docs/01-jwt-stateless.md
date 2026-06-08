@@ -59,7 +59,7 @@ JWT는 토큰의 소유권이 클라이언트에게 있다. 서버는 토큰을 
 2. **Blacklist 방식**: 로그아웃된 토큰을 서버에 저장해두고, 요청마다 해당 목록을 조회한다.
 3. **클라이언트 측 삭제**: 서버는 아무것도 하지 않고, 클라이언트 측에서 토큰을 삭제하는 것으로 로그아웃을 처리한다.
 
-3번 방식같은 경우 보안 상 허점이 있고, 1번 방식만으로는 토큰이 탈취되었을 때 해당 토큰이 만료되기 전까지 막을 방법이 없다. 따라서 서버 측에서 제어가 가능한 2번 방식, Blacklist 방식을 도입하기로 결정했다.
+3번 방식 같은 경우 보안상 허점이 있고, 1번 방식만으로는 토큰이 탈취되었을 때 해당 토큰이 만료되기 전까지 막을 방법이 없다. 따라서 서버 측에서 제어가 가능한 2번 방식, Blacklist 방식을 도입하기로 결정했다.
 
 ### 2.2. 해결 방식: Blacklist
 
@@ -88,7 +88,30 @@ JWT는 토큰의 소유권이 클라이언트에게 있다. 서버는 토큰을 
             }
         }
     
-        // saveBlackList, removeRefreshToken...
+        private void saveBlackList(String accessToken) {
+            Claims accessTokenClaims = jwtProvider.getClaims(accessToken);
+    
+            long expiration = jwtProvider.getExpiration(accessTokenClaims);
+    
+            long now = System.currentTimeMillis();
+    
+            String jti = jwtProvider.getJti(accessTokenClaims);
+            long ttlMillis = expiration - now; // 액세스 토큰의 남은 만료 시간 만큼만 Redis TTL로 설정
+    
+            if (ttlMillis < 0) {
+                return; // 이미 만료된 액세스 토큰의 경우 무시
+            }
+    
+            blacklistTokenRepository.save(jti, ttlMillis);
+        }
+    
+        private void removeRefreshToken(String refreshToken) {
+            Claims refreshTokenClaims = jwtProvider.getClaims(refreshToken);
+    
+            String jti = jwtProvider.getJti(refreshTokenClaims);
+    
+            refreshTokenRepository.delete(jti);
+        }
     }
 ```
 
@@ -179,7 +202,7 @@ JWT를 선택한 이유 중 하나가 서버에 상태를 저장하지 않아도
 
 |           | 세션                 | JWT                                  |
 |-----------|--------------------|--------------------------------------|
-| 쿠키에 담기는 것 | 세션 ID (랜덤 문자열)     | 토큰 (서명된 JSON 페이로드)                   |
+| 요청에 담기는 것 | 세션 ID (랜덤 문자열)     | 토큰 (서명된 JSON 페이로드)                   |
 | 실제 데이터 위치 | 서버 (DB, Redis 등)   | 토큰 자체 (Client)                       |
 | 서버의 역할    | 세션 ID로 서버에서 사용자 조회 | 토큰 변조 여부(서명), 만료 여부, 블랙리스트 검증 (도입 시) | 
 
@@ -209,7 +232,7 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NTEzMDgzNDEwMzY3MjU3MzYiLCJqdGkiOiIwY2MyNDE5NC0
         "alg" : "HS256" // 서명에 사용된 알고리즘
       },
       "payload" : {
-        "sub" : "851308341036725736",                   // 유저 식별자 (TSID)
+        "sub" : "851308341036725736",                   // 사용자 식별자 (TSID)
         "jti" : "0cc24194-9d31-41fe-b018-aa0761e59556", // 토큰 고유 ID
         "isAdmin" : false,                              // 권한 정보 (Role)
         "exp" : 1780806821                              // 토큰 만료 시간
@@ -242,7 +265,7 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NTEzMDgzNDEwMzY3MjU3MzYiLCJqdGkiOiIwY2MyNDE5NC0
 
 **JWT는 페이로드에 사용자 정보를 담아 DB 조회를 줄여준다**
 
-Redis 세션 방식도 세션 생성 시 필요한 정보(권한 등)를 직렬화하여 함께 저장하면 Blacklist JWT와 마찬가지로 단 1회의 Redis 조회로 정보를 얻을 수 있어서 효율 면에서 차이가 없다.
+Redis 세션 방식도 세션 생성 시 필요한 정보(권한 등)를 직렬화하여 함께 저장하면 Blacklist JWT와 마찬가지로 요청당 외부 저장소 조회가 필요하다는 점에서는 유사하다.
 
 **API 게이트웨이/MSA 환경에서 인프라 병목을 분산한다**
 

@@ -98,7 +98,7 @@ public class JwtProvider {
     }
 
     public boolean getIsAdmin(Claims claims) {
-        return claims.get("isAdmin",Boolean.class);
+        return claims.get("isAdmin", Boolean.class);
     }
 
     public String getJti(Claims claims) {

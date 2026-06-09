@@ -9,7 +9,9 @@ import me.splleat.messengerproject.domain.group.exception.GroupMemberNotPermitte
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
-@Table(name = "group_members")
+@Table(name = "group_members", uniqueConstraints = {
+        @UniqueConstraint(name = "uq_group_members_user_group", columnNames = {"user_id", "group_id"})
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupMember extends BaseEntity {
 

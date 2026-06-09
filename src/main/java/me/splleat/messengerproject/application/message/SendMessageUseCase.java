@@ -13,6 +13,8 @@ import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
+import me.splleat.messengerproject.infrastructure.message.outbox.DomainCreatedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -23,6 +25,7 @@ public class SendMessageUseCase {
     private final GroupMemberService groupMemberService;
     private final UserProfileService userProfileService;
     private final MessageService messageService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public MessageResponse execute(MessageCreateCommand command) {
@@ -47,6 +50,8 @@ public class SendMessageUseCase {
                     .orElse(username);
         }
 
-        return MessageResponse.of(username, profileUrl, created);
+        MessageResponse response = MessageResponse.of(username, profileUrl, created);
+        eventPublisher.publishEvent(DomainCreatedEvent.of(created, response));
+        return response;
     }
 }

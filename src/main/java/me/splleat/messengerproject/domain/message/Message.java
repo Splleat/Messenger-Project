@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "messages", indexes = {
+        @Index(name = "idx_messages_channel_id", columnList = "channel_id, id")
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message extends SoftDeletableEntity {

@@ -1,8 +1,7 @@
 package me.splleat.messengerproject.domain.channel;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,14 @@ import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
-@Table(name = "channel_user_settings")
+@Table(name = "channel_user_settings",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_channel_user_settings_user_channel", columnNames = {"user_id", "channel_id"})
+        },
+        indexes = {
+                @Index(name = "idx_channel_user_settings_channel_id", columnList = "channel_id")
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChannelUserSetting extends BaseEntity {
 

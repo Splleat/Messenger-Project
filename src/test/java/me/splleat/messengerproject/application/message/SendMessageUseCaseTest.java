@@ -11,12 +11,14 @@ import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
+import me.splleat.messengerproject.infrastructure.message.outbox.DomainCreatedEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.UUID;
 
@@ -43,6 +45,9 @@ class SendMessageUseCaseTest {
 
     @Mock
     private MessageService messageService;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @InjectMocks
     private SendMessageUseCase sendMessageUseCase;
@@ -89,5 +94,9 @@ class SendMessageUseCaseTest {
         then(userProfileService)
                 .should()
                 .getUserProfile(userId);
+
+        then(applicationEventPublisher)
+                .should()
+                .publishEvent(any(DomainCreatedEvent.class));
     }
 }

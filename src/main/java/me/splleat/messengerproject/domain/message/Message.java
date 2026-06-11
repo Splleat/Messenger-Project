@@ -34,7 +34,7 @@ public class Message extends SoftDeletableEntity {
     @Column(name = "parent_message_id")
     private Long parentMessageId;
 
-    @Column(name = "idempotency_key")
+    @Column(name = "idempotency_key", columnDefinition = "BINARY(16)", unique = true)
     private UUID idemPotencyKey;
 
     @OneToMany(mappedBy = "message", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -11,14 +11,11 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MessageOutbox extends BaseEntity {
-    @Column(name = "aggregate_id")
-    private long aggregateId;
+    @Column(name = "message_id")
+    private long messageId;
 
-    @Column(name = "aggregate_type")
-    private String aggregateType;
-
-    @Column(name = "event_type")
-    private String eventType;
+    @Column(name = "channel_id")
+    private long channelId;
 
     @Column(name = "processed")
     private boolean processed;
@@ -27,19 +24,17 @@ public class MessageOutbox extends BaseEntity {
     private String payload;
 
     @Builder
-    private MessageOutbox(long aggregateId, String aggregateType, String eventType, String payload, boolean processed) {
-        this.aggregateId = aggregateId;
-        this.aggregateType = aggregateType;
-        this.eventType = eventType;
+    private MessageOutbox(long messageId, long channelId, String payload, boolean processed) {
+        this.messageId = messageId;
+        this.channelId = channelId;
         this.payload = payload;
         this.processed = processed;
     }
 
-    public static MessageOutbox create(long aggregateId, String aggregateType, String eventType, String payload) {
+    public static MessageOutbox create(long messageId, long channelId, String payload) {
         return MessageOutbox.builder()
-                .aggregateId(aggregateId)
-                .aggregateType(aggregateType)
-                .eventType(eventType)
+                .messageId(messageId)
+                .channelId(channelId)
                 .payload(payload)
                 .processed(false)
                 .build();

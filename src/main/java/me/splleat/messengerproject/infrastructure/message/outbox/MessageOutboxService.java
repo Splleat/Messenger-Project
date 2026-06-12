@@ -17,7 +17,7 @@ public class MessageOutboxService {
         messageOutboxRepository.save(messageOutbox);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void updateToProcessed(long aggregateId) {
         messageOutboxRepository.findByMessageIdAndProcessedFalse(aggregateId)
                 .ifPresentOrElse(

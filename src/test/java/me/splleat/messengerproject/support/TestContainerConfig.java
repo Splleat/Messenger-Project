@@ -12,8 +12,6 @@ public class TestContainerConfig {
 
     private static final MySQLContainer MYSQL = new MySQLContainer(DockerImageName.parse("mysql:9.6.0"))
             .withDatabaseName("test_db")
-            .withUsername("test")
-            .withPassword("test")
             .withReuse(true);
 
     private static final GenericContainer<?> REDIS = new GenericContainer<>(DockerImageName.parse("redis:7.4-alpine"))

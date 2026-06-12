@@ -8,12 +8,12 @@ import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
+import me.splleat.messengerproject.support.annotation.ContainerDataJpaTest;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@ContainerDataJpaTest
 @Import({QueryDslConfig.class, MessageQueryRepository.class})
 class MessageQueryRepositoryTest {
 

@@ -58,6 +58,7 @@ public class MessageQueryRepository {
                         userProfile.name,
                         userProfile.imageUrl,
                         message.content,
+                        message.idemPotencyKey,
                         message.type,
                         message.parentMessageId,
                         message.createdAt

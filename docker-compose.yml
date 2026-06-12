@@ -11,14 +11,24 @@ services:
       MYSQL_PASSWORD: 1234
     volumes:
       - ./mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - app-network
 
   redis:
-    image: redis:latest
+    image: redis:7.4-alpine
     container_name: redis-container
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
     networks:
       - app-network
 

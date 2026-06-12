@@ -8,7 +8,7 @@ public final class ChannelFixture {
         return Channel.createDirectChannel("testChannel", ChannelType.TEXT);
     }
 
-    public static Channel groupChannel(long groupId) {
-        return Channel.createGroupChannel(groupId, "testChannel", ChannelType.TEXT);
+    public static Channel spaceChannel(long spaceId) {
+        return Channel.createSpaceChannel(spaceId, "testChannel", ChannelType.TEXT);
     }
 }

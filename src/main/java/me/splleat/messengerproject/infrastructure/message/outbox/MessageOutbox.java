@@ -23,8 +23,7 @@ public class MessageOutbox extends BaseEntity {
     @Column(name = "processed")
     private boolean processed;
 
-    @Lob
-    @Column(name = "payload")
+    @Column(name = "payload", length = 65535)
     private String payload;
 
     @Builder

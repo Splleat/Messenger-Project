@@ -49,7 +49,7 @@ class MessageQueryRepositoryTest {
                     TEST_USER_ID,
                     TEST_CHANNEL_ID,
                     "메시지 내용 " + i,
-                    MessageType.GROUP,
+                    MessageType.SPACE,
                     null,
                     UUID.randomUUID(),
                     Collections.emptyList()

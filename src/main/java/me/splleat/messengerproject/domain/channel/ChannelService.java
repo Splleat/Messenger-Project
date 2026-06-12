@@ -3,7 +3,7 @@ package me.splleat.messengerproject.domain.channel;
 import io.jsonwebtoken.lang.Collections;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.domain.channel.exception.ChannelNotFoundException;
-import me.splleat.messengerproject.domain.channel.exception.GroupChannelNotFoundException;
+import me.splleat.messengerproject.domain.channel.exception.SpaceChannelNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +27,13 @@ public class ChannelService {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> getGroupChannelIds(long groupId) {
-        return channelRepository.findAllChannelIdByGroupId(groupId);
+    public List<Long> getSpaceChannelIds(long spaceId) {
+        return channelRepository.findAllChannelIdBySpaceId(spaceId);
     }
 
     @Transactional(readOnly = true)
-    public List<Channel> getGroupChannels(long groupId) {
-        return channelRepository.findAllByGroupId(groupId);
+    public List<Channel> getSpaceChannels(long spaceId) {
+        return channelRepository.findAllBySpaceId(spaceId);
     }
 
     @Transactional(readOnly = true)
@@ -42,13 +42,13 @@ public class ChannelService {
             return Collections.emptyList();
         }
 
-        return channelRepository.findAllByGroupIdIsNullAndIdIn(channelIds);
+        return channelRepository.findAllBySpaceIdIsNullAndIdIn(channelIds);
     }
 
     @Transactional(readOnly = true)
-    public void validateInGroup(long groupId, long channelId) {
-        if (!channelRepository.existsByIdAndGroupId(channelId, groupId)) {
-            throw new GroupChannelNotFoundException();
+    public void validateInSpace(long spaceId, long channelId) {
+        if (!channelRepository.existsByIdAndSpaceId(channelId, spaceId)) {
+            throw new SpaceChannelNotFoundException();
         }
     }
 }

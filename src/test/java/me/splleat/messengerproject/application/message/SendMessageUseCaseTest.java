@@ -5,7 +5,7 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.group.GroupMemberService;
+import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.message.MessageType;
@@ -38,7 +38,7 @@ class SendMessageUseCaseTest {
     private ChannelUserSettingService channelUserSettingService;
 
     @Mock
-    private GroupMemberService groupMemberService;
+    private SpaceMemberService spaceMemberService;
 
     @Mock
     private UserProfileService userProfileService;

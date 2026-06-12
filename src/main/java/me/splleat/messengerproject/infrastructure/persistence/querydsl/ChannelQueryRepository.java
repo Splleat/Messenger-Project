@@ -12,7 +12,7 @@ import me.splleat.messengerproject.application.channel.dto.ChannelListResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelParticipantResult;
 import me.splleat.messengerproject.domain.channel.QChannel;
 import me.splleat.messengerproject.domain.channel.QChannelUserSetting;
-import me.splleat.messengerproject.domain.group.QGroupMember;
+import me.splleat.messengerproject.domain.space.QSpaceMember;
 import me.splleat.messengerproject.domain.message.QMessage;
 import me.splleat.messengerproject.domain.user.QUserProfile;
 import org.springframework.stereotype.Repository;
@@ -49,24 +49,24 @@ public class ChannelQueryRepository {
                 .join(channel).on(setting.channelId.eq(channel.id))
                 .where(
                         setting.userId.eq(userId),
-                        channel.groupId.isNull()
+                        channel.spaceId.isNull()
                 );
 
         return findChannelList(query);
     }
 
-    public List<ChannelListResult> findGroupChannelList(long userId, long groupId) {
+    public List<ChannelListResult> findSpaceChannelList(long userId, long spaceId) {
         QChannel channel = QChannel.channel;
         QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;
-        QGroupMember member = QGroupMember.groupMember;
+        QSpaceMember member = QSpaceMember.spaceMember;
 
         JPQLQuery<?> query = queryFactory
                 .from(channel)
                 .leftJoin(setting).on(channel.id.eq(setting.channelId)
                         .and(setting.userId.eq(userId)))
-                .join(member).on(member.groupId.eq(channel.groupId))
+                .join(member).on(member.spaceId.eq(channel.spaceId))
                 .where(
-                        member.groupId.eq(groupId),
+                        member.spaceId.eq(spaceId),
                         member.userId.eq(userId)
                 );
 

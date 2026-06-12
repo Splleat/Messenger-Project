@@ -12,13 +12,13 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     @Query("""
         SELECT c.id
         FROM Channel c
-        WHERE c.groupId = :groupId
+        WHERE c.spaceId = :spaceId
     """)
-    List<Long> findAllChannelIdByGroupId(@Param("groupId") Long groupId);
+    List<Long> findAllChannelIdBySpaceId(@Param("spaceId") Long spaceId);
 
-    List<Channel> findAllByGroupIdIsNullAndIdIn(List<Long> ids);
+    List<Channel> findAllBySpaceIdIsNullAndIdIn(List<Long> ids);
 
-    List<Channel> findAllByGroupId(Long groupId);
+    List<Channel> findAllBySpaceId(Long spaceId);
 
-    boolean existsByIdAndGroupId(Long id, Long groupId);
+    boolean existsByIdAndSpaceId(Long id, Long spaceId);
 }

@@ -12,7 +12,7 @@ import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
-import me.splleat.messengerproject.infrastructure.message.outbox.DomainCreatedEvent;
+import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreateEvent;
 import me.splleat.messengerproject.support.fixture.ChannelFixture;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -95,7 +95,7 @@ class SendMessageUseCaseTest {
 
         then(applicationEventPublisher)
                 .should()
-                .publishEvent(any(DomainCreatedEvent.class));
+                .publishEvent(any(MessageCreateEvent.class));
     }
 
     @Test
@@ -125,6 +125,6 @@ class SendMessageUseCaseTest {
         // then
         then(applicationEventPublisher)
                 .should(never())
-                .publishEvent(any(DomainCreatedEvent.class));
+                .publishEvent(any(MessageCreateEvent.class));
     }
 }

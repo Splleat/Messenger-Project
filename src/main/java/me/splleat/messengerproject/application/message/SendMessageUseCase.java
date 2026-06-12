@@ -13,7 +13,7 @@ import me.splleat.messengerproject.domain.message.MessageRegistration;
 import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
-import me.splleat.messengerproject.infrastructure.message.outbox.DomainCreatedEvent;
+import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreateEvent;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +55,7 @@ public class SendMessageUseCase {
 
         // 메시지가 새로 생성된 경우에만 이벤트를 발행
         if (result.isCreated()) {
-            eventPublisher.publishEvent(DomainCreatedEvent.of(result.message(), response));
+            eventPublisher.publishEvent(MessageCreateEvent.from(response));
         }
 
         return response;

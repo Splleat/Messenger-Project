@@ -7,7 +7,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import org.springframework.util.ClassUtils;
 import tools.jackson.databind.json.JsonMapper;
 
 @Slf4j
@@ -19,17 +18,16 @@ public class MessageOutboxEventListener {
     private final JsonMapper jsonMapper;
 
     @EventListener
-    public void handleDomainCreated(DomainCreatedEvent event) {
-        messageOutboxService.saveOutbox(event.entity(), event.eventType());
+    public void handleDomainCreated(MessageCreateEvent event) {
+        messageOutboxService.saveOutbox(event.toOutbox(jsonMapper));
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void publishToRedis(DomainCreatedEvent event) {
+    public void publishToRedis(MessageCreateEvent event) {
         try {
             messagePublisher.publish(event.toJson(jsonMapper));
 
-            String aggregateType = ClassUtils.getUserClass(event.entity()).getSimpleName();
-            messageOutboxService.updateToProcessed(event.entity().getId(), aggregateType);
+            messageOutboxService.updateToProcessed(event.message().id());
         } catch (Exception e) {
             log.warn("메시지 발행 실패: {}", e.getMessage());
         }

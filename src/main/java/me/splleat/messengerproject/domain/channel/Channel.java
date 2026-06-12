@@ -13,8 +13,8 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletab
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Channel extends SoftDeletableEntity {
 
-    @Column(name = "group_id")
-    private Long groupId;
+    @Column(name = "space_id")
+    private Long spaceId;
 
     @Column(name = "name")
     private String name;
@@ -24,8 +24,8 @@ public class Channel extends SoftDeletableEntity {
     private ChannelType type;
 
     @Builder
-    private Channel(Long groupId, String name, ChannelType type) {
-        this.groupId = groupId;
+    private Channel(Long spaceId, String name, ChannelType type) {
+        this.spaceId = spaceId;
         this.name = name;
         this.type = type;
     }
@@ -37,15 +37,15 @@ public class Channel extends SoftDeletableEntity {
                 .build();
     }
 
-    public static Channel createGroupChannel(long groupId, String name, ChannelType type) {
+    public static Channel createSpaceChannel(long spaceId, String name, ChannelType type) {
         return Channel.builder()
-                .groupId(groupId)
+                .spaceId(spaceId)
                 .name(name)
                 .type(type)
                 .build();
     }
 
-    public boolean isGroupChannel() {
-        return groupId != null;
+    public boolean isSpaceChannel() {
+        return spaceId != null;
     }
 }

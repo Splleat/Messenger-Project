@@ -7,7 +7,7 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
-import me.splleat.messengerproject.domain.group.GroupMemberService;
+import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.user.UserProfile;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SendMessageUseCase {
     private final ChannelService channelService;
     private final ChannelUserSettingService channelUserSettingService;
-    private final GroupMemberService groupMemberService;
+    private final SpaceMemberService spaceMemberService;
     private final UserProfileService userProfileService;
     private final MessageService messageService;
     private final ApplicationEventPublisher eventPublisher;
@@ -45,8 +45,8 @@ public class SendMessageUseCase {
         String username = userProfile.getName();
         String profileUrl = userProfile.getImageUrl();
 
-        if (channel.isGroupChannel()) {
-            username = groupMemberService.getNickname(command.senderId(), channel.getGroupId())
+        if (channel.isSpaceChannel()) {
+            username = spaceMemberService.getNickname(command.senderId(), channel.getSpaceId())
                     .orElse(username);
         }
 

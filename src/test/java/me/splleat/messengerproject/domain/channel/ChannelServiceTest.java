@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.domain.channel;
 
 import me.splleat.messengerproject.domain.channel.exception.ChannelNotFoundException;
-import me.splleat.messengerproject.domain.channel.exception.GroupChannelNotFoundException;
+import me.splleat.messengerproject.domain.channel.exception.SpaceChannelNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,17 +72,17 @@ class ChannelServiceTest {
     }
 
     @Test
-    @DisplayName("해당 채널이 그룹에 속해 있지 않으면, GroupChannelNotFoundException이 발생한다.")
-    void validateInGroup_WhenNotGroupChannel_ThrowsException() {
+    @DisplayName("해당 채널이 그룹에 속해 있지 않으면, SpaceChannelNotFoundException이 발생한다.")
+    void validateInSpace_WhenNotSpaceChannel_ThrowsException() {
         // given
-        long groupId = 1L;
+        long spaceId = 1L;
         long channelId = 1L;
 
-        given(channelRepository.existsByIdAndGroupId(channelId, groupId))
+        given(channelRepository.existsByIdAndSpaceId(channelId, spaceId))
                 .willReturn(false);
 
         // when
-        assertThatThrownBy(() -> channelService.validateInGroup(groupId, channelId))
-                .isInstanceOf(GroupChannelNotFoundException.class);
+        assertThatThrownBy(() -> channelService.validateInSpace(spaceId, channelId))
+                .isInstanceOf(SpaceChannelNotFoundException.class);
     }
 }

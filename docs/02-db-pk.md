@@ -292,7 +292,7 @@ Jackson의 `ToStringSerializer`를 전역으로 적용해 해당 문제를 해�
 
 ### 5.1. 엔티티 식별자
 
-프로젝트에서는 `Message`, `Channel`, `Group` 등 모든 엔티티의 식별자를 TSID로 통일하였다.
+프로젝트에서는 `Message`, `Channel`, `Space` 등 모든 엔티티의 식별자를 TSID로 통일하였다.
 
 따라서 모든 엔티티가 `BaseEntity`를 상속받아 전역 고유성과 시간순 정렬, 일관성, Persistable 인터페이스 구현을 통한 성능 최적화의 이점을 얻을 수 있었다.
 

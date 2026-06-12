@@ -4,6 +4,7 @@ import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record MessageResponse(
         long id,
@@ -12,6 +13,7 @@ public record MessageResponse(
         String username,
         String profileUrl,
         String content,
+        UUID idemPotencyKey,
         MessageType type,
         Long parentMessageId,
         LocalDateTime createdAt
@@ -24,6 +26,7 @@ public record MessageResponse(
             username,
             profileUrl,
             message.getContent(),
+            message.getIdemPotencyKey(),
             message.getType(),
             message.getParentMessageId(),
             message.getCreatedAt()

@@ -15,9 +15,7 @@ public class SendMessageFacade {
 
     @Retryable(
             includes = {DataIntegrityViolationException.class, TransientDataAccessException.class},
-            maxRetries = 3,
-            jitter = 50,
-            delay = 50
+            maxRetries = 1
     )
     public MessageResponse execute(MessageCreateCommand command) {
         return sendMessageUseCase.execute(command);

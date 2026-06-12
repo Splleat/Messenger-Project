@@ -5,14 +5,21 @@ import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageReposit
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;
 
     @Transactional
-    public Message registerWithIdempotency(Message message) {
-        return messageRepository.findByIdemPotencyKey(message.getIdemPotencyKey())
-                .orElseGet(() -> messageRepository.save(message));
+    public MessageRegistration registerWithIdempotency(Message message) {
+        Optional<Message> result = messageRepository.findByIdemPotencyKey(message.getIdemPotencyKey());
+
+        return result.map(m -> MessageRegistration.of(m, false))
+                .orElseGet(() -> {
+                    Message saved = messageRepository.save(message);
+                    return MessageRegistration.of(saved, true);
+                });
     }
 }

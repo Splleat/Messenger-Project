@@ -9,11 +9,12 @@ import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.message.Message;
+import me.splleat.messengerproject.domain.message.MessageRegistration;
 import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import me.splleat.messengerproject.infrastructure.message.outbox.DomainCreatedEvent;
+import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,10 +36,10 @@ public class SendMessageUseCase {
 
         // 메시지 생성
         Message message = command.toEntity();
-        Message created = messageService.registerWithIdempotency(message);
+        MessageRegistration result = messageService.registerWithIdempotency(message);
 
         // 마지막으로 읽은 메시지 업데이트
-        setting.updateLastReadMessage(created.getId());
+        setting.updateLastReadMessage(result.message().getId());
 
         // 응답으로 내려줄 프로필 정보 조회
         UserProfile userProfile = userProfileService.getUserProfile(command.senderId());
@@ -50,8 +51,13 @@ public class SendMessageUseCase {
                     .orElse(username);
         }
 
-        MessageResponse response = MessageResponse.of(username, profileUrl, created);
-        eventPublisher.publishEvent(DomainCreatedEvent.of(created, response));
+        MessageResponse response = MessageResponse.of(username, profileUrl, result.message());
+
+        // 메시지가 새로 생성된 경우에만 이벤트를 발행
+        if (result.isCreated()) {
+            eventPublisher.publishEvent(DomainCreatedEvent.of(result.message(), response));
+        }
+
         return response;
     }
 }

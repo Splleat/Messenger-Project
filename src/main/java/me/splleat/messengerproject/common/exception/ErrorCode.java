@@ -36,6 +36,8 @@ public enum ErrorCode {
     SPACE_MEMBER_NOT_PERMITTED(HttpStatus.FORBIDDEN, "SPACE_MEMBER_003", "해당 작업을 수행할 권한이 없는 그룹 멤버입니다."),
     SPACE_OWNER_CANNOT_LEAVE(HttpStatus.CONFLICT, "SPACE_MEMBER_004", "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
+    LOCK_FAILED(HttpStatus.CONFLICT, "LOCK_001", "락을 획득하지 못했습니다."),
+
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "COMMON_001", "잘못된 입력값입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_002", "서버 오류가 발생했습니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_003", "권한이 없습니다.");

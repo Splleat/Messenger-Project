@@ -8,3 +8,7 @@ spring:
   threads:
     virtual:
       enabled: true
+
+relay:
+  grace-seconds: 2
+  give-up-seconds: 60

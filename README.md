@@ -18,27 +18,72 @@
 
 ---
 
+## 실행 방법
+
+### 사전 요구사항
+
+- Docker / Docker Compose
+
+### 1. 환경 변수 설정
+
+`.env.example`을 복사해 `.env`를 만들고 값을 채운다.
+
+```bash
+cp .env.example .env
+```
+
+| 변수 | 설명 | 예시 |
+| --- | --- | --- |
+| `SECRET_KEY` | JWT 서명 키 (32자 이상) | `this-is-a-secret-key-with-at-least-32-chars` |
+| `TSID_NODE` | TSID 노드 ID | `0` |
+
+### 2. 실행
+
+```bash
+docker compose up --build
+```
+
+- MySQL, Redis, 메신저 애플리케이션이 함께 기동된다.
+- 애플리케이션은 DB·Redis의 헬스체크가 통과한 뒤에 시작된다.
+- 기동 후 `http://localhost:8080` 에서 API에 접근할 수 있다.
+
+### 3. 종료
+
+```bash
+docker compose down     # 컨테이너 종료
+docker compose down -v  # 데이터(MySQL 볼륨)까지 삭제
+```
+
+프론트엔드는 [Messenger-Front](https://github.com/Splleat/Messenger-Front) 리포지토리에 존재하며, 백엔드(`localhost:8080`) 기동 후 로컬에서 `npm run dev`(`localhost:3000`)로 실행한다.
+
+---
+
 ## 도메인 구조
 
 ```text
 src/main/java/me/splleat/messengerproject/
 ├── domain/                    # 도메인 모델 및 도메인 서비스
 │   ├── user/                  # 사용자(User), 사용자 프로필(UserProfile)
-│   ├── group/                 # 그룹(Group), 그룹 멤버(GroupMember)
+│   ├── space/                 # 스페이스(Space), 스페이스 멤버(SpaceMember), 권한(SpaceRole)
 │   ├── channel/               # 채널(Channel), 채널 설정(ChannelUserSetting)
 │   └── message/               # 메시지(Message), 첨부 파일(Attachment)
 │
 ├── application/               # 비즈니스 유스케이스 레이어
 │   ├── auth/                  # 회원가입, 로그인, 로그아웃, 토큰 재발급 유스케이스
-│   ├── group/                 # 그룹 생성, 조회, 초대, 탈퇴 유스케이스
+│   ├── space/                 # 스페이스 생성, 조회, 초대, 탈퇴 유스케이스
 │   ├── channel/               # 채널 생성, 조회, 읽음 처리 유스케이스
 │   └── message/               # 메시지 송신 유스케이스
 │
 ├── interfaces/                # 외부 클라이언트 진입점
-│   ├── rest/                  # REST API 컨트롤러 (인증, 그룹, 채널 등)
+│   ├── rest/                  # REST API 컨트롤러 (인증, 스페이스, 채널 등)
 │   └── websocket/             # STOMP 기반 실시간 웹소켓 컨트롤러
 │
 ├── infrastructure/            # 인프라 기술 및 프레임워크 연동
+│   ├── message/               # 실시간 메시지 전달 및 발행 신뢰성 보장
+│   │   ├── outbox/            # 아웃박스 패턴 (메시지 발행 보장)
+│   │   ├── publisher/         # Redis Pub/Sub 발행
+│   │   ├── subscriber/        # Redis 구독 → STOMP 라우팅
+│   │   └── relay/             # 발행 실패 메시지 복구 스케줄러
 │   ├── persistence/           # 영속성 계층
 │   │   ├── entity/            # 공통 추상 엔티티 (BaseEntity, SoftDeletableEntity)
 │   │   ├── jpa/               # Spring Data JPA
@@ -47,7 +92,9 @@ src/main/java/me/splleat/messengerproject/
 │   └── websocket/             # STOMP 메시지 핸들러 및 웹소켓 세션 인증 리졸버
 │
 └── common/                    # 프로젝트 전역 공통 설정 및 예외 처리
-    ├── annotation/            # 커스텀 어노테이션(@UseCase)
+    ├── annotation/            # 커스텀 어노테이션 (@UseCase, @DistributedLock)
+    ├── aop/                   # 분산 락 AOP (DistributedLockAspect)
+    ├── parser/                # SpEL 기반 동적 Lock Key 파서
     ├── config/                # Redis, Jackson, Security, WebSocket 등 설정 클래스
     └── exception/             # 커스텀 비즈니스 예외 및 GlobalExceptionHandler, 공통 에러 응답
 ```

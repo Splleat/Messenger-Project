@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .orElse(ErrorCode.INVALID_INPUT.getMessage());
 
-        ApiErrorResponse errorResponse = ApiErrorResponse.of(ErrorCode.INVALID_INPUT, message);
+        ApiErrorResponse errorResponse = ApiErrorResponse.of(message);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

@@ -5,7 +5,7 @@ import me.splleat.messengerproject.common.exception.ErrorCode;
 
 public enum MessageType {
     DIRECT,
-    GROUP;
+    SPACE;
 
     public static MessageType from(String value) {
         try {

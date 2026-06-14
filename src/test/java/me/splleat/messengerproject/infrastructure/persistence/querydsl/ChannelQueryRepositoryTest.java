@@ -7,22 +7,22 @@ import me.splleat.messengerproject.common.config.QueryDslConfig;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelType;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
-import me.splleat.messengerproject.domain.group.Group;
-import me.splleat.messengerproject.domain.group.GroupMember;
-import me.splleat.messengerproject.domain.group.GroupRole;
+import me.splleat.messengerproject.domain.space.Space;
+import me.splleat.messengerproject.domain.space.SpaceMember;
+import me.splleat.messengerproject.domain.space.SpaceRole;
 import me.splleat.messengerproject.domain.user.UserProfile;
+import me.splleat.messengerproject.support.annotation.ContainerDataJpaTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@ContainerDataJpaTest
 @Import({QueryDslConfig.class, ChannelQueryRepository.class})
 class ChannelQueryRepositoryTest {
 
@@ -34,9 +34,9 @@ class ChannelQueryRepositoryTest {
 
     private static final long TEST_USER_ID = 1L;
     private static final long OTHER_USER_ID = 2L;
-    private Group testGroup;
+    private Space testSpace;
     private Channel directChannel;
-    private Channel groupChannel;
+    private Channel spaceChannel;
 
     @BeforeEach
     void setUp() {
@@ -55,15 +55,15 @@ class ChannelQueryRepositoryTest {
         entityManager.persist(ChannelUserSetting.create(OTHER_USER_ID, directChannel.getId()));
 
         // 그룹 생성
-        testGroup = Group.create("Test Group");
-        entityManager.persist(testGroup);
+        testSpace = Space.create("Test Space");
+        entityManager.persist(testSpace);
 
         // 그룹 멤버 설정
-        entityManager.persist(GroupMember.create(TEST_USER_ID, testGroup.getId(), "nick1", GroupRole.MEMBER));
+        entityManager.persist(SpaceMember.create(TEST_USER_ID, testSpace.getId(), "nick1", SpaceRole.MEMBER));
 
         // 그룹 채널 생성
-        groupChannel = Channel.createGroupChannel(testGroup.getId(), "Group Channel", ChannelType.TEXT);
-        entityManager.persist(groupChannel);
+        spaceChannel = Channel.createSpaceChannel(testSpace.getId(), "Space Channel", ChannelType.TEXT);
+        entityManager.persist(spaceChannel);
 
         entityManager.flush();
         entityManager.clear();
@@ -99,17 +99,17 @@ class ChannelQueryRepositoryTest {
     }
 
     @Test
-    @DisplayName("findGroupChannelList: 해당 유저가 속한 특정 그룹의 채널 목록을 반환한다.")
-    void findGroupChannelList() {
+    @DisplayName("findSpaceChannelList: 해당 유저가 속한 특정 그룹의 채널 목록을 반환한다.")
+    void findSpaceChannelList() {
         // when
-        List<ChannelListResult> results = channelQueryRepository.findGroupChannelList(TEST_USER_ID, testGroup.getId());
+        List<ChannelListResult> results = channelQueryRepository.findSpaceChannelList(TEST_USER_ID, testSpace.getId());
 
         // then
         assertThat(results)
                 .hasSize(1);
         assertThat(results.getFirst().channelId())
-                .isEqualTo(groupChannel.getId());
+                .isEqualTo(spaceChannel.getId());
         assertThat(results.getFirst().channelName())
-                .isEqualTo(groupChannel.getName());
+                .isEqualTo(spaceChannel.getName());
     }
 }

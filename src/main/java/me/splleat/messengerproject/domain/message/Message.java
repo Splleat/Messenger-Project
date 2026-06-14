@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +36,8 @@ public class Message extends SoftDeletableEntity {
     @Column(name = "parent_message_id")
     private Long parentMessageId;
 
-    @Column(name = "idempotency_key")
+    @Column(name = "idempotency_key", unique = true)
+    @JdbcTypeCode(SqlTypes.UUID)
     private UUID idemPotencyKey;
 
     @OneToMany(mappedBy = "message", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

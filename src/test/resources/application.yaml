@@ -16,3 +16,7 @@ jwt:
   secret: this-is-a-test-secret-key-with-at-least-32-characters-long
   access-token-expiration: 1800000 # 30분 (ms)
   refresh-token-expiration: 604800000 # 7일 (ms)
+
+relay:
+  grace-seconds: 2
+  give-up-seconds: 60

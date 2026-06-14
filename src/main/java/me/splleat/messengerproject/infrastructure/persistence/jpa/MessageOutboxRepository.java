@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface MessageOutboxRepository extends JpaRepository<MessageOutbox, Long> {
     Optional<MessageOutbox> findByMessageIdAndProcessedFalse(long messageId);
 
-    List<MessageOutbox> findAllByProcessedFalseAndCreatedAtBefore(LocalDateTime limit);
+    List<MessageOutbox> findTop500ByProcessedFalseAndCreatedAtBetweenOrderByIdAsc(LocalDateTime createdAtAfter, LocalDateTime createdAtBefore);
 }

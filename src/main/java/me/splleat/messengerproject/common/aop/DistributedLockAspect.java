@@ -34,22 +34,20 @@ public class DistributedLockAspect {
         String key = parser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key()).toString();
         RLock lock = redissonClient.getLock(key);
 
-        try {
-            boolean acquired = lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
+        boolean acquired = lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
 
-            if (!acquired) {
-                if (distributedLock.throwOnFailure()) {
-                    throw new BusinessException(ErrorCode.LOCK_FAILED);
-                }
-
-                return null;
+        if (!acquired) {
+            if (distributedLock.throwOnFailure()) {
+                throw new BusinessException(ErrorCode.LOCK_FAILED);
             }
 
+            return null;
+        }
+
+        try {
             return joinPoint.proceed();
         } finally {
-            if (lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
+            lock.unlock();
         }
     }
 }

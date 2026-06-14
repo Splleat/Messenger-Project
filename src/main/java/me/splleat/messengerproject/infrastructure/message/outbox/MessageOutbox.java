@@ -1,14 +1,18 @@
 package me.splleat.messengerproject.infrastructure.message.outbox;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
+@Table(indexes = {
+        @Index(name = "idx_message_id_processed", columnList = "message_id, processed"),
+        @Index(name = "idx_processed_created_at", columnList = "processed, created_at")
+})
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MessageOutbox extends BaseEntity {
     @Column(name = "message_id")

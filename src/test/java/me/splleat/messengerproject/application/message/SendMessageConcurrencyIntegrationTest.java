@@ -5,7 +5,7 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageOutboxRepository;
+import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageOutboxRepository;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelUserSettingRepository;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageRepository;

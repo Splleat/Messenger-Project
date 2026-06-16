@@ -15,21 +15,19 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends SoftDeletableEntity {
 
-    @Getter
     @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password_hash")
     private String passwordHash;
 
-    @Getter
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Getter
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 

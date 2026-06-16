@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public final class MessageFixture {
     public static Message defaultMessage(long userId, long channelId) {
-        return Message.create(userId, channelId, "test", MessageType.DIRECT, null, UUID.randomUUID(), null);
+        return Message.create(userId, channelId, "test", MessageType.DIRECT, null, UUID.randomUUID());
     }
 }

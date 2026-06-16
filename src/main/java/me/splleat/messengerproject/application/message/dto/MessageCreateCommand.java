@@ -14,7 +14,6 @@ public record MessageCreateCommand(
         Long parentMessageId
 ) {
     public Message toEntity() {
-        // MVP -> 첨부파일 제외
-        return Message.create(senderId, channelId, content, type, parentMessageId, idempotencyKey, null);
+        return Message.create(senderId, channelId, content, type, parentMessageId, idempotencyKey);
     }
 }

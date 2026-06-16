@@ -16,3 +16,9 @@ spring:
       host: redis
       port: 6379
       connect-timeout: 2000ms
+      
+minio:
+  endpoint: http://minio:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket: messenger

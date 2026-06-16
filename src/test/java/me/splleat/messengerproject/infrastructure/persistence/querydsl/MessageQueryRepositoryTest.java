@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,8 +50,7 @@ class MessageQueryRepositoryTest {
                     "메시지 내용 " + i,
                     MessageType.SPACE,
                     null,
-                    UUID.randomUUID(),
-                    Collections.emptyList()
+                    UUID.randomUUID()
             );
             entityManager.persist(message);
             savedMessages.add(message);

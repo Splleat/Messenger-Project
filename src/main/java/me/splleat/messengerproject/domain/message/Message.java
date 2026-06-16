@@ -40,21 +40,17 @@ public class Message extends SoftDeletableEntity {
     @JdbcTypeCode(SqlTypes.UUID)
     private UUID idemPotencyKey;
 
-    @OneToMany(mappedBy = "message", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Attachment> attachments;
-
     @Builder
-    private Message(Long userId, Long channelId, String content, MessageType type, Long parentMessageId, UUID idemPotencyKey, List<Attachment> attachments) {
+    private Message(Long userId, Long channelId, String content, MessageType type, Long parentMessageId, UUID idemPotencyKey) {
         this.userId = userId;
         this.channelId = channelId;
         this.content = content;
         this.type = type;
         this.parentMessageId = parentMessageId;
         this.idemPotencyKey = idemPotencyKey;
-        this.attachments = attachments;
     }
 
-    public static Message create(long userId, long channelId, String content, MessageType type, Long parentMessageId, UUID idemPotencyKey, List<Attachment> attachments) {
+    public static Message create(long userId, long channelId, String content, MessageType type, Long parentMessageId, UUID idemPotencyKey) {
         return Message.builder()
                 .userId(userId)
                 .channelId(channelId)
@@ -62,7 +58,6 @@ public class Message extends SoftDeletableEntity {
                 .type(type)
                 .parentMessageId(parentMessageId)
                 .idemPotencyKey(idemPotencyKey)
-                .attachments(attachments)
                 .build();
     }
 }

@@ -35,15 +35,6 @@ public class UserProfileService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserProfile> getUserProfiles(List<Long> userIds) {
-        if (userIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return userProfileRepository.findAllByUserIdIn(userIds);
-    }
-
-    @Transactional(readOnly = true)
     public Map<Long, UserProfile> getUserProfileMap(List<Long> userIds) {
         if (userIds.isEmpty()) {
             return Collections.emptyMap();

@@ -12,22 +12,19 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 @Table(name = "space_members", uniqueConstraints = {
         @UniqueConstraint(name = "uq_space_members_user_space", columnNames = {"user_id", "space_id"})
 })
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SpaceMember extends BaseEntity {
 
-    @Getter
     @Column(name = "user_id")
     private Long userId;
 
-    @Getter
     @Column(name = "space_id")
     private Long spaceId;
 
-    @Getter
     @Column(name = "nickname")
     private String nickname;
 
-    @Getter
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private SpaceRole role;

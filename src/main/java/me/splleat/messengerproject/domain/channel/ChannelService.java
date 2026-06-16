@@ -32,11 +32,6 @@ public class ChannelService {
     }
 
     @Transactional(readOnly = true)
-    public List<Channel> getSpaceChannels(long spaceId) {
-        return channelRepository.findAllBySpaceId(spaceId);
-    }
-
-    @Transactional(readOnly = true)
     public List<Channel> getDirectChannels(List<Long> channelIds) {
         if (channelIds.isEmpty()) {
             return Collections.emptyList();

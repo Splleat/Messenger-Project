@@ -6,6 +6,7 @@ mysql_data/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+minio_data/
 
 ### STS ###
 .apt_generated

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.domain.user.exception.UserProfileAlreadyExistsException;
 import me.splleat.messengerproject.domain.user.exception.UserProfileNotFoundException;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,5 +43,27 @@ public class UserProfileService {
 
         return userProfileRepository.findAllByUserIdIn(userIds).stream()
                 .collect(Collectors.toMap(UserProfile::getUserId, profile -> profile));
+    }
+
+    @Transactional
+    @CacheEvict(value = "userProfile", key = "#userId")
+    public String updateImageUrl(long userId, String imageUrl) {
+        UserProfile userProfile = userProfileRepository.findByUserId(userId)
+                .orElseThrow(UserProfileNotFoundException::new);
+
+        String oldImageKey = userProfile.getImageUrl();
+
+        userProfile.updateImageUrl(imageUrl);
+
+        return oldImageKey;
+    }
+
+    @Transactional
+    @CacheEvict(value = "userProfile", key = "#userId")
+    public void updateProfile(long userId, String name, String statusMessage) {
+        UserProfile userProfile = userProfileRepository.findByUserId(userId)
+                .orElseThrow(UserProfileNotFoundException::new);
+
+        userProfile.updateProfile(name, statusMessage);
     }
 }

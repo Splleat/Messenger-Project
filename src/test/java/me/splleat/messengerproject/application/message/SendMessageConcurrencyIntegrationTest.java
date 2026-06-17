@@ -88,7 +88,7 @@ class SendMessageConcurrencyIntegrationTest {
         UUID idempotencyKey = UUID.randomUUID();
         executorService = Executors.newFixedThreadPool(threadCount);
 
-        MessageCreateCommand command = new MessageCreateCommand(USER_ID, channelId, "test", idempotencyKey, MessageType.DIRECT, null);
+        MessageCreateCommand command = new MessageCreateCommand(USER_ID, channelId, "test", idempotencyKey, MessageType.DIRECT, null, null);
 
         CountDownLatch ready = new CountDownLatch(threadCount);
         CountDownLatch start = new CountDownLatch(1);

@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageResult;
 import me.splleat.messengerproject.common.config.QueryDslConfig;
+import me.splleat.messengerproject.common.properties.MinIOProperties;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ContainerDataJpaTest
 @Import({QueryDslConfig.class, MessageQueryRepository.class})
+@EnableConfigurationProperties(MinIOProperties.class)
 class MessageQueryRepositoryTest {
 
     @Autowired

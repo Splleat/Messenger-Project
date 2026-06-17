@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageResult;
 import me.splleat.messengerproject.common.config.QueryDslConfig;
-import me.splleat.messengerproject.common.properties.MinIOProperties;
+import me.splleat.messengerproject.infrastructure.storage.MinIOProperties;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;

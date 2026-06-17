@@ -37,4 +37,13 @@ public class UserProfile extends BaseEntity {
                 .name(name)
                 .build();
     }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateProfile(String name, String statusMessage) {
+        this.name = name;
+        this.statusMessage = statusMessage;
+    }
 }

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignRequest;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignResponse;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3Service {
     private final S3Presigner s3Presigner;
+    private final S3Client s3Client;
     private final MinIOProperties minIOProperties;
 
     private static final String KEY = "attachments/";
@@ -37,5 +40,14 @@ public class S3Service {
         );
 
         return new PresignResponse(presigned.url().toString(), objectKey);
+    }
+
+    public void deleteObject(String objectKey) {
+        DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                .bucket(minIOProperties.bucket())
+                .key(objectKey)
+                .build();
+
+        s3Client.deleteObject(deleteRequest);
     }
 }

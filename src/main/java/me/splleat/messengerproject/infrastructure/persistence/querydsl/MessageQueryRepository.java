@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageResult;
-import me.splleat.messengerproject.common.properties.MinIOProperties;
+import me.splleat.messengerproject.infrastructure.storage.MinIOProperties;
 import me.splleat.messengerproject.domain.message.QAttachment;
 import me.splleat.messengerproject.domain.message.QMessage;
 import me.splleat.messengerproject.domain.user.QUserProfile;

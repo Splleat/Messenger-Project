@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.common.properties;
+package me.splleat.messengerproject.infrastructure.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

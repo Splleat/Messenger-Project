@@ -12,7 +12,9 @@ import me.splleat.messengerproject.domain.message.MessageService;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
+import me.splleat.messengerproject.domain.message.AttachmentService;
 import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreateEvent;
+import java.util.List;
 import me.splleat.messengerproject.support.fixture.ChannelFixture;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -53,6 +55,9 @@ class SendMessageUseCaseTest {
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Mock
+    private AttachmentService attachmentService;
+
     @InjectMocks
     private SendMessageUseCase sendMessageUseCase;
 
@@ -63,7 +68,7 @@ class SendMessageUseCaseTest {
         long channelId = 1L;
         Channel channel = ChannelFixture.directChannel();
         UserProfile profile = UserProfileFixture.defaultUserProfile(1L);
-        MessageCreateCommand command = new MessageCreateCommand(profile.getUserId(), channelId, "test", UUID.randomUUID(), MessageType.DIRECT, null);
+        MessageCreateCommand command = new MessageCreateCommand(profile.getUserId(), channelId, "test", UUID.randomUUID(), MessageType.DIRECT, null, null);
         Message message = mock(Message.class);
         MessageRegistration messageResult = MessageRegistration.of(message, true);
         ChannelUserSetting setting = mock(ChannelUserSetting.class);
@@ -105,7 +110,7 @@ class SendMessageUseCaseTest {
         long channelId = 1L;
         Channel channel = ChannelFixture.directChannel();
         UserProfile profile = UserProfileFixture.defaultUserProfile(1L);
-        MessageCreateCommand command = new MessageCreateCommand(profile.getUserId(), channelId, "test", UUID.randomUUID(), MessageType.DIRECT, null);
+        MessageCreateCommand command = new MessageCreateCommand(profile.getUserId(), channelId, "test", UUID.randomUUID(), MessageType.DIRECT, null, null);
         Message message = mock(Message.class);
         MessageRegistration messageResult = MessageRegistration.of(message, false);
         ChannelUserSetting setting = mock(ChannelUserSetting.class);
@@ -118,6 +123,8 @@ class SendMessageUseCaseTest {
                 .willReturn(messageResult);
         given(userProfileService.getUserProfile(command.senderId()))
                 .willReturn(profile);
+        given(attachmentService.getAttachments(any(Long.class)))
+                .willReturn(List.of());
 
         // when
         assertDoesNotThrow(() -> sendMessageUseCase.execute(command));

@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.common.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.common.properties.MinIOProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -13,28 +13,16 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import java.net.URI;
 
 @Configuration
+@RequiredArgsConstructor
 public class S3Config {
-    private final String endpoint;
-    private final String accessKey;
-    private final String secretKey;
-
-    @Autowired
-    public S3Config(
-            @Value("${minio.endpoint}") String endpoint,
-            @Value("${minio.access-key}") String accessKey,
-            @Value("${minio.secret-key}") String secretKey
-    ) {
-        this.endpoint = endpoint;
-        this.accessKey = accessKey;
-        this.secretKey = secretKey;
-    }
+    private final MinIOProperties properties;
 
     @Bean
     S3Presigner s3Presigner() {
         return S3Presigner.builder()
-                .endpointOverride(URI.create(endpoint))
+                .endpointOverride(URI.create(properties.endpoint()))
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(accessKey, secretKey)))
+                        AwsBasicCredentials.create(properties.accessKey(), properties.secretKey())))
                 .region(Region.US_EAST_1)
                 .serviceConfiguration(S3Configuration.builder()
                         .pathStyleAccessEnabled(true)

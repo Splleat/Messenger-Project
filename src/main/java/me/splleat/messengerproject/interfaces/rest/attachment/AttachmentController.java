@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.interfaces.rest.attachment;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.message.AttachmentService;
+import me.splleat.messengerproject.infrastructure.storage.S3Service;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignRequest;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignResponse;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/attachments")
 @RequiredArgsConstructor
 public class AttachmentController {
-    private final AttachmentService attachmentService;
+    private final S3Service s3Service;
 
     @PostMapping("/presign")
     public PresignResponse presign(@RequestBody PresignRequest request) {
-        return attachmentService.createPresignedUpload(request);
+        return s3Service.createPresignedUpload(request);
     }
 }

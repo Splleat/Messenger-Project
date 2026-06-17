@@ -1,9 +1,9 @@
 package me.splleat.messengerproject.interfaces.rest.attachment;
 
-import me.splleat.messengerproject.domain.message.AttachmentService;
+import me.splleat.messengerproject.common.config.JacksonConfig;
+import me.splleat.messengerproject.infrastructure.storage.S3Service;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignRequest;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignResponse;
-import me.splleat.messengerproject.common.config.JacksonConfig;
 import me.splleat.messengerproject.support.TestSecurityConfig;
 import me.splleat.messengerproject.support.WithMockPrincipal;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ class AttachmentControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private AttachmentService attachmentService;
+    private S3Service s3Service;
 
     @Test
     @WithMockPrincipal
@@ -44,7 +44,7 @@ class AttachmentControllerTest {
         PresignRequest request = new PresignRequest("test.png", "image/png", 1024L);
         PresignResponse expected = new PresignResponse("http://localhost:9000/messenger/attachments/test-uuid", "attachments/test-uuid");
 
-        given(attachmentService.createPresignedUpload(any(PresignRequest.class)))
+        given(s3Service.createPresignedUpload(any(PresignRequest.class)))
                 .willReturn(expected);
 
         // when

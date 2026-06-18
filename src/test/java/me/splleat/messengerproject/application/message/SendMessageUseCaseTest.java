@@ -58,6 +58,9 @@ class SendMessageUseCaseTest {
     @Mock
     private AttachmentService attachmentService;
 
+    @Mock
+    private MinIOProperties minIOProperties;
+
     @InjectMocks
     private SendMessageUseCase sendMessageUseCase;
 
@@ -81,6 +84,8 @@ class SendMessageUseCaseTest {
                 .willReturn(messageResult);
         given(userProfileService.getUserProfile(command.senderId()))
                 .willReturn(profile);
+        given(minIOProperties.getBucketUrl())
+                .willReturn("http://localhost:9000/messenger");
 
         // when
         assertDoesNotThrow(() -> sendMessageUseCase.execute(command));
@@ -125,6 +130,8 @@ class SendMessageUseCaseTest {
                 .willReturn(profile);
         given(attachmentService.getAttachments(any(Long.class)))
                 .willReturn(List.of());
+        given(minIOProperties.getBucketUrl())
+                .willReturn("http://localhost:9000/messenger");
 
         // when
         assertDoesNotThrow(() -> sendMessageUseCase.execute(command));

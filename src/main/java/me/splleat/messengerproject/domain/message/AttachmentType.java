@@ -18,7 +18,7 @@ public enum AttachmentType {
 
     public static AttachmentType from(String value) {
         return Arrays.stream(AttachmentType.values())
-                .filter(type -> Objects.equals(type.value, value))
+                .filter(type -> type.value.equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.ATTACHMENT_UNSUPPORTED_TYPE));
     }

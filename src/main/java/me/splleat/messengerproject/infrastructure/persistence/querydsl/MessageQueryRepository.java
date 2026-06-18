@@ -114,7 +114,7 @@ public class MessageQueryRepository {
                                     att.id(),
                                     att.messageId(),
                                     att.type(),
-                                    att.url() != null ? minIOProperties.getBucketUrl() + att.url() : null
+                                    att.url()
                             ))
                             .toList();
 

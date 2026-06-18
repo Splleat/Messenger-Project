@@ -24,7 +24,7 @@ public class S3Service {
     private static final String KEY = "attachments/";
 
     public PresignResponse createPresignedUpload(PresignRequest request) {
-        String objectKey = KEY + UUID.randomUUID();
+        String objectKey = KEY + UUID.randomUUID() + getExtension(request.fileName());
 
         PutObjectRequest putRequest = PutObjectRequest.builder()
                 .bucket(minIOProperties.bucket())
@@ -49,5 +49,13 @@ public class S3Service {
                 .build();
 
         s3Client.deleteObject(deleteRequest);
+    }
+
+    private String getExtension(String fileName) {
+        if (fileName != null && fileName.contains(".")) {
+            return fileName.substring(fileName.lastIndexOf('.'));
+        }
+
+        return "";
     }
 }

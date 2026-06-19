@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageResult;
-import me.splleat.messengerproject.infrastructure.storage.MinIOProperties;
+import me.splleat.messengerproject.common.util.StorageUrlMapper;
 import me.splleat.messengerproject.domain.message.QAttachment;
 import me.splleat.messengerproject.domain.message.QMessage;
 import me.splleat.messengerproject.domain.user.QUserProfile;
@@ -25,7 +25,7 @@ public class MessageQueryRepository {
     private static final int MESSAGE_SIZE = 20;
 
     private final JPAQueryFactory queryFactory;
-    private final MinIOProperties minIOProperties;
+    private final StorageUrlMapper storageUrlMapper;
 
     public ChannelMessagePageResult findByPrevId(long channelId, long cursorId) {
         MessageSlice prev = findBy(channelId, QMessage.message.id.lt(cursorId), QMessage.message.id.desc(), true);
@@ -105,16 +105,14 @@ public class MessageQueryRepository {
 
         List<MessageResponse> result = messages.stream()
                 .map(msg -> {
-                    String fullProfileUrl = msg.profileUrl() != null 
-                            ? minIOProperties.getBucketUrl()
-                            : null;
+                    String fullProfileUrl = storageUrlMapper.resolve(msg.profileUrl());
                     
                     List<AttachmentResponse> msgAttachments = attachmentMap.getOrDefault(msg.id(), List.of()).stream()
                             .map(att -> new AttachmentResponse(
                                     att.id(),
                                     att.messageId(),
                                     att.type(),
-                                    att.url()
+                                    storageUrlMapper.resolve(att.url())
                             ))
                             .toList();
 

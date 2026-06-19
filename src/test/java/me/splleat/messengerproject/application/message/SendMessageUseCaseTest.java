@@ -1,20 +1,16 @@
 package me.splleat.messengerproject.application.message;
 
 import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
+import me.splleat.messengerproject.common.util.StorageUrlMapper;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
+import me.splleat.messengerproject.domain.message.*;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
-import me.splleat.messengerproject.domain.message.Message;
-import me.splleat.messengerproject.domain.message.MessageRegistration;
-import me.splleat.messengerproject.domain.message.MessageService;
-import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
-import me.splleat.messengerproject.domain.message.AttachmentService;
 import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreateEvent;
-import java.util.List;
 import me.splleat.messengerproject.support.fixture.ChannelFixture;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -59,7 +55,7 @@ class SendMessageUseCaseTest {
     private AttachmentService attachmentService;
 
     @Mock
-    private MinIOProperties minIOProperties;
+    private StorageUrlMapper storageUrlMapper;
 
     @InjectMocks
     private SendMessageUseCase sendMessageUseCase;
@@ -84,8 +80,6 @@ class SendMessageUseCaseTest {
                 .willReturn(messageResult);
         given(userProfileService.getUserProfile(command.senderId()))
                 .willReturn(profile);
-        given(minIOProperties.getBucketUrl())
-                .willReturn("http://localhost:9000/messenger");
 
         // when
         assertDoesNotThrow(() -> sendMessageUseCase.execute(command));
@@ -128,10 +122,6 @@ class SendMessageUseCaseTest {
                 .willReturn(messageResult);
         given(userProfileService.getUserProfile(command.senderId()))
                 .willReturn(profile);
-        given(attachmentService.getAttachments(any(Long.class)))
-                .willReturn(List.of());
-        given(minIOProperties.getBucketUrl())
-                .willReturn("http://localhost:9000/messenger");
 
         // when
         assertDoesNotThrow(() -> sendMessageUseCase.execute(command));

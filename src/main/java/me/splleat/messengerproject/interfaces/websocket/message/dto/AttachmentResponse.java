@@ -9,12 +9,12 @@ public record AttachmentResponse(
         AttachmentType type,
         String url
 ) {
-    public static AttachmentResponse of(Attachment attachment, String bucketUrl) {
+    public static AttachmentResponse of(Attachment attachment, String absoluteUrl) {
         return new AttachmentResponse(
                 attachment.getId(),
                 attachment.getMessageId(),
                 attachment.getType(),
-                bucketUrl + "/" + attachment.getUrl()
+                absoluteUrl
         );
     }
 }

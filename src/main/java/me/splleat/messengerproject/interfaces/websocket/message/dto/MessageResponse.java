@@ -1,6 +1,5 @@
 package me.splleat.messengerproject.interfaces.websocket.message.dto;
 
-import me.splleat.messengerproject.domain.message.Attachment;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 
@@ -36,11 +35,7 @@ public record MessageResponse(
         this(id, userId, channelId, username, profileUrl, content, idemPotencyKey, type, parentMessageId, List.of(), createdAt);
     }
 
-    public static MessageResponse of(String username, String profileUrl, Message message, List<Attachment> attachments) {
-        List<AttachmentResponse> attachmentResponses = attachments.stream()
-                .map(a -> new AttachmentResponse(a.getId(), message.getId(), a.getType(), a.getUrl()))
-                .toList();
-
+    public static MessageResponse of(String username, String profileUrl, Message message, List<AttachmentResponse> attachments) {
         return new MessageResponse(
             message.getId(),
             message.getUserId(),
@@ -51,25 +46,8 @@ public record MessageResponse(
             message.getIdemPotencyKey(),
             message.getType(),
             message.getParentMessageId(),
-            attachmentResponses,
+            attachments,
             message.getCreatedAt()
         );
     }
-
-    public MessageResponse withAttachments(List<AttachmentResponse> attachments) {
-        return new MessageResponse(
-                id,
-                userId,
-                channelId,
-                username,
-                profileUrl,
-                content,
-                idemPotencyKey,
-                type,
-                parentMessageId,
-                attachments,
-                createdAt
-        );
-    }
-
 }

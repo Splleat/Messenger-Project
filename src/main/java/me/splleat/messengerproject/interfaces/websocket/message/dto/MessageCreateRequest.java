@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
 import me.splleat.messengerproject.domain.message.MessageType;
 
+import java.util.List;
 import java.util.UUID;
 
 public record MessageCreateRequest(
@@ -18,7 +19,9 @@ public record MessageCreateRequest(
         @NotBlank(message = "메시지 타입은 필수 입력값입니다.")
         String type,
 
-        Long parentMessageId
+        Long parentMessageId,
+
+        List<AttachmentCreateRequest> attachments
 ) {
     public MessageCreateCommand toCommand(long senderId, long channelId) {
         return new MessageCreateCommand(
@@ -27,7 +30,8 @@ public record MessageCreateRequest(
                 content,
                 UUID.fromString(idempotencyKey),
                 MessageType.from(type),
-                parentMessageId
+                parentMessageId,
+                attachments
         );
     }
 }

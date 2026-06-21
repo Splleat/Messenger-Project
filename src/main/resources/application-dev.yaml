@@ -26,3 +26,9 @@ spring:
       host: localhost
       port: 6379
       connect-timeout: 2000ms
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket: messenger

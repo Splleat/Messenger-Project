@@ -17,18 +17,16 @@ import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
                 @Index(name = "idx_channel_user_settings_channel_id", columnList = "channel_id")
         }
 )
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChannelUserSetting extends BaseEntity {
 
-    @Getter
     @Column(name = "user_id")
     private Long userId;
 
-    @Getter
     @Column(name = "channel_id")
     private Long channelId;
 
-    @Getter
     @Column(name = "last_read_message_id")
     private Long lastReadMessageId;
 

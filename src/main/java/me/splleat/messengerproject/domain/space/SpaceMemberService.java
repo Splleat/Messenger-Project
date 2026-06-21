@@ -66,11 +66,6 @@ public class SpaceMemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> getAllJoinedSpaceIds(long userId) {
-        return spaceMemberRepository.findAllSpaceIdByUserId(userId);
-    }
-
-    @Transactional(readOnly = true)
     public void validateParticipant(long userId, long spaceId) {
         if (!spaceMemberRepository.existsByUserIdAndSpaceId(userId, spaceId)) {
             throw new SpaceMemberNotFoundException();

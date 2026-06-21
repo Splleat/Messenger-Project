@@ -36,6 +36,8 @@ public enum ErrorCode {
     SPACE_MEMBER_NOT_PERMITTED(HttpStatus.FORBIDDEN, "해당 작업을 수행할 권한이 없는 그룹 멤버입니다."),
     SPACE_OWNER_CANNOT_LEAVE(HttpStatus.CONFLICT, "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
+    ATTACHMENT_UNSUPPORTED_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 첨부 파일 타입입니다"),
+
     LOCK_FAILED(HttpStatus.CONFLICT, "락을 획득하지 못했습니다."),
 
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "잘못된 입력값입니다."),

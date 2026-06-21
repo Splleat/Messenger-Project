@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.annotation.DistributedLock;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
-import me.splleat.messengerproject.common.parser.CustomSpringELParser;
+import me.splleat.messengerproject.common.util.CustomSpringELParser;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -47,7 +47,9 @@ public class DistributedLockAspect {
         try {
             return joinPoint.proceed();
         } finally {
-            lock.unlock();
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
     }
 }

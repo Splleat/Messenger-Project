@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.application.message;
 
 import me.splleat.messengerproject.application.message.dto.MessageCreateCommand;
+import me.splleat.messengerproject.common.util.StorageUrlMapper;
 import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.message.MessageType;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Import(TestContainerConfig.class)
 class SendMessageConcurrencyIntegrationTest {
+
+    @MockitoBean
+    private StorageUrlMapper storageUrlMapper;
 
     @Autowired
     private SendMessageFacade sendMessageFacade;
@@ -88,7 +93,7 @@ class SendMessageConcurrencyIntegrationTest {
         UUID idempotencyKey = UUID.randomUUID();
         executorService = Executors.newFixedThreadPool(threadCount);
 
-        MessageCreateCommand command = new MessageCreateCommand(USER_ID, channelId, "test", idempotencyKey, MessageType.DIRECT, null);
+        MessageCreateCommand command = new MessageCreateCommand(USER_ID, channelId, "test", idempotencyKey, MessageType.DIRECT, null, null);
 
         CountDownLatch ready = new CountDownLatch(threadCount);
         CountDownLatch start = new CountDownLatch(1);

@@ -1,6 +1,5 @@
 package me.splleat.messengerproject.common.config;
 
-import io.lettuce.core.RedisClient;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.message.subscriber.RedisSubscriber;
 import org.springframework.boot.data.redis.autoconfigure.DataRedisProperties;

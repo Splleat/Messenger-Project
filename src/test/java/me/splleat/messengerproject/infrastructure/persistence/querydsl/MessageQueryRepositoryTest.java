@@ -4,9 +4,11 @@ import jakarta.persistence.EntityManager;
 import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelMessagePageResult;
 import me.splleat.messengerproject.common.config.QueryDslConfig;
+import me.splleat.messengerproject.common.util.StorageUrlMapper;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
+import me.splleat.messengerproject.infrastructure.storage.MinIOProperties;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import me.splleat.messengerproject.support.annotation.ContainerDataJpaTest;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
@@ -14,10 +16,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +28,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ContainerDataJpaTest
 @Import({QueryDslConfig.class, MessageQueryRepository.class})
+@EnableConfigurationProperties(MinIOProperties.class)
 class MessageQueryRepositoryTest {
+
+    @MockitoBean
+    private StorageUrlMapper storageUrlMapper;
 
     @Autowired
     private EntityManager entityManager;
@@ -51,8 +58,7 @@ class MessageQueryRepositoryTest {
                     "메시지 내용 " + i,
                     MessageType.SPACE,
                     null,
-                    UUID.randomUUID(),
-                    Collections.emptyList()
+                    UUID.randomUUID()
             );
             entityManager.persist(message);
             savedMessages.add(message);

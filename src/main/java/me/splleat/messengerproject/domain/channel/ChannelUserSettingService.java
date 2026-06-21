@@ -40,11 +40,6 @@ public class ChannelUserSettingService {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> getJoinedUserIds(long channelId) {
-        return channelUserSettingRepository.findAllUserIdByChannelId(channelId);
-    }
-
-    @Transactional(readOnly = true)
     public List<Long> alreadyJoinedIds(long channelId, List<Long> targetIds) {
         return channelUserSettingRepository.findAllUserIdByChannelIdAndUserIdIn(channelId, targetIds);
     }

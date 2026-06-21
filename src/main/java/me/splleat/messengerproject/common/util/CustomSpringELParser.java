@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.common.parser;
+package me.splleat.messengerproject.common.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.expression.ExpressionParser;

@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
     Optional<Message> findByIdemPotencyKey(UUID idemPotencyKey);
+
+    Optional<Message> findByUserIdAndId(Long userId, Long id);
 }

@@ -45,4 +45,8 @@ public abstract class BaseEntity implements Persistable<Long> {
     void markNotNew() {
         this.isNew = false;
     }
+
+    public boolean isUpdated() {
+        return this.updatedAt != this.createdAt;
+    }
 }

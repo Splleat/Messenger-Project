@@ -60,4 +60,8 @@ public class Message extends SoftDeletableEntity {
                 .idemPotencyKey(idemPotencyKey)
                 .build();
     }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }

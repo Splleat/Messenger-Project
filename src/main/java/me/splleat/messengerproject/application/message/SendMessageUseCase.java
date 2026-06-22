@@ -12,7 +12,8 @@ import me.splleat.messengerproject.domain.message.*;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreateEvent;
+import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreatedEvent;
+import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
 import me.splleat.messengerproject.infrastructure.storage.S3Service;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.AttachmentResponse;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
@@ -37,7 +38,7 @@ public class SendMessageUseCase {
     @Transactional
     public MessageResponse execute(MessageCreateCommand command) {
         // 채널 및 채널 설정 정보 확인
-        ChannelUserSetting setting = channelUserSettingService.getChannelUserSetting(command.senderId(), command.channelId());
+        ChannelUserSetting setting = channelUserSettingService.getChannelUserSetting(command.userId(), command.channelId());
         Channel channel = channelService.getChannel(command.channelId());
 
         // 첨부파일이 있는 경우, DB에 저장하기 이전 S3 스토리지 파일 용량 검증
@@ -55,8 +56,8 @@ public class SendMessageUseCase {
         setting.updateLastReadMessage(messageId);
 
         // 응답으로 내려줄 프로필 정보 조회
-        UserProfile userProfile = userProfileService.getUserProfile(command.senderId());
-        String username = resolveUsername(command.senderId(), channel, userProfile);
+        UserProfile userProfile = userProfileService.getUserProfile(command.userId());
+        String username = resolveUsername(command.userId(), channel, userProfile);
         String profileUrl = storageUrlMapper.resolve(userProfile.getImageUrl());
 
         // 첨부파일 등록
@@ -73,7 +74,7 @@ public class SendMessageUseCase {
 
         // 새로운 메시지라면 이벤트 발행
         if (result.isCreated()) {
-            eventPublisher.publishEvent(MessageCreateEvent.from(response));
+            eventPublisher.publishEvent(MessageEvent.from(MessageCreatedEvent.from(response)));
         }
 
         return response;

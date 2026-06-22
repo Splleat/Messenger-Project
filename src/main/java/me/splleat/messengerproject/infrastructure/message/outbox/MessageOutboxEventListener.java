@@ -19,17 +19,17 @@ public class MessageOutboxEventListener {
     private final JsonMapper jsonMapper;
 
     @EventListener
-    public void handleDomainCreated(MessageCreateEvent event) {
+    public void handleMessageEvent(MessageEvent<?> event) {
         messageOutboxService.saveOutbox(event.toOutbox(jsonMapper));
     }
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void publishToRedis(MessageCreateEvent event) {
+    public void publishToRedis(MessageEvent<?> event) {
         try {
             messagePublisher.publish(event.toJson(jsonMapper));
 
-            messageOutboxService.updateToProcessed(event.message().id());
+            messageOutboxService.updateToProcessed(event.messageId());
         } catch (Exception e) {
             log.warn("메시지 발행 실패: {}", e.getMessage());
         }

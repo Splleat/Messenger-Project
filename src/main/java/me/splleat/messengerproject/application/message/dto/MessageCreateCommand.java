@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public record MessageCreateCommand(
-        long senderId,
+        long userId,
         long channelId,
         String content,
         UUID idempotencyKey,
@@ -17,6 +17,6 @@ public record MessageCreateCommand(
         List<AttachmentCreateRequest> attachments
 ) {
     public Message toMessage() {
-        return Message.create(senderId, channelId, content, type, parentMessageId, idempotencyKey);
+        return Message.create(userId, channelId, content, type, parentMessageId, idempotencyKey);
     }
 }

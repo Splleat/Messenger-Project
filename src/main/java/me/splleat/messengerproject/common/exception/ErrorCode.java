@@ -36,6 +36,8 @@ public enum ErrorCode {
     SPACE_MEMBER_NOT_PERMITTED(HttpStatus.FORBIDDEN, "해당 작업을 수행할 권한이 없는 그룹 멤버입니다."),
     SPACE_OWNER_CANNOT_LEAVE(HttpStatus.CONFLICT, "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
+    MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "메시지를 찾을 수 없습니다."),
+
     ATTACHMENT_UNSUPPORTED_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 첨부 파일 타입입니다"),
     ATTACHMENT_EXCEED_LIMIT_SIZE(HttpStatus.BAD_REQUEST, "첨부 파일 크기 제한을 초과했습니다."),
     ATTACHMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "첨부 파일을 찾을 수 없습니다."),

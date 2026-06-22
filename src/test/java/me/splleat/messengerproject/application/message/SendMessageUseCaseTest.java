@@ -10,7 +10,7 @@ import me.splleat.messengerproject.domain.message.*;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreateEvent;
+import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
 import me.splleat.messengerproject.support.fixture.ChannelFixture;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -72,13 +72,13 @@ class SendMessageUseCaseTest {
         MessageRegistration messageResult = MessageRegistration.of(message, true);
         ChannelUserSetting setting = mock(ChannelUserSetting.class);
 
-        given(channelUserSettingService.getChannelUserSetting(command.senderId(), command.channelId()))
+        given(channelUserSettingService.getChannelUserSetting(command.userId(), command.channelId()))
                 .willReturn(setting);
         given(channelService.getChannel(channelId))
                 .willReturn(channel);
         given(messageService.registerWithIdempotency(any(Message.class)))
                 .willReturn(messageResult);
-        given(userProfileService.getUserProfile(command.senderId()))
+        given(userProfileService.getUserProfile(command.userId()))
                 .willReturn(profile);
 
         // when
@@ -87,7 +87,7 @@ class SendMessageUseCaseTest {
         // then
         then(channelUserSettingService)
                 .should()
-                .getChannelUserSetting(command.senderId(), command.channelId());
+                .getChannelUserSetting(command.userId(), command.channelId());
 
         then(messageService)
                 .should()
@@ -95,11 +95,11 @@ class SendMessageUseCaseTest {
 
         then(userProfileService)
                 .should()
-                .getUserProfile(command.senderId());
+                .getUserProfile(command.userId());
 
         then(applicationEventPublisher)
                 .should()
-                .publishEvent(any(MessageCreateEvent.class));
+                .publishEvent(any(MessageEvent.class));
     }
 
     @Test
@@ -114,13 +114,13 @@ class SendMessageUseCaseTest {
         MessageRegistration messageResult = MessageRegistration.of(message, false);
         ChannelUserSetting setting = mock(ChannelUserSetting.class);
 
-        given(channelUserSettingService.getChannelUserSetting(command.senderId(), command.channelId()))
+        given(channelUserSettingService.getChannelUserSetting(command.userId(), command.channelId()))
                 .willReturn(setting);
         given(channelService.getChannel(channelId))
                 .willReturn(channel);
         given(messageService.registerWithIdempotency(any(Message.class)))
                 .willReturn(messageResult);
-        given(userProfileService.getUserProfile(command.senderId()))
+        given(userProfileService.getUserProfile(command.userId()))
                 .willReturn(profile);
 
         // when
@@ -129,6 +129,6 @@ class SendMessageUseCaseTest {
         // then
         then(applicationEventPublisher)
                 .should(never())
-                .publishEvent(any(MessageCreateEvent.class));
+                .publishEvent(any(MessageEvent.class));
     }
 }

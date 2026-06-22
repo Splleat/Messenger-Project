@@ -7,7 +7,8 @@ public record MinIOProperties(
         String endpoint,
         String bucket,
         String accessKey,
-        String secretKey
+        String secretKey,
+        long maxSizeBytes
 ) {
     public String getBucketUrl() {
         return endpoint + "/" + bucket;

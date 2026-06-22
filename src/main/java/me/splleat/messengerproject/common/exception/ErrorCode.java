@@ -37,6 +37,8 @@ public enum ErrorCode {
     SPACE_OWNER_CANNOT_LEAVE(HttpStatus.CONFLICT, "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
     ATTACHMENT_UNSUPPORTED_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 첨부 파일 타입입니다"),
+    ATTACHMENT_EXCEED_LIMIT_SIZE(HttpStatus.BAD_REQUEST, "첨부 파일 크기 제한을 초과했습니다."),
+    ATTACHMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "첨부 파일을 찾을 수 없습니다."),
 
     LOCK_FAILED(HttpStatus.CONFLICT, "락을 획득하지 못했습니다."),
 

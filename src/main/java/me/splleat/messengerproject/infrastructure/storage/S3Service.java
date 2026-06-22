@@ -1,12 +1,13 @@
 package me.splleat.messengerproject.infrastructure.storage;
 
 import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignRequest;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignResponse;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
@@ -29,12 +30,13 @@ public class S3Service {
         PutObjectRequest putRequest = PutObjectRequest.builder()
                 .bucket(minIOProperties.bucket())
                 .key(objectKey)
-                .contentType(request.contentType())
+                .contentType(request.contentType()) // Content-Type 고정
+                .contentLength(request.size()) // Content-Length 고정
                 .build();
 
         PresignedPutObjectRequest presigned = s3Presigner.presignPutObject(
                 PutObjectPresignRequest.builder()
-                        .signatureDuration(Duration.ofMinutes(5))
+                        .signatureDuration(Duration.ofMinutes(5)) // 5분 제한
                         .putObjectRequest(putRequest)
                         .build()
         );
@@ -57,5 +59,25 @@ public class S3Service {
         }
 
         return "";
+    }
+
+    public void validateObjectSize(String objectKey) {
+        try {
+            HeadObjectRequest headRequest = HeadObjectRequest.builder()
+                    .bucket(minIOProperties.bucket())
+                    .key(objectKey)
+                    .build();
+
+            HeadObjectResponse response = s3Client.headObject(headRequest);
+            long actualSize = response.contentLength();
+
+            if (actualSize > minIOProperties.maxSizeBytes()) {
+                deleteObject(objectKey);
+
+                throw new BusinessException(ErrorCode.ATTACHMENT_EXCEED_LIMIT_SIZE);
+            }
+        } catch (NoSuchKeyException _) {
+            throw new BusinessException(ErrorCode.ATTACHMENT_NOT_FOUND);
+        }
     }
 }

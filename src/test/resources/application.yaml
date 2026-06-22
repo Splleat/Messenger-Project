@@ -22,7 +22,8 @@ relay:
   give-up-seconds: 60
 
 minio:
-  endpoint: http://minio:9000
+  endpoint: http://localhost:9000
   access-key: minioadmin
   secret-key: minioadmin
   bucket: messenger
+  max-size-bytes: 10485760 # 10MB

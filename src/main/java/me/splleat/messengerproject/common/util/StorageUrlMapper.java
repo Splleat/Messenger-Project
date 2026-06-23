@@ -10,7 +10,7 @@ public class StorageUrlMapper {
     private final MinIOProperties properties;
 
     public String resolve(String objectKey) {
-        if (objectKey == null || objectKey.isEmpty()) {
+        if (objectKey == null || objectKey.isBlank()) {
             return null;
         }
 

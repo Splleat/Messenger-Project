@@ -2,7 +2,7 @@ package me.splleat.messengerproject.infrastructure.message.subscriber;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
+import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -20,7 +20,7 @@ public class RedisSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte @Nullable [] pattern) {
         try {
-            MessageResponse response = jsonMapper.readValue(message.toString(), MessageResponse.class);
+            MessageEvent<?> response = jsonMapper.readValue(message.toString(), MessageEvent.class);
 
             String destination = "/sub/channels/" + response.channelId() + "/messages";
 

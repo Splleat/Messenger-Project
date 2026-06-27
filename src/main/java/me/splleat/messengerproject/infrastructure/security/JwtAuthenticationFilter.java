@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .build()
                 .toUriString();
 
-        log.info("[요청 URL]: {} {}", request.getMethod(), path);
+        log.debug("[요청 URL]: {} {}", request.getMethod(), path);
 
         return publicPaths.stream()
                 .anyMatch(path::startsWith);

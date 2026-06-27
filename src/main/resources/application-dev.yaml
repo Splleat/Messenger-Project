@@ -31,8 +31,9 @@ logging:
   level:
     me.splleat.messengerproject: DEBUG
 
-minio:
+storage:
   endpoint: http://localhost:9000
+  region: us-east-1
   access-key: minioadmin
   secret-key: minioadmin
   bucket: messenger

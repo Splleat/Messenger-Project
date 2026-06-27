@@ -24,8 +24,9 @@ spring:
 jwt:
   secret: local-dev-only-secret-key-at-least-32-characters-long
 
-minio:
+storage:
   endpoint: http://localhost:9000
+  region: us-east-1
   access-key: minioadmin
   secret-key: minioadmin
   bucket: messenger

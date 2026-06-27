@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.domain.user;
 
-import me.splleat.messengerproject.domain.user.exception.UserProfileAlreadyExistsException;
-import me.splleat.messengerproject.domain.user.exception.UserProfileNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userProfileService.register(profile))
-                .isInstanceOf(UserProfileAlreadyExistsException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_PROFILE_ALREADY_EXISTS);
 
         then(userProfileRepository)
                 .should(never())
@@ -79,6 +80,7 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userProfileService.getUserProfile(userId))
-                .isInstanceOf(UserProfileNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_PROFILE_NOT_FOUND);
     }
 }

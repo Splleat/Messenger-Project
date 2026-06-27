@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.domain.user;
 
-import me.splleat.messengerproject.domain.user.exception.UserEmailDuplicatedException;
-import me.splleat.messengerproject.domain.user.exception.UserNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserRepository;
 import me.splleat.messengerproject.support.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,8 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.register(user))
-                .isInstanceOf(UserEmailDuplicatedException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.EMAIL_DUPLICATED);
 
         then(userRepository)
                 .should(never())
@@ -78,6 +79,7 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.getUser(email))
-                .isInstanceOf(UserNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
     }
 }

@@ -7,7 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.user.exception.UserPasswordMismatchException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.entity.SoftDeletableEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -49,7 +50,7 @@ public class User extends SoftDeletableEntity {
 
     public void login(String rawPassword, PasswordEncoder encoder) {
         if (!encoder.matches(rawPassword, this.passwordHash)) {
-            throw new UserPasswordMismatchException();
+            throw new BusinessException(ErrorCode.USER_PASSWORD_MISMATCH);
         }
 
         this.lastLoginAt = LocalDateTime.now();

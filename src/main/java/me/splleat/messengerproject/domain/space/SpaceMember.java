@@ -5,7 +5,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.splleat.messengerproject.domain.space.exception.SpaceMemberNotPermittedException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
@@ -43,7 +44,7 @@ public class SpaceMember extends BaseEntity {
 
     public void validatePermission(SpaceRole requiredRole) {
         if (!role.hasPermission(requiredRole)) {
-            throw new SpaceMemberNotPermittedException();
+            throw new BusinessException(ErrorCode.SPACE_MEMBER_NOT_PERMITTED);
         }
     }
 

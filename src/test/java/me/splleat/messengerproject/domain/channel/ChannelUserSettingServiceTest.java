@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.domain.channel;
 
-import me.splleat.messengerproject.domain.channel.exception.ChannelUserSettingAlreadyExistsException;
-import me.splleat.messengerproject.domain.channel.exception.ChannelUserSettingNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelUserSettingRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,8 @@ class ChannelUserSettingServiceTest {
 
         // when & then
         assertThatThrownBy(() -> channelUserSettingService.register(channelUserSetting))
-                .isInstanceOf(ChannelUserSettingAlreadyExistsException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CHANNEL_USER_SETTING_ALREADY_EXISTS);
 
         then(channelUserSettingRepository)
                 .should(never())
@@ -90,7 +91,8 @@ class ChannelUserSettingServiceTest {
 
         // when & then
         assertThatThrownBy(() -> channelUserSettingService.validateParticipant(userId, channelId))
-                .isInstanceOf(ChannelUserSettingNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND);
     }
 
     @Test
@@ -119,7 +121,8 @@ class ChannelUserSettingServiceTest {
 
         // when & then
         assertThatThrownBy(() -> channelUserSettingService.getChannelUserSetting(userId, channelId))
-                .isInstanceOf(ChannelUserSettingNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND);
     }
 
     @Test
@@ -134,7 +137,8 @@ class ChannelUserSettingServiceTest {
 
         // when & then
         assertThatThrownBy(() -> channelUserSettingService.leaveChannel(userId, channelId))
-                .isInstanceOf(ChannelUserSettingNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND);
     }
 
     @Test

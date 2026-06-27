@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.domain.user;
 
-import me.splleat.messengerproject.domain.user.exception.UserPasswordMismatchException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.support.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,7 @@ class UserTest {
 
         // when & then
         assertThatThrownBy(() -> user.login(wrongPassword, passwordEncoder))
-                .isInstanceOf(UserPasswordMismatchException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_PASSWORD_MISMATCH);
     }
 }

@@ -1,7 +1,8 @@
 package me.splleat.messengerproject.domain.space;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.space.exception.SpaceNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.SpaceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,6 @@ public class SpaceService {
     @Transactional(readOnly = true)
     public Space getSpace(long spaceId) {
         return spaceRepository.findById(spaceId)
-                .orElseThrow(SpaceNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.SPACE_NOT_FOUND));
     }
 }

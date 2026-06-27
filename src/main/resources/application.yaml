@@ -16,6 +16,16 @@ logging:
   level:
     me.splleat.messengerproject: ${LOG_LEVEL:INFO}
 
+# actuator는 health만 공개, 상세 숨김 (env/beans 등 노출 차단)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
 relay:
   grace-seconds: 2
   give-up-seconds: 60

@@ -5,5 +5,17 @@
 
 # 백엔드 API + WebSocket(STOMP)
 api.splleat.com {
+    header {
+        # HTTPS 강제 (1년)
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        # MIME 스니핑 차단
+        X-Content-Type-Options "nosniff"
+        # 클릭재킹 차단
+        X-Frame-Options "DENY"
+        # 리퍼러 최소 노출
+        Referrer-Policy "strict-origin-when-cross-origin"
+        # 서버 정보 숨김
+        -Server
+    }
     reverse_proxy app:8080
 }

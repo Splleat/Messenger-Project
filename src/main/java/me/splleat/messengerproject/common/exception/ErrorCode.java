@@ -12,7 +12,7 @@ public enum ErrorCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증이 필요한 서비스입니다."),
     TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "토큰 정보가 일치하지 않습니다."),
 
-    EMAIL_DUPLICATED(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
+    USER_EMAIL_DUPLICATED(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
 
     USER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "아이디나 비밀번호가 일치하지 않습니다."),
     USER_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "아이디나 비밀번호가 일치하지 않습니다."),

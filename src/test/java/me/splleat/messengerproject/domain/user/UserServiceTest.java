@@ -40,7 +40,7 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(() -> userService.register(user))
                 .isInstanceOf(BusinessException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.EMAIL_DUPLICATED);
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_EMAIL_DUPLICATED);
 
         then(userRepository)
                 .should(never())

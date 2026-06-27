@@ -19,7 +19,7 @@ public class UserService {
     @Transactional
     public User register(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new BusinessException(ErrorCode.EMAIL_DUPLICATED);
+            throw new BusinessException(ErrorCode.USER_EMAIL_DUPLICATED);
         }
 
         return userRepository.save(user);

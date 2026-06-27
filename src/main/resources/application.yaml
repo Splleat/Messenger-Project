@@ -12,6 +12,10 @@ spring:
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
 
+logging:
+  level:
+    me.splleat.messengerproject: ${LOG_LEVEL:INFO}
+
 relay:
   grace-seconds: 2
   give-up-seconds: 60

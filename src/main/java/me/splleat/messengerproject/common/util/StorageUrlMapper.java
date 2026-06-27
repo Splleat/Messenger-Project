@@ -1,13 +1,13 @@
 package me.splleat.messengerproject.common.util;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.infrastructure.storage.MinIOProperties;
+import me.splleat.messengerproject.infrastructure.storage.StorageProperties;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class StorageUrlMapper {
-    private final MinIOProperties properties;
+    private final StorageProperties properties;
 
     public String resolve(String objectKey) {
         if (objectKey == null || objectKey.isBlank()) {

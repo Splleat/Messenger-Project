@@ -20,7 +20,7 @@ import java.util.UUID;
 public class S3Service {
     private final S3Presigner s3Presigner;
     private final S3Client s3Client;
-    private final MinIOProperties minIOProperties;
+    private final StorageProperties storageProperties;
 
     private static final String KEY = "attachments/";
 
@@ -28,7 +28,7 @@ public class S3Service {
         String objectKey = KEY + UUID.randomUUID() + getExtension(request.fileName());
 
         PutObjectRequest putRequest = PutObjectRequest.builder()
-                .bucket(minIOProperties.bucket())
+                .bucket(storageProperties.bucket())
                 .key(objectKey)
                 .contentType(request.contentType()) // Content-Type 고정
                 .contentLength(request.size()) // Content-Length 고정
@@ -46,7 +46,7 @@ public class S3Service {
 
     public void deleteObject(String objectKey) {
         DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
-                .bucket(minIOProperties.bucket())
+                .bucket(storageProperties.bucket())
                 .key(objectKey)
                 .build();
 
@@ -64,14 +64,14 @@ public class S3Service {
     public void validateObjectSize(String objectKey) {
         try {
             HeadObjectRequest headRequest = HeadObjectRequest.builder()
-                    .bucket(minIOProperties.bucket())
+                    .bucket(storageProperties.bucket())
                     .key(objectKey)
                     .build();
 
             HeadObjectResponse response = s3Client.headObject(headRequest);
             long actualSize = response.contentLength();
 
-            if (actualSize > minIOProperties.maxSizeBytes()) {
+            if (actualSize > storageProperties.maxSizeBytes()) {
                 deleteObject(objectKey);
 
                 throw new BusinessException(ErrorCode.ATTACHMENT_EXCEED_LIMIT_SIZE);

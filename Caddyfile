@@ -1,0 +1,9 @@
+{
+    # ACME 등록 이메일 (인증서 만료 알림)
+    email {$ACME_EMAIL}
+}
+
+# 백엔드 API + WebSocket(STOMP)
+api.splleat.com {
+    reverse_proxy app:8080
+}

@@ -1,8 +1,8 @@
 package me.splleat.messengerproject.domain.channel;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.channel.exception.ChannelUserSettingAlreadyExistsException;
-import me.splleat.messengerproject.domain.channel.exception.ChannelUserSettingNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelUserSettingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ public class ChannelUserSettingService {
     @Transactional
     public ChannelUserSetting register(ChannelUserSetting channelUserSetting) {
         if (channelUserSettingRepository.existsByUserIdAndChannelId(channelUserSetting.getUserId(), channelUserSetting.getChannelId())) {
-            throw new ChannelUserSettingAlreadyExistsException();
+            throw new BusinessException(ErrorCode.CHANNEL_USER_SETTING_ALREADY_EXISTS);
         }
 
         return channelUserSettingRepository.save(channelUserSetting);
@@ -36,7 +36,7 @@ public class ChannelUserSettingService {
     @Transactional(readOnly = true)
     public ChannelUserSetting getChannelUserSetting(long userId, long channelId) {
         return channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId)
-                .orElseThrow(ChannelUserSettingNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -47,14 +47,14 @@ public class ChannelUserSettingService {
     @Transactional(readOnly = true)
     public void validateParticipant(long userId, long channelId) {
         if (!channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId)) {
-            throw new ChannelUserSettingNotFoundException();
+            throw new BusinessException(ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND);
         }
     }
 
     @Transactional
     public void leaveChannel(long userId, long channelId) {
         if (!channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId)) {
-            throw new ChannelUserSettingNotFoundException();
+            throw new BusinessException(ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND);
         }
 
         channelUserSettingRepository.deleteByUserIdAndChannelId(userId, channelId);

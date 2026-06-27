@@ -1,10 +1,8 @@
 package me.splleat.messengerproject.domain.user;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.user.exception.TargetUserNotFoundException;
-import me.splleat.messengerproject.domain.user.exception.UserDeactivatedException;
-import me.splleat.messengerproject.domain.user.exception.UserEmailDuplicatedException;
-import me.splleat.messengerproject.domain.user.exception.UserNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,7 @@ public class UserService {
     @Transactional
     public User register(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new UserEmailDuplicatedException();
+            throw new BusinessException(ErrorCode.EMAIL_DUPLICATED);
         }
 
         return userRepository.save(user);
@@ -30,16 +28,16 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUser(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
     public User getActiveUser(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         if (user.isDeleted()) {
-            throw new UserDeactivatedException();
+            throw new BusinessException(ErrorCode.USER_DEACTIVATED);
         }
 
         return user;
@@ -52,7 +50,7 @@ public class UserService {
         int count = userRepository.countAllByIdIn(distinctIds);
 
         if (count != distinctIds.size()) {
-            throw new TargetUserNotFoundException();
+            throw new BusinessException(ErrorCode.TARGET_USER_NOT_FOUND);
         }
     }
 }

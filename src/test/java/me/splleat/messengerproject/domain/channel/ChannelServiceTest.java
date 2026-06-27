@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.domain.channel;
 
-import me.splleat.messengerproject.domain.channel.exception.ChannelNotFoundException;
-import me.splleat.messengerproject.domain.channel.exception.SpaceChannelNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,8 @@ class ChannelServiceTest {
 
         // when & then
         assertThatThrownBy(() -> channelService.getChannel(channelId))
-                .isInstanceOf(ChannelNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CHANNEL_NOT_FOUND);
     }
 
     @Test
@@ -83,6 +84,7 @@ class ChannelServiceTest {
 
         // when
         assertThatThrownBy(() -> channelService.validateInSpace(spaceId, channelId))
-                .isInstanceOf(SpaceChannelNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_CHANNEL_NOT_FOUND);
     }
 }

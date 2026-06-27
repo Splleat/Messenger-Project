@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.domain.space;
 
-import me.splleat.messengerproject.domain.space.exception.SpaceNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.SpaceRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,6 +106,7 @@ class SpaceServiceTest {
         
         // when & then
         assertThatThrownBy(() -> spaceService.getSpace(spaceId))
-                .isInstanceOf(SpaceNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_NOT_FOUND);
     }
 }

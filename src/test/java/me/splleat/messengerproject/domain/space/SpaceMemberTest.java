@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.domain.space;
 
-import me.splleat.messengerproject.domain.space.exception.SpaceMemberNotPermittedException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,8 @@ class SpaceMemberTest {
 
         // when & then
         assertThatThrownBy(() -> spaceMember.validatePermission(SpaceRole.ADMIN))
-                .isInstanceOf(SpaceMemberNotPermittedException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_MEMBER_NOT_PERMITTED);
     }
 
     @Test

@@ -1,9 +1,8 @@
 package me.splleat.messengerproject.domain.space;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.space.exception.SpaceMemberAlreadyExistsException;
-import me.splleat.messengerproject.domain.space.exception.SpaceMemberNotFoundException;
-import me.splleat.messengerproject.domain.space.exception.SpaceOwnerLeaveException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.SpaceMemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,7 @@ public class SpaceMemberService {
     @Transactional
     public SpaceMember register(SpaceMember spaceMember) {
         if (spaceMemberRepository.existsByUserIdAndSpaceId(spaceMember.getUserId(), spaceMember.getSpaceId())) {
-            throw new SpaceMemberAlreadyExistsException();
+            throw new BusinessException(ErrorCode.SPACE_MEMBER_ALREADY_EXISTS);
         }
 
         return spaceMemberRepository.save(spaceMember);
@@ -36,7 +35,7 @@ public class SpaceMemberService {
     @Transactional(readOnly = true)
     public SpaceMember getSpaceMember(long userId, long spaceId) {
         return spaceMemberRepository.findByUserIdAndSpaceId(userId, spaceId)
-                .orElseThrow(SpaceMemberNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.SPACE_MEMBER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -52,13 +51,13 @@ public class SpaceMemberService {
     @Transactional
     public void leaveSpace(long userId, long spaceId) {
         SpaceMember spaceMember = spaceMemberRepository.findByUserIdAndSpaceId(userId, spaceId)
-                .orElseThrow(SpaceMemberNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.SPACE_MEMBER_NOT_FOUND));
 
         if (spaceMember.isSpaceOwner()) {
             boolean hasOtherMember = spaceMemberRepository.existsBySpaceIdAndUserIdNot(spaceId, userId);
 
             if (hasOtherMember) {
-                throw new SpaceOwnerLeaveException();
+                throw new BusinessException(ErrorCode.SPACE_OWNER_CANNOT_LEAVE);
             }
         }
 
@@ -68,7 +67,7 @@ public class SpaceMemberService {
     @Transactional(readOnly = true)
     public void validateParticipant(long userId, long spaceId) {
         if (!spaceMemberRepository.existsByUserIdAndSpaceId(userId, spaceId)) {
-            throw new SpaceMemberNotFoundException();
+            throw new BusinessException(ErrorCode.SPACE_MEMBER_NOT_FOUND);
         }
     }
 

@@ -1,8 +1,7 @@
 package me.splleat.messengerproject.domain.space;
 
-import me.splleat.messengerproject.domain.space.exception.SpaceMemberAlreadyExistsException;
-import me.splleat.messengerproject.domain.space.exception.SpaceMemberNotFoundException;
-import me.splleat.messengerproject.domain.space.exception.SpaceOwnerLeaveException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.SpaceMemberRepository;
 import me.splleat.messengerproject.support.fixture.SpaceMemberFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +41,8 @@ class SpaceMemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> spaceMemberService.register(spaceMember))
-                .isInstanceOf(SpaceMemberAlreadyExistsException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_MEMBER_ALREADY_EXISTS);
     }
 
     @Test
@@ -57,7 +57,8 @@ class SpaceMemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> spaceMemberService.getSpaceMember(userId, spaceId))
-                .isInstanceOf(SpaceMemberNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_MEMBER_NOT_FOUND);
     }
 
     @Test
@@ -84,7 +85,8 @@ class SpaceMemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> spaceMemberService.leaveSpace(userId, spaceId))
-                .isInstanceOf(SpaceMemberNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_MEMBER_NOT_FOUND);
     }
 
     @Test
@@ -102,7 +104,8 @@ class SpaceMemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> spaceMemberService.leaveSpace(userId, spaceId))
-                .isInstanceOf(SpaceOwnerLeaveException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_OWNER_CANNOT_LEAVE);
     }
 
     @Test
@@ -117,7 +120,8 @@ class SpaceMemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> spaceMemberService.validateParticipant(userId, spaceId))
-                .isInstanceOf(SpaceMemberNotFoundException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SPACE_MEMBER_NOT_FOUND);
     }
 
     @Test

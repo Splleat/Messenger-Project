@@ -2,8 +2,8 @@ package me.splleat.messengerproject.domain.channel;
 
 import io.jsonwebtoken.lang.Collections;
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.domain.channel.exception.ChannelNotFoundException;
-import me.splleat.messengerproject.domain.channel.exception.SpaceChannelNotFoundException;
+import me.splleat.messengerproject.common.exception.BusinessException;
+import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ public class ChannelService {
     @Transactional(readOnly = true)
     public Channel getChannel(long channelId) {
         return channelRepository.findById(channelId)
-                .orElseThrow(ChannelNotFoundException::new);
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHANNEL_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -43,7 +43,7 @@ public class ChannelService {
     @Transactional(readOnly = true)
     public void validateInSpace(long spaceId, long channelId) {
         if (!channelRepository.existsByIdAndSpaceId(channelId, spaceId)) {
-            throw new SpaceChannelNotFoundException();
+            throw new BusinessException(ErrorCode.SPACE_CHANNEL_NOT_FOUND);
         }
     }
 }

@@ -27,3 +27,6 @@ minio:
   secret-key: minioadmin
   bucket: messenger
   max-size-bytes: 10485760 # 10MB
+
+cors:
+  allowed-origins: http://localhost:3000

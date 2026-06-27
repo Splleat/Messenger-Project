@@ -11,6 +11,9 @@ RUN ./mvnw clean package -DskipTests -B
 FROM eclipse-temurin:25-jre
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/target/messenger-project-0.0.1-SNAPSHOT.jar app.jar
 
 USER 1000

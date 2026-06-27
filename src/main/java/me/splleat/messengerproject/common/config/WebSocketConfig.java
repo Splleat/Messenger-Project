@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.infrastructure.security.JwtValidator;
 import me.splleat.messengerproject.infrastructure.websocket.AuthenticationPrincipalArgumentResolver;
 import me.splleat.messengerproject.infrastructure.websocket.StompHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.JacksonJsonMessageConverter;
@@ -27,6 +28,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final StompHandler stompHandler;
     private final AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver;
 
+    @Value("${cors.allowed-origins}")
+    private List<String> allowedOrigins;
+
     @Bean
     public static StompHandler stompHandler(JwtValidator jwtValidator) {
         return new StompHandler(jwtValidator);
@@ -41,7 +45,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-stomp")
-                .setAllowedOrigins("http://localhost:3000")
+                .setAllowedOrigins(allowedOrigins.stream().map(String::trim).toArray(String[]::new))
                 .withSockJS();
     }
 

@@ -32,10 +32,20 @@
 cp .env.example .env
 ```
 
-| 변수 | 설명 | 예시 |
-| --- | --- | --- |
-| `SECRET_KEY` | JWT 서명 키 (32자 이상) | `this-is-a-secret-key-with-at-least-32-chars` |
-| `TSID_NODE` | TSID 노드 ID | `0` |
+| 변수                        | 설명                  | 예시                                            |
+|---------------------------|---------------------|-----------------------------------------------|
+| `SECRET_KEY`              | JWT 서명 키 (32자 이상)   | `this-is-a-secret-key-with-at-least-32-chars` |
+| `TSID_NODE`               | TSID 노드 ID          | `0` (기본값)                                     |
+| `MYSQL_ROOT_PASSWORD`     | MySQL root 비밀번호     | `change-me-root`                              |
+| `MYSQL_DATABASE`          | DB 이름               | `my_db` (기본값)                                 |
+| `MYSQL_USER`              | DB 사용자              | `user` (기본값)                                  |
+| `MYSQL_PASSWORD`          | DB 사용자 비밀번호         | `change-me`                                   |
+| `MINIO_ROOT_USER`         | MinIO 액세스 키         | `change-me`                                   |
+| `MINIO_ROOT_PASSWORD`     | MinIO 시크릿 키 (8자 이상) | `change-me-8chars`                            |
+| `MINIO_BUCKET`            | 첨부파일 버킷             | `messenger` (기본값)                             |
+| `MINIO_CORS_ALLOW_ORIGIN` | MinIO CORS 허용 오리진   | `http://localhost:3000` (기본값)                 |
+| `CORS_ALLOWED_ORIGINS`    | 애플리케이션 CORS 허용 오리진  | `http://localhost:3000` (기본값)                 |
+
 
 ### 2. 실행
 
@@ -43,15 +53,16 @@ cp .env.example .env
 docker compose up --build
 ```
 
-- MySQL, Redis, 메신저 애플리케이션이 함께 기동된다.
-- 애플리케이션은 DB·Redis의 헬스체크가 통과한 뒤에 시작된다.
-- 기동 후 `http://localhost:8080` 에서 API에 접근할 수 있다.
+- MySQL, Redis, MinIO, 메신저 애플리케이션이 함께 기동된다.
+- 애플리케이션은 DB·Redis·MinIO 헬스체크가 통과하고 MinIO 버킷 초기화가 끝난 뒤에 시작된다.
+- 기동 후 `http://localhost:8080` 에서 API에 접근할 수 있다. 
+- MinIO 콘솔은 `http://localhost:9001`에서 접근할 수 있다.
 
 ### 3. 종료
 
 ```bash
 docker compose down     # 컨테이너 종료
-docker compose down -v  # 데이터(MySQL 볼륨)까지 삭제
+docker compose down -v  # 데이터(MySQL·MinIO 볼륨)까지 삭제
 ```
 
 프론트엔드는 [Messenger-Front](https://github.com/Splleat/Messenger-Front) 리포지토리에 존재하며, 백엔드(`localhost:8080`) 기동 후 로컬에서 `npm run dev`(`localhost:3000`)로 실행한다.

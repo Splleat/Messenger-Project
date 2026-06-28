@@ -77,6 +77,7 @@ public class SecurityConfig {
                     auth
                             .requestMatchers("/auth/login", "/auth/register", "/auth/refresh").permitAll()
                             .requestMatchers("/ws-stomp/**").permitAll()
+                            .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").permitAll()
                             .requestMatchers("/actuator/health").permitAll();
                     if (h2ConsoleEnabled) {
                         auth.requestMatchers("/h2-console/**").permitAll();

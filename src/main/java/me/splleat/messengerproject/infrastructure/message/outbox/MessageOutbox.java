@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import me.splleat.messengerproject.infrastructure.persistence.entity.BaseEntity;
 
 @Entity
-@Table(indexes = {
+@Table(name = "message_outboxes", indexes = {
         @Index(name = "idx_message_id_processed", columnList = "message_id, processed"),
         @Index(name = "idx_processed_created_at", columnList = "processed, created_at")
 })

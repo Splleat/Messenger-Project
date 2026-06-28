@@ -29,3 +29,7 @@ management:
 relay:
   grace-seconds: 2
   give-up-seconds: 60
+
+springdoc:
+  swagger-ui:
+    persist-authorization: true   # 새로고침해도 Authorize 토큰 유지

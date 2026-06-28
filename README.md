@@ -2,7 +2,7 @@
 
 스페이스 · 채널 기반의 실시간 메신저 서비스. STOMP 웹소켓으로 메시지를 주고받고, 파일 첨부를 지원합니다.
 
-**데모: [www.splleat.com](https://www.splleat.com)** · **프론트엔드: [Messenger-Front](https://github.com/Splleat/Messenger-Front)**
+**데모: [www.splleat.com](https://www.splleat.com)** · **API 문서: [Swagger](https://api.splleat.com/swagger-ui/index.html)** · **프론트엔드: [Messenger-Front](https://github.com/Splleat/Messenger-Front)**
 
 ---
 

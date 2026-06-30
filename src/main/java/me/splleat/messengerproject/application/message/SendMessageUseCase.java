@@ -14,7 +14,6 @@ import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.infrastructure.message.outbox.MessageCreatedEvent;
 import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
-import me.splleat.messengerproject.infrastructure.storage.S3Service;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.AttachmentResponse;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import org.springframework.context.ApplicationEventPublisher;
@@ -32,7 +31,6 @@ public class SendMessageUseCase {
     private final UserProfileService userProfileService;
     private final MessageService messageService;
     private final AttachmentService attachmentService;
-    private final S3Service s3Service;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
@@ -40,12 +38,6 @@ public class SendMessageUseCase {
         // 채널 및 채널 설정 정보 확인
         ChannelUserSetting setting = channelUserSettingService.getChannelUserSetting(command.userId(), command.channelId());
         Channel channel = channelService.getChannel(command.channelId());
-
-        // 첨부파일이 있는 경우, DB에 저장하기 이전 S3 스토리지 파일 용량 검증
-        if (command.attachments() != null && !command.attachments().isEmpty()) {
-
-            command.attachments().forEach(req -> s3Service.validateObjectSize(req.url()));
-        }
 
         // 메시지 생성
         Message message = command.toMessage();

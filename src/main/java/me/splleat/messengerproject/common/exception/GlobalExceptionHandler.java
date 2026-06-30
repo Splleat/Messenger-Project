@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
             log.error("BusinessException(서버 오류): {}", e.getMessage(), e);
         } else {
             // 4xx는 클라이언트 오류 -> 스택 트레이스 출력 X
-            log.debug("BusinessException(클라이언트 오류) [{}]: {}", errorCode.name(), e.getMessage());
+            log.info("BusinessException(클라이언트 오류) [{}]: {}", errorCode.name(), e.getMessage());
         }
 
         return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);

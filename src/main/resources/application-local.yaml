@@ -31,3 +31,7 @@ storage:
   secret-key: minioadmin
   bucket: messenger
   max-size-bytes: 10485760 # 10MB
+
+logging:
+  level:
+    me.splleat.messengerproject: ${LOG_LEVEL:DEBUG}

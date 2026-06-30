@@ -1,5 +1,6 @@
 package me.splleat.messengerproject.infrastructure.message.relay;
 
+import lombok.extern.slf4j.Slf4j;
 import me.splleat.messengerproject.common.annotation.DistributedLock;
 import me.splleat.messengerproject.infrastructure.message.outbox.MessageOutbox;
 import me.splleat.messengerproject.infrastructure.message.outbox.MessageOutboxService;
@@ -10,8 +11,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class MessageRelayScheduler {
     private final MessageOutboxService messageOutboxService;
@@ -40,11 +43,16 @@ public class MessageRelayScheduler {
 
         List<MessageOutbox> outboxes = messageOutboxService.getMessageOutboxInWindow(old, young);
 
-        outboxes.forEach(o -> messagePublisher.publish(o.getPayload()));
+        List<Long> processedIds = new ArrayList<>();
 
-        List<Long> processedIds = outboxes.stream()
-                .map(MessageOutbox::getId)
-                .toList();
+        for (MessageOutbox outbox : outboxes) {
+            try {
+                messagePublisher.publish(outbox.getPayload());
+                processedIds.add(outbox.getId());
+            } catch (Exception e) {
+                log.error("메시지 발행 실패 | outboxId: {}, 메시지: {}", outbox.getId(), e.getMessage(), e);
+            }
+        }
 
         messageOutboxService.updateToProcessedInBatch(processedIds);
     }

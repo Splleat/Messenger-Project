@@ -61,7 +61,7 @@ public class SpaceMemberService {
             }
         }
 
-        spaceMemberRepository.deleteByUserIdAndSpaceId(userId, spaceId);
+        spaceMemberRepository.delete(spaceMember);
     }
 
     @Transactional(readOnly = true)

@@ -53,11 +53,10 @@ public class ChannelUserSettingService {
 
     @Transactional
     public void leaveChannel(long userId, long channelId) {
-        if (!channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId)) {
-            throw new BusinessException(ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND);
-        }
+        ChannelUserSetting setting = channelUserSettingRepository.findByUserIdAndChannelId(userId, channelId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHANNEL_USER_SETTING_NOT_FOUND));
 
-        channelUserSettingRepository.deleteByUserIdAndChannelId(userId, channelId);
+        channelUserSettingRepository.delete(setting);
     }
 
     @Transactional

@@ -132,9 +132,6 @@ class ChannelUserSettingServiceTest {
         long userId = 1L;
         long channelId = 1L;
 
-        given(channelUserSettingRepository.existsByUserIdAndChannelId(userId, channelId))
-                .willReturn(false);
-
         // when & then
         assertThatThrownBy(() -> channelUserSettingService.leaveChannel(userId, channelId))
                 .isInstanceOf(BusinessException.class)

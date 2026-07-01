@@ -33,7 +33,7 @@ class MessageRelaySchedulerIntegrationTest {
     private RedisMessageListenerContainer redisMessageListenerContainer;
 
     @Autowired
-    private ChannelTopic channelTopic;
+    private ChannelTopic messageTopic;
 
     @Autowired
     private MessageRelayScheduler messageRelayScheduler;
@@ -45,7 +45,7 @@ class MessageRelaySchedulerIntegrationTest {
     void setUp() {
         received.clear();
         testListener = (message, pattern) -> received.add(message.toString());
-        redisMessageListenerContainer.addMessageListener(testListener, channelTopic);
+        redisMessageListenerContainer.addMessageListener(testListener, messageTopic);
     }
 
     @AfterEach

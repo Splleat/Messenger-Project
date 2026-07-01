@@ -2,6 +2,7 @@ package me.splleat.messengerproject.infrastructure.message.outbox;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.splleat.messengerproject.infrastructure.message.event.MessageEvent;
 import me.splleat.messengerproject.infrastructure.message.publisher.MessagePublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;

@@ -1,6 +1,6 @@
 package me.splleat.messengerproject.infrastructure.message.outbox;
 
-public enum EventType {
+public enum MessageEventType {
     CREATED,
     UPDATED,
     DELETED

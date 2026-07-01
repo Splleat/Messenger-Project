@@ -5,8 +5,8 @@ import me.splleat.messengerproject.application.message.dto.MessageDeleteCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageDeletedEvent;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
+import me.splleat.messengerproject.infrastructure.message.event.MessageDeletedEvent;
+import me.splleat.messengerproject.infrastructure.message.event.MessageEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -10,7 +10,7 @@ import me.splleat.messengerproject.domain.message.*;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
+import me.splleat.messengerproject.infrastructure.message.event.MessageEvent;
 import me.splleat.messengerproject.support.fixture.ChannelFixture;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;

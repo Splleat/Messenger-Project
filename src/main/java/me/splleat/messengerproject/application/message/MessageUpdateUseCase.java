@@ -5,8 +5,8 @@ import me.splleat.messengerproject.application.message.dto.MessageUpdateCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageUpdatedEvent;
+import me.splleat.messengerproject.infrastructure.message.event.MessageEvent;
+import me.splleat.messengerproject.infrastructure.message.event.MessageUpdatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 

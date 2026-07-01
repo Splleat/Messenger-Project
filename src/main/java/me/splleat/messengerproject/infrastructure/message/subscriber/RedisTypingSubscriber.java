@@ -2,7 +2,8 @@ package me.splleat.messengerproject.infrastructure.message.subscriber;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.splleat.messengerproject.infrastructure.message.outbox.MessageEvent;
+import me.splleat.messengerproject.infrastructure.message.event.TypingEvent;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -13,20 +14,20 @@ import tools.jackson.databind.json.JsonMapper;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RedisSubscriber implements MessageListener {
-    private final JsonMapper jsonMapper;
+public class RedisTypingSubscriber implements MessageListener {
     private final SimpMessagingTemplate messagingTemplate;
+    private final JsonMapper jsonMapper;
 
     @Override
-    public void onMessage(Message message, byte @Nullable [] pattern) {
+    public void onMessage(@NonNull Message message, byte @Nullable [] pattern) {
         try {
-            MessageEvent<?> response = jsonMapper.readValue(message.toString(), MessageEvent.class);
+            TypingEvent event = jsonMapper.readValue(message.getBody(), TypingEvent.class);
 
-            String destination = "/sub/channels/" + response.channelId() + "/messages";
+            String destination = "/sub/channels/" + event.channelId() + "/typing";
 
-            messagingTemplate.convertAndSend(destination, response);
+            messagingTemplate.convertAndSend(destination, event);
         } catch (Exception e) {
-            log.error("메시지 라우팅 실패: {}", e.getMessage());
+            log.error("이벤트 라우팅 실패: {}", e.getMessage());
         }
     }
 }

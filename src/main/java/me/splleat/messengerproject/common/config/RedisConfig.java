@@ -1,46 +1,41 @@
 package me.splleat.messengerproject.common.config;
 
-import me.splleat.messengerproject.infrastructure.message.subscriber.RedisSubscriber;
+import me.splleat.messengerproject.infrastructure.message.subscriber.RedisMessageSubscriber;
+import me.splleat.messengerproject.infrastructure.message.subscriber.RedisTypingSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
 
-    private static final String TOPIC = "messenger:channel";
+    private static final String TOPIC = "messenger:message";
+    private static final String TYPING_TOPIC = "messenger:typing";
 
-    @Bean
-    ChannelTopic channelTopic() {
+    @Bean("messageTopic")
+    ChannelTopic messageTopic() {
         return new ChannelTopic(TOPIC);
     }
 
-    @Bean
-    RedisTemplate<String, String> redisTemplate(RedisConnectionFactory connectionFactory) {
-
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-        StringRedisSerializer serializer = new StringRedisSerializer();
-        template.setKeySerializer(serializer);
-        template.setValueSerializer(serializer);
-        template.setHashKeySerializer(serializer);
-        template.setHashValueSerializer(serializer);
-
-        return template;
+    @Bean("typingTopic")
+    ChannelTopic typingChannelTopic() {
+        return new ChannelTopic(TYPING_TOPIC);
     }
 
     @Bean
-    RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory, RedisSubscriber subscriber) {
+    RedisMessageListenerContainer redisMessageListenerContainer(
+            RedisConnectionFactory connectionFactory,
+            RedisMessageSubscriber messageSubscriber,
+            RedisTypingSubscriber typingSubscriber
+    ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(subscriber, channelTopic());
+        container.addMessageListener(messageSubscriber, messageTopic());
+        container.addMessageListener(typingSubscriber, typingChannelTopic());
 
         return container;
     }

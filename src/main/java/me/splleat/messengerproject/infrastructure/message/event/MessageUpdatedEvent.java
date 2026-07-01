@@ -1,4 +1,4 @@
-package me.splleat.messengerproject.infrastructure.message.outbox;
+package me.splleat.messengerproject.infrastructure.message.event;
 
 import me.splleat.messengerproject.domain.message.Message;
 

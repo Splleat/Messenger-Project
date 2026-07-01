@@ -1,6 +1,5 @@
 package me.splleat.messengerproject.application.channel.dto;
 
-import me.splleat.messengerproject.domain.user.UserProfile;
 
 public record ChannelParticipantResult(
         long userId,
@@ -8,12 +7,12 @@ public record ChannelParticipantResult(
         String profileImage,
         String statusMessage
 ) {
-    public static ChannelParticipantResult from(UserProfile userProfile) {
+    public ChannelParticipantResult withImageUrl(String absoluteUrl) {
         return new ChannelParticipantResult(
-                userProfile.getUserId(),
-                userProfile.getName(),
-                userProfile.getImageUrl(),
-                userProfile.getStatusMessage()
+                userId,
+                username,
+                absoluteUrl,
+                statusMessage
         );
     }
 }

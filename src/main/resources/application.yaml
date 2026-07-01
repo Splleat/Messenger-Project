@@ -32,4 +32,4 @@ relay:
 
 springdoc:
   swagger-ui:
-    persist-authorization: true   # 새로고침해도 Authorize 토큰 유지
+    try-it-out-enabled: false

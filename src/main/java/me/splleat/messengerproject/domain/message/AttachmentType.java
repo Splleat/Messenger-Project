@@ -1,12 +1,12 @@
 package me.splleat.messengerproject.domain.message;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,6 +14,7 @@ public enum AttachmentType {
     IMAGE("image"),
     FILE("file");
 
+    @JsonValue
     private final String value;
 
     public static AttachmentType from(String value) {

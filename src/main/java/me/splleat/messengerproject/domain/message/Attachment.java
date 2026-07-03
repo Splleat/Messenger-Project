@@ -17,6 +17,9 @@ public class Attachment extends SoftDeletableEntity {
     @Column(name = "message_id")
     private Long messageId;
 
+    @Column(name = "original_name")
+    private String originalName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private AttachmentType type;
@@ -24,7 +27,10 @@ public class Attachment extends SoftDeletableEntity {
     @Column(name = "url")
     private String url;
 
-    public static Attachment create(long messageId, AttachmentType type, String url) {
-        return new Attachment(messageId, type, url);
+    @Column(name = "size")
+    private Long size;
+
+    public static Attachment create(long messageId, String originalName, AttachmentType type, String url, long size) {
+        return new Attachment(messageId, originalName, type, url, size);
     }
 }

@@ -94,8 +94,10 @@ public class MessageQueryRepository {
                 .select(Projections.constructor(AttachmentResponse.class,
                         attachment.id,
                         attachment.messageId,
+                        attachment.originalName,
                         attachment.type,
-                        attachment.url))
+                        attachment.url,
+                        attachment.size))
                 .from(attachment)
                 .where(attachment.messageId.in(messageIds))
                 .fetch();
@@ -111,9 +113,10 @@ public class MessageQueryRepository {
                             .map(att -> new AttachmentResponse(
                                     att.id(),
                                     att.messageId(),
+                                    att.name(),
                                     att.type(),
-                                    storageUrlMapper.resolve(att.url())
-                            ))
+                                    storageUrlMapper.resolve(att.url()),
+                                    att.size()))
                             .toList();
 
                     return new MessageResponse(

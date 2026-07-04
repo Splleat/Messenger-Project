@@ -27,6 +27,9 @@ spring:
       port: 6379
       connect-timeout: 2000ms
 
+  flyway:
+    enabled: false
+
 logging:
   level:
     me.splleat.messengerproject: DEBUG

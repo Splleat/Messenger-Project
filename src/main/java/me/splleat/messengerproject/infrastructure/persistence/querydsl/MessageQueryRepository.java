@@ -3,6 +3,7 @@ package me.splleat.messengerproject.infrastructure.persistence.querydsl;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.channel.dto.ChannelEnterResult;
@@ -57,6 +58,9 @@ public class MessageQueryRepository {
         QMessage message = QMessage.message;
         QAttachment attachment = QAttachment.attachment;
 
+        BooleanExpression isUpdated = message.updatedAt.ne(message.createdAt);
+        BooleanExpression isDeleted = message.deletedAt.isNotNull();
+
         List<MessageResponse> messages = queryFactory
                 .select(Projections.constructor(MessageResponse.class,
                         message.id,
@@ -68,7 +72,9 @@ public class MessageQueryRepository {
                         message.idemPotencyKey,
                         message.type,
                         message.parentMessageId,
-                        message.createdAt
+                        message.createdAt,
+                        isUpdated,
+                        isDeleted
                 ))
                 .from(message)
                 .leftJoin(userProfile).on(message.userId.eq(userProfile.userId))
@@ -108,7 +114,7 @@ public class MessageQueryRepository {
         List<MessageResponse> result = messages.stream()
                 .map(msg -> {
                     String fullProfileUrl = storageUrlMapper.resolve(msg.profileUrl());
-                    
+
                     List<AttachmentResponse> msgAttachments = attachmentMap.getOrDefault(msg.id(), List.of()).stream()
                             .map(att -> new AttachmentResponse(
                                     att.id(),
@@ -130,7 +136,9 @@ public class MessageQueryRepository {
                             msg.type(),
                             msg.parentMessageId(),
                             msgAttachments,
-                            msg.createdAt()
+                            msg.createdAt(),
+                            msg.isUpdated(),
+                            msg.isDeleted()
                     );
                 })
                 .toList();

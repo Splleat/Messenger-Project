@@ -18,7 +18,9 @@ public record MessageResponse(
         MessageType type,
         Long parentMessageId,
         List<AttachmentResponse> attachments,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        boolean isUpdated,
+        boolean isDeleted
 ) {
     public MessageResponse(
             long id,
@@ -30,9 +32,11 @@ public record MessageResponse(
             UUID idemPotencyKey,
             MessageType type,
             Long parentMessageId,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            boolean isUpdated,
+            boolean isDeleted
     ) {
-        this(id, userId, channelId, username, profileUrl, content, idemPotencyKey, type, parentMessageId, List.of(), createdAt);
+        this(id, userId, channelId, username, profileUrl, content, idemPotencyKey, type, parentMessageId, List.of(), createdAt, isUpdated, isDeleted);
     }
 
     public static MessageResponse of(String username, String profileUrl, Message message, List<AttachmentResponse> attachments) {
@@ -47,7 +51,9 @@ public record MessageResponse(
             message.getType(),
             message.getParentMessageId(),
             attachments,
-            message.getCreatedAt()
+            message.getCreatedAt(),
+            message.isUpdated(),
+            message.isDeleted()
         );
     }
 }

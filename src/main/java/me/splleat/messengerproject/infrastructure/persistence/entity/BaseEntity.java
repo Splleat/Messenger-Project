@@ -47,6 +47,6 @@ public abstract class BaseEntity implements Persistable<Long> {
     }
 
     public boolean isUpdated() {
-        return this.updatedAt != this.createdAt;
+        return !this.updatedAt.equals(this.createdAt);
     }
 }

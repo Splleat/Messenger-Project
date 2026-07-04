@@ -21,6 +21,9 @@ spring:
       port: 6379
       connect-timeout: 2000ms
 
+  flyway:
+    enabled: false
+
 jwt:
   secret: local-dev-only-secret-key-at-least-32-characters-long
 

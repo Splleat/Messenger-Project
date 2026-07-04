@@ -1,7 +1,6 @@
 package me.splleat.messengerproject.application.message;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.application.message.dto.MessageDeleteCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageService;
@@ -17,8 +16,8 @@ public class MessageDeleteUseCase {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public void execute(MessageDeleteCommand command) {
-        Message message = messageService.getUserMessage(command.userId(), command.messageId());
+    public void execute(long userId, long messageId) {
+        Message message = messageService.getUserMessage(userId, messageId);
 
         message.softDelete();
 

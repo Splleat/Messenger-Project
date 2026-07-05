@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.space.dto.SpaceListResult;
 import me.splleat.messengerproject.domain.space.QSpace;
 import me.splleat.messengerproject.domain.space.QSpaceMember;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public class SpaceQueryRepository {
     private final JPAQueryFactory queryFactory;
 
+    @Cacheable(value = "spaceList", key = "#userId")
     public List<SpaceListResult> findSpaceList(long userId) {
         QSpace space = QSpace.space;
         QSpaceMember member = QSpaceMember.spaceMember;

@@ -6,18 +6,17 @@ import me.splleat.messengerproject.domain.channel.Channel;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
-import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageOutboxRepository;
-import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
-import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelUserSettingRepository;
-import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageRepository;
-import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
+import me.splleat.messengerproject.infrastructure.persistence.jpa.*;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import me.splleat.messengerproject.support.TestContainerConfig;
+import me.splleat.messengerproject.support.annotation.IntegrationTest;
 import me.splleat.messengerproject.support.fixture.ChannelFixture;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -31,7 +30,7 @@ import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@IntegrationTest
 @Import(TestContainerConfig.class)
 class SendMessageConcurrencyIntegrationTest {
 

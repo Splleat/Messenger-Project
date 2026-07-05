@@ -7,6 +7,7 @@ import me.splleat.messengerproject.domain.space.SpaceMember;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
+import me.splleat.messengerproject.infrastructure.cache.SpaceCacheEvictor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,9 @@ class SpaceCreateUseCaseTest {
 
     @Mock
     private SpaceMemberService spaceMemberService;
+
+    @Mock
+    private SpaceCacheEvictor cacheEvictor;
 
     @InjectMocks
     private SpaceCreateUseCase spaceCreateUseCase;

@@ -5,6 +5,7 @@ import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.domain.user.UserService;
+import me.splleat.messengerproject.infrastructure.cache.SpaceCacheEvictor;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ class SpaceInviteUseCaseTest {
 
     @Mock
     private SpaceMemberService spaceMemberService;
+
+    @Mock
+    private SpaceCacheEvictor cacheEvictor;
 
     @InjectMocks
     private SpaceInviteUseCase spaceInviteUseCase;

@@ -3,13 +3,10 @@ package me.splleat.messengerproject.application.space;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.space.dto.SpaceCreateCommand;
 import me.splleat.messengerproject.common.annotation.UseCase;
-import me.splleat.messengerproject.domain.space.Space;
-import me.splleat.messengerproject.domain.space.SpaceService;
-import me.splleat.messengerproject.domain.space.SpaceMember;
-import me.splleat.messengerproject.domain.space.SpaceMemberService;
-import me.splleat.messengerproject.domain.space.SpaceRole;
+import me.splleat.messengerproject.domain.space.*;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
+import me.splleat.messengerproject.infrastructure.cache.SpaceCacheEvictor;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -18,6 +15,7 @@ public class SpaceCreateUseCase {
     private final UserProfileService userProfileService;
     private final SpaceService spaceService;
     private final SpaceMemberService spaceMemberService;
+    private final SpaceCacheEvictor cacheEvictor;
 
     @Transactional
     public void execute(SpaceCreateCommand command) {
@@ -28,5 +26,7 @@ public class SpaceCreateUseCase {
         SpaceMember spaceMember = SpaceMember.create(command.userId(), createdSpace.getId(), userProfile.getName(), SpaceRole.OWNER);
 
         spaceMemberService.register(spaceMember);
+
+        cacheEvictor.evictSpaceList(command.userId());
     }
 }

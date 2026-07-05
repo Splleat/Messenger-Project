@@ -10,7 +10,7 @@ import me.splleat.messengerproject.interfaces.rest.space.dto.SpaceCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.space.dto.SpaceInviteRequest;
 import me.splleat.messengerproject.common.config.JacksonConfig;
 import me.splleat.messengerproject.support.TestSecurityConfig;
-import me.splleat.messengerproject.support.WithMockPrincipal;
+import me.splleat.messengerproject.support.annotation.WithMockPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

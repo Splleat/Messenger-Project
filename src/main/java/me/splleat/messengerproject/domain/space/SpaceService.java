@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.SpaceRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class SpaceService {
         return spaceRepository.findAllByIdIn(spaceIds);
     }
 
+    @Cacheable(value = "space", key = "#spaceId")
     @Transactional(readOnly = true)
     public Space getSpace(long spaceId) {
         return spaceRepository.findById(spaceId)

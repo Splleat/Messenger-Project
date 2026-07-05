@@ -10,6 +10,7 @@ import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.space.SpaceMember;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.space.SpaceRole;
+import me.splleat.messengerproject.infrastructure.cache.ChannelCacheEvictor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class SpaceChannelCreateUseCase {
     private final SpaceMemberService spaceMemberService;
     private final ChannelService channelService;
     private final ChannelUserSettingService channelUserSettingService;
+    private final ChannelCacheEvictor cacheEvictor;
 
     @Transactional
     public void execute(SpaceChannelCreateCommand command) {
@@ -36,5 +38,7 @@ public class SpaceChannelCreateUseCase {
                 .toList();
 
         channelUserSettingService.registerAll(channelUserSettingList);
+
+        spaceParticipantUserIds.forEach(userId -> cacheEvictor.evictSpaceChannels(userId, command.spaceId()));
     }
 }

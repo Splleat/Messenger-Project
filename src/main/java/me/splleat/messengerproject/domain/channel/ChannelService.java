@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.ChannelRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class ChannelService {
         return channelRepository.save(channel);
     }
 
+    @Cacheable(value = "channel", key = "#channelId")
     @Transactional(readOnly = true)
     public Channel getChannel(long channelId) {
         return channelRepository.findById(channelId)

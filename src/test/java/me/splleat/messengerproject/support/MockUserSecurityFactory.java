@@ -1,6 +1,7 @@
 package me.splleat.messengerproject.support;
 
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
+import me.splleat.messengerproject.support.annotation.WithMockPrincipal;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

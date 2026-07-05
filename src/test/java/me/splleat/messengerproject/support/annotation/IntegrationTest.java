@@ -1,6 +1,5 @@
 package me.splleat.messengerproject.support.annotation;
 
-import me.splleat.messengerproject.support.TestCacheConfig;
 import me.splleat.messengerproject.support.TestContainerConfig;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -12,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import({TestContainerConfig.class, TestCacheConfig.class})
+@Import(TestContainerConfig.class)
 @SpringBootTest
 public @interface IntegrationTest {
     @AliasFor(attribute = "properties", annotation = SpringBootTest.class)

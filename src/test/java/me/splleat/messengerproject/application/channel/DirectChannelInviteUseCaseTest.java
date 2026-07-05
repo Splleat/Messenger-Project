@@ -4,7 +4,6 @@ import me.splleat.messengerproject.application.channel.dto.DirectChannelInviteCo
 import me.splleat.messengerproject.domain.channel.ChannelService;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.user.UserService;
-import me.splleat.messengerproject.infrastructure.cache.ChannelCacheEvictor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,9 +30,6 @@ class DirectChannelInviteUseCaseTest {
 
     @Mock
     private ChannelUserSettingService channelUserSettingService;
-
-    @Mock
-    private ChannelCacheEvictor cacheEvictor;
 
     @InjectMocks
     private DirectChannelInviteUseCase directChannelInviteUseCase;

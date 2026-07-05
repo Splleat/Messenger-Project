@@ -8,7 +8,6 @@ import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.space.SpaceMember;
 import me.splleat.messengerproject.domain.space.SpaceMemberService;
 import me.splleat.messengerproject.domain.space.SpaceRole;
-import me.splleat.messengerproject.infrastructure.cache.ChannelCacheEvictor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,9 +35,6 @@ class SpaceChannelCreateUseCaseTest {
 
     @Mock
     private ChannelUserSettingService channelUserSettingService;
-
-    @Mock
-    private ChannelCacheEvictor cacheEvictor;
 
     @InjectMocks
     private SpaceChannelCreateUseCase spaceChannelCreateUseCase;

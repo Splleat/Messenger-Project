@@ -6,7 +6,6 @@ import me.splleat.messengerproject.common.annotation.UseCase;
 import me.splleat.messengerproject.domain.channel.ChannelUserSetting;
 import me.splleat.messengerproject.domain.channel.ChannelUserSettingService;
 import me.splleat.messengerproject.domain.user.UserService;
-import me.splleat.messengerproject.infrastructure.cache.ChannelCacheEvictor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
@@ -18,7 +17,6 @@ import java.util.Set;
 public class DirectChannelInviteUseCase {
     private final UserService userService;
     private final ChannelUserSettingService channelUserSettingService;
-    private final ChannelCacheEvictor cacheEvictor;
 
     @Transactional
     public void execute(DirectChannelInviteCommand command) {
@@ -32,10 +30,7 @@ public class DirectChannelInviteUseCase {
         // 새롭게 채널에 참여하는 사용자의 설정 정보 생성
         List<ChannelUserSetting> newChannelSettings = command.targetIds().stream()
                 .filter(targetId -> !alreadyJoinedUserIds.contains(targetId))
-                .map(targetId -> {
-                    cacheEvictor.evictDirectChannels(targetId);
-                    return ChannelUserSetting.create(targetId, command.channelId());
-                })
+                .map(targetId -> ChannelUserSetting.create(targetId, command.channelId()))
                 .toList();
 
         channelUserSettingService.registerAll(newChannelSettings);

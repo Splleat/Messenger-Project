@@ -3,12 +3,12 @@ package me.splleat.messengerproject.infrastructure.message.relay;
 import me.splleat.messengerproject.infrastructure.message.outbox.MessageOutbox;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.MessageOutboxRepository;
 import me.splleat.messengerproject.support.TestContainerConfig;
+import me.splleat.messengerproject.support.annotation.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-@SpringBootTest
+@IntegrationTest
 @Import(TestContainerConfig.class)
 class MessageRelaySchedulerIntegrationTest {
 

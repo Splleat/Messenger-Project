@@ -5,7 +5,7 @@ import me.splleat.messengerproject.infrastructure.storage.S3Service;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignRequest;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignResponse;
 import me.splleat.messengerproject.support.TestSecurityConfig;
-import me.splleat.messengerproject.support.WithMockPrincipal;
+import me.splleat.messengerproject.support.annotation.WithMockPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

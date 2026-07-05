@@ -9,6 +9,7 @@ import me.splleat.messengerproject.domain.space.SpaceRole;
 import me.splleat.messengerproject.domain.user.UserProfile;
 import me.splleat.messengerproject.domain.user.UserProfileService;
 import me.splleat.messengerproject.domain.user.UserService;
+import me.splleat.messengerproject.infrastructure.cache.SpaceCacheEvictor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
@@ -22,6 +23,7 @@ public class SpaceInviteUseCase {
     private final UserService userService;
     private final UserProfileService userProfileService;
     private final SpaceMemberService spaceMemberService;
+    private final SpaceCacheEvictor cacheEvictor;
 
     @Transactional
     public void execute(SpaceInviteCommand command) {
@@ -39,6 +41,8 @@ public class SpaceInviteUseCase {
 
         List<SpaceMember> newSpaceMembers = targetIds.stream()
                 .map(targetId -> {
+                    cacheEvictor.evictSpaceList(targetId);
+
                     UserProfile profile = userProfileMap.get(targetId);
 
                     String nickname = (profile != null) ? profile.getName() : "탈퇴한 사용자";

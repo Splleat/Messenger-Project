@@ -1,5 +1,6 @@
-package me.splleat.messengerproject.support;
+package me.splleat.messengerproject.support.annotation;
 
+import me.splleat.messengerproject.support.MockUserSecurityFactory;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.*;

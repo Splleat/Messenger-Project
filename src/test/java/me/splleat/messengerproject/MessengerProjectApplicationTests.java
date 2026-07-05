@@ -1,12 +1,9 @@
 package me.splleat.messengerproject;
 
-import me.splleat.messengerproject.support.TestContainerConfig;
+import me.splleat.messengerproject.support.annotation.IntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
-@SpringBootTest
-@Import(TestContainerConfig.class)
+@IntegrationTest
 class MessengerProjectApplicationTests {
 
     @Test

@@ -10,7 +10,7 @@ import me.splleat.messengerproject.domain.channel.ChannelType;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelCreateRequest;
 import me.splleat.messengerproject.interfaces.rest.channel.dto.DirectChannelInviteRequest;
 import me.splleat.messengerproject.support.TestSecurityConfig;
-import me.splleat.messengerproject.support.WithMockPrincipal;
+import me.splleat.messengerproject.support.annotation.WithMockPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

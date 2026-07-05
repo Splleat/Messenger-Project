@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
 import me.splleat.messengerproject.infrastructure.persistence.jpa.UserProfileRepository;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +45,6 @@ public class UserProfileService {
     }
 
     @Transactional
-    @CacheEvict(value = "userProfile", key = "#userId")
     public String updateImageUrl(long userId, String imageUrl) {
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_PROFILE_NOT_FOUND));
@@ -59,7 +57,6 @@ public class UserProfileService {
     }
 
     @Transactional
-    @CacheEvict(value = "userProfile", key = "#userId")
     public void updateProfile(long userId, String name, String statusMessage) {
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_PROFILE_NOT_FOUND));

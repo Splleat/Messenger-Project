@@ -12,9 +12,10 @@ import me.splleat.messengerproject.application.channel.dto.ChannelListResult;
 import me.splleat.messengerproject.application.channel.dto.ChannelParticipantResult;
 import me.splleat.messengerproject.domain.channel.QChannel;
 import me.splleat.messengerproject.domain.channel.QChannelUserSetting;
-import me.splleat.messengerproject.domain.space.QSpaceMember;
 import me.splleat.messengerproject.domain.message.QMessage;
+import me.splleat.messengerproject.domain.space.QSpaceMember;
 import me.splleat.messengerproject.domain.user.QUserProfile;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class ChannelQueryRepository {
                 .fetch();
     }
 
+    @Cacheable(value = "directChannelList", key = "#userId")
     public List<ChannelListResult> findDirectChannelList(long userId) {
         QChannel channel = QChannel.channel;
         QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;
@@ -55,6 +57,7 @@ public class ChannelQueryRepository {
         return findChannelList(query);
     }
 
+    @Cacheable(value = "spaceChannelList", key = "#userId + '-' + #spaceId")
     public List<ChannelListResult> findSpaceChannelList(long userId, long spaceId) {
         QChannel channel = QChannel.channel;
         QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;

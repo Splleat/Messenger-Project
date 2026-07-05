@@ -76,6 +76,21 @@ public class ChannelQueryRepository {
         return findChannelList(query);
     }
 
+    public List<NotificationRecipientResult> findNotificationRecipients(long channelId, long excludeUserId) {
+        QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;
+
+        return queryFactory
+                .select(Projections.constructor(NotificationRecipientResult.class,
+                        setting.userId,
+                        setting.isMuted))
+                .from(setting)
+                .where(
+                        setting.channelId.eq(channelId),
+                        setting.userId.ne(excludeUserId)
+                )
+                .fetch();
+    }
+
     private List<ChannelListResult> findChannelList(JPQLQuery<?> query) {
         QChannel channel = QChannel.channel;
         QChannelUserSetting setting = QChannelUserSetting.channelUserSetting;

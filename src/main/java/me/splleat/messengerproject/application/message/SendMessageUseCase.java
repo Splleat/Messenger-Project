@@ -67,6 +67,7 @@ public class SendMessageUseCase {
         // 새로운 메시지라면 이벤트 발행
         if (result.isCreated()) {
             eventPublisher.publishEvent(MessageEvent.from(MessageCreatedEvent.from(response)));
+            eventPublisher.publishEvent(MessageCreatedEvent.from(response));
         }
 
         return response;

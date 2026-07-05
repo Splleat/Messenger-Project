@@ -6,5 +6,7 @@ public record NotificationEvent(
         long channelId,
         long messageId,
         String senderName,
-        String content
+        String senderProfileUrl,
+        String content,
+        boolean hasAttachment
 ) {}

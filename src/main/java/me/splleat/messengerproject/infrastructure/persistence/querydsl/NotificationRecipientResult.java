@@ -14,7 +14,9 @@ public record NotificationRecipientResult(
                 message.channelId(),
                 message.id(),
                 message.username(),
-                message.content()
+                message.profileUrl(),
+                message.content(),
+                message.attachments() != null && !message.attachments().isEmpty()
         );
     }
 }

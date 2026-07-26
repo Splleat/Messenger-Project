@@ -1,11 +1,9 @@
 package me.splleat.messengerproject.common.config;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.infrastructure.security.JwtValidator;
 import me.splleat.messengerproject.infrastructure.websocket.AuthenticationPrincipalArgumentResolver;
 import me.splleat.messengerproject.infrastructure.websocket.StompHandler;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.JacksonJsonMessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
@@ -30,11 +28,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Value("${cors.allowed-origins}")
     private List<String> allowedOrigins;
-
-    @Bean
-    public static StompHandler stompHandler(JwtValidator jwtValidator) {
-        return new StompHandler(jwtValidator);
-    }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {

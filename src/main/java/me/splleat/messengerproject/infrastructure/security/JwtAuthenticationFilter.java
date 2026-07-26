@@ -12,7 +12,6 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,15 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
-        String path = ServletUriComponentsBuilder.fromRequestUri(request)
-                .replaceQuery(request.getQueryString())
-                .build()
-                .toUriString();
+        String path = request.getRequestURI();
 
         log.debug("[요청 URL]: {} {}", request.getMethod(), path);
 
         return publicPaths.stream()
-                .anyMatch(path::startsWith);
+                .anyMatch(publicPath -> path.equals(publicPath) || path.startsWith(publicPath + "/"));
     }
 
     @Override

@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthApi {
     private final LoginUseCase loginUseCase;
     private final RegisterUseCase registerUseCase;
     private final LogoutUseCase logoutUseCase;
     private final TokenReissueUseCase tokenReissueUseCase;
 
+    @Override
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = loginUseCase.execute(request.toCommand());
@@ -30,6 +31,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @PostMapping("/register")
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
         registerUseCase.execute(request.toCommand());
@@ -37,6 +39,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Override
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody LogoutRequest request) {
         logoutUseCase.execute(request.toCommand());
@@ -44,6 +47,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @Override
     @PostMapping("/refresh")
     public ResponseEntity<TokenReissueResult> reissue(@Valid @RequestBody TokenReissueRequest request) {
         TokenReissueResult response = tokenReissueUseCase.execute(request.toCommand());

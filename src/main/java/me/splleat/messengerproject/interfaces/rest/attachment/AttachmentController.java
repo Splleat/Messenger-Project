@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/attachments")
 @RequiredArgsConstructor
-public class AttachmentController {
+public class AttachmentController implements AttachmentApi {
     private final S3Service s3Service;
 
+    @Override
     @PostMapping("/presign")
     public PresignResponse presign(@RequestBody PresignRequest request) {
         return s3Service.createPresignedUpload(request);

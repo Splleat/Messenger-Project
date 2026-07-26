@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/channels")
 @RequiredArgsConstructor
-public class ChannelController {
+public class ChannelController implements ChannelApi {
     private final ChannelListGetUseCase channelListGetUseCase;
     private final ChannelMessageCursorGetUseCase channelMessageCursorGetUseCase;
     private final ChannelParticipantGetUseCase channelParticipantGetUseCase;
@@ -26,6 +26,7 @@ public class ChannelController {
     private final DirectChannelInviteUseCase directChannelInviteUseCase;
     private final DirectChannelLeaveUseCase directChannelLeaveUseCase;
 
+    @Override
     @GetMapping
     public ResponseEntity<List<ChannelListResult>> getDirectChannels(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         long userId = userPrincipal.getUserId();
@@ -35,6 +36,7 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @PostMapping
     public ResponseEntity<Void> createDirectChannel(
             @Valid @RequestBody DirectChannelCreateRequest request,
@@ -45,6 +47,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Override
     @DeleteMapping("/{channel-id}")
     public ResponseEntity<Void> leaveChannel(
             @PathVariable("channel-id") long channelId,
@@ -57,6 +60,7 @@ public class ChannelController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @GetMapping("/{channel-id}/participants")
     public ResponseEntity<List<ChannelParticipantResult>> getChannelParticipants(
             @PathVariable("channel-id") long channelId,
@@ -69,6 +73,7 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @GetMapping("/{channel-id}")
     public ResponseEntity<ChannelEnterResult> channelEnter(
             @PathVariable("channel-id") long channelId,
@@ -81,6 +86,7 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @GetMapping("/{channel-id}/messages")
     public ResponseEntity<ChannelMessagePageResult> getChannelMessagesByCursor(
             @PathVariable("channel-id") long channelId,
@@ -95,6 +101,7 @@ public class ChannelController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @PostMapping("/{channel-id}/members")
     public ResponseEntity<Void> inviteDirectChannel(
             @PathVariable("channel-id") long channelId,
@@ -106,6 +113,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Override
     @PatchMapping("/{channel-id}/read")
     public ResponseEntity<Void> updateLastRead(
             @PathVariable("channel-id") long channelId,

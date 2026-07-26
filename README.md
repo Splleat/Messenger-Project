@@ -91,7 +91,7 @@ sequenceDiagram
 | HTTPS | **Caddy** 자동 발급(Let's Encrypt) / Vercel 자동              |
 | CI | **GitHub Actions** — push·PR 시 빌드 + 테스트(Testcontainers) |
 
-- 운영 구성은 [`docker-compose.prod.yml`](docker-compose.prod.yml), 리버스 프록시는 [`Caddyfile`](Caddyfile) 참고.
+- 운영 구성은 [`compose.prod.yaml`](compose.prod.yaml), 리버스 프록시는 [`Caddyfile`](Caddyfile) 참고.
 - 로컬은 MinIO·MySQL 컨테이너, 운영은 관리형 S3·RDS를 사용하도록 프로파일·환경변수로 분리.
 
 ---

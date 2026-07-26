@@ -80,14 +80,14 @@ services:
     container_name: messenger-app
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       TZ: Asia/Seoul
       SPRING_PROFILES_ACTIVE: docker
-      SECRET_KEY: ${SECRET_KEY}
       TSID_NODE: ${TSID_NODE:-0}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-my_db}
       MYSQL_USER: ${MYSQL_USER:-user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       # 로컬 MinIO 컨테이너 크레덴셜을 앱 STORAGE_* 로 매핑
       STORAGE_ACCESS_KEY: ${MINIO_ROOT_USER}
       STORAGE_SECRET_KEY: ${MINIO_ROOT_PASSWORD}

@@ -17,6 +17,7 @@ jobs:
     env:
       SECRET_KEY: ci-test-secret-key-with-at-least-32-characters-long
       TSID_NODE: "0"
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: 체크아웃 # Repository 코드를 러너로 클론
         uses: actions/checkout@v4
@@ -34,9 +35,8 @@ jobs:
         run: ./mvnw -B clean verify # clean -> compile -> test -> verify
 
       - name: SonarCloud 분석
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        if: ${{ env.SONAR_TOKEN != '' }}
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./mvnw -B sonar:sonar
 

@@ -1,5 +1,5 @@
 jwt:
-  public-paths: /auth/login, /auth/register, /auth/refresh, /ws-stomp, /actuator/health, /swagger-ui, /v3/api-docs
+  public-paths: /auth/login, /auth/register, /auth/refresh, /ws-stomp, /actuator/health, /actuator/prometheus, /swagger-ui, /v3/api-docs
   secret: ${SECRET_KEY}
   access-token-expiration: 1800000 # 30분 (ms)
   refresh-token-expiration: 604800000 # 7일 (ms)
@@ -19,12 +19,12 @@ logging:
   level:
     me.splleat.messengerproject: ${LOG_LEVEL:INFO}
 
-# actuator는 health만 공개, 상세 숨김 (env/beans 등 노출 차단)
+# actuator는 health/prometheus만 공개, 상세 숨김 (env/beans 등 노출 차단)
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health, prometheus
   endpoint:
     health:
       show-details: never

@@ -17,9 +17,12 @@ jobs:
     env:
       SECRET_KEY: ci-test-secret-key-with-at-least-32-characters-long
       TSID_NODE: "0"
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: 체크아웃 # Repository 코드를 러너로 클론
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # SonarCloud 블레임 분석을 위해 전체 히스토리 필요
 
       - name: JDK 25 설정
         uses: actions/setup-java@v4
@@ -30,6 +33,12 @@ jobs:
 
       - name: 빌드 및 테스트
         run: ./mvnw -B clean verify # clean -> compile -> test -> verify
+
+      - name: SonarCloud 분석
+        if: ${{ env.SONAR_TOKEN != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./mvnw -B sonar:sonar
 
       - name: 테스트 리포트 업로드
         if: always()

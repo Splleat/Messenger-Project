@@ -12,22 +12,19 @@ services:
       - app-network
 
   app:
-    build: .
+    image: ghcr.io/splleat/messenger-project:latest
     container_name: messenger-app
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       TZ: Asia/Seoul
       SPRING_PROFILES_ACTIVE: docker
-      JAVA_TOOL_OPTIONS: "-Xmx512m"
-      SECRET_KEY: ${SECRET_KEY}
       TSID_NODE: ${TSID_NODE:-0}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       DDL_AUTO: ${DDL_AUTO:-validate}
-      DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT:-3306}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-my_db}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       STORAGE_ENDPOINT: ""
       STORAGE_REGION: ${S3_REGION:-ap-northeast-2}
       STORAGE_BUCKET: ${S3_BUCKET}

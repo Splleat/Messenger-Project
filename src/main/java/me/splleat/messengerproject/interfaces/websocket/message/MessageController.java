@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.application.message.MessageDeleteUseCase;
 import me.splleat.messengerproject.application.message.MessageUpdateUseCase;
 import me.splleat.messengerproject.application.message.SendMessageFacade;
-import me.splleat.messengerproject.application.message.dto.MessageUpdateCommand;
 import me.splleat.messengerproject.infrastructure.security.UserPrincipal;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageCreateRequest;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageUpdateRequest;

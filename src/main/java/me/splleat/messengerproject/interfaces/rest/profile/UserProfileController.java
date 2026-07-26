@@ -18,13 +18,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/profiles")
 @RequiredArgsConstructor
-public class UserProfileController {
+public class UserProfileController implements UserProfileApi {
     private final MyProfileGetUseCase myProfileGetUseCase;
     private final TargetProfileGetUseCase targetProfileGetUseCase;
     private final UserProfileUpdateUseCase userProfileUpdateUseCase;
     private final UserProfileImageUpdateUseCase userProfileImageUpdateUseCase;
     private final UserSearchUseCase userSearchUseCase;
 
+    @Override
     @GetMapping("/me")
     public ResponseEntity<UserProfileDetailResult> getMyProfile(
             @AuthenticationPrincipal UserPrincipal userPrincipal
@@ -36,6 +37,7 @@ public class UserProfileController {
         return ResponseEntity.ok(result);
     }
 
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<UserProfileResult> getTargetProfile(
             @PathVariable long id
@@ -45,6 +47,7 @@ public class UserProfileController {
         return ResponseEntity.ok(result);
     }
 
+    @Override
     @GetMapping("/search")
     public ResponseEntity<List<UserProfileResult>> searchUserProfiles(
             @RequestParam("name") String name,
@@ -58,6 +61,7 @@ public class UserProfileController {
         return ResponseEntity.ok(result);
     }
 
+    @Override
     @PutMapping
     public ResponseEntity<Void> updateProfile(
             @Valid @RequestBody UserProfileUpdateRequest request,
@@ -70,6 +74,7 @@ public class UserProfileController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PatchMapping
     public ResponseEntity<Void> updateProfileImage(
             @Valid @RequestBody UserProfileImageUpdateRequest request,

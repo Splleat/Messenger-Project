@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/spaces")
 @RequiredArgsConstructor
-public class SpaceController {
+public class SpaceController implements SpaceApi {
     private final SpaceListGetUseCase spaceListGetUseCase;
     private final SpaceCreateUseCase spaceCreateUseCase;
     private final SpaceGetUseCase spaceGetUseCase;
@@ -31,6 +31,7 @@ public class SpaceController {
     private final SpaceLeaveUseCase spaceLeaveUseCase;
     private final SpaceChannelEnterUseCase spaceChannelEnterUseCase;
 
+    @Override
     @PostMapping
     public ResponseEntity<Void> createSpace(
             @Valid @RequestBody SpaceCreateRequest request,
@@ -40,6 +41,7 @@ public class SpaceController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<List<SpaceListResult>> getSpaceList(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         long userId = userPrincipal.getUserId();
@@ -49,6 +51,7 @@ public class SpaceController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @PostMapping("/{space-id}")
     public ResponseEntity<Void> inviteSpace(
             @PathVariable("space-id") long spaceId,
@@ -62,6 +65,7 @@ public class SpaceController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Override
     @GetMapping("/{space-id}")
     public ResponseEntity<SpaceResult> getSpace(
             @PathVariable("space-id") long spaceId,
@@ -74,6 +78,7 @@ public class SpaceController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @DeleteMapping("/{space-id}")
     public ResponseEntity<Void> leaveSpace(
             @PathVariable("space-id") long spaceId,
@@ -86,6 +91,7 @@ public class SpaceController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PostMapping("/{space-id}/channels")
     public ResponseEntity<Void> createSpaceChannel(
             @PathVariable("space-id") long spaceId,
@@ -97,6 +103,7 @@ public class SpaceController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Override
     @GetMapping("/{space-id}/channels/{channel-id}")
     public ResponseEntity<ChannelEnterResult> enterSpaceChannel(
             @PathVariable("space-id") long spaceId,

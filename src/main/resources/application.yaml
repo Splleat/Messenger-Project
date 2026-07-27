@@ -28,6 +28,10 @@ management:
   endpoint:
     health:
       show-details: never
+  metrics:
+    distribution:
+      percentiles-histogram:
+        message.send.duration: true
 
 relay:
   grace-seconds: 2

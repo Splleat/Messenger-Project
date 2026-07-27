@@ -136,6 +136,14 @@ sequenceDiagram
 
 ---
 
+## 코드 품질
+
+![SonarQube](docs/img/sonarqube.png)
+
+GitHub Actions에서 빌드 및 테스트 통과 후 SonarCloud로 정적 분석을 수행합니다.
+
+---
+
 ## ERD
 
 ![ERD](docs/img/erd.png)

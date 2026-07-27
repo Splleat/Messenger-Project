@@ -1,6 +1,10 @@
 # Messenger
 
-스페이스 · 채널 기반의 실시간 메신저 서비스. STOMP 웹소켓으로 메시지를 주고받고, 파일 첨부를 지원합니다.
+스페이스/채널 기반의 실시간 메신저 서비스입니다. STOMP 웹소켓으로 메시지를 주고받고, 파일 첨부를 지원합니다.
+
+실시간성, 동시성, 트랜잭션, 데이터 모델링 등 백엔드 시스템의 핵심적인 문제를 종합적으로 다루기 위해 메신저 도메인을 선정했습니다.
+
+메시지 저장과 발행의 원자성을 Outbox 패턴으로 보장하고, TSID 기반 커서 페이징과 Redis Pub/Sub 다중 인스턴스 브로드캐스트를 설계했습니다.
 
 **데모: [www.splleat.com](https://www.splleat.com)** · **API 문서: [Swagger](https://api.splleat.com/swagger-ui/index.html)** · **프론트엔드: [Messenger-Front](https://github.com/Splleat/Messenger-Front)**
 
@@ -23,44 +27,80 @@
 
 ## 아키텍처
 
-![아키텍처 다이어그램](docs/architecture.png)
+![아키텍처 다이어그램](docs/img/architecture.png)
 
-- **상태가 있고 손실이 치명적인 데이터**(DB·파일)는 관리형 서비스(RDS·S3)로 분리해 내구성과 운영 부담을 위임했습니다.
-- **휘발성 데이터**(Pub/Sub·락)를 다루는 Redis는 컨테이너로 운영합니다. 메시지는 아웃박스 패턴으로 DB에 안전하게 저장되므로 Redis 유실이 데이터 손실로 이어지지 않습니다.
+- EC2 인스턴스는 t2.micro(메모리 1GB)로 운영합니다. DB와 파일 스토리지를 EC2에 함께 구성하면 애플리케이션에 사용할 메모리가 부족해질 수 있어 RDS와 S3로 분리했습니다.
+- Redis는 실시간 브로드캐스트를 위한 메시지 전달 계층으로 사용하며, 메시지 데이터는 DB를 Source of Truth로 사용합니다.
+- Redis 발행 실패에 대비해 Outbox 이벤트를 DB에 함께 저장하고, 보정 스케줄러를 통해 미발행 이벤트를 재처리합니다.
 
 ### 실시간 메시지 전달 흐름
 
 메시지는 DB에 아웃박스로 저장된 뒤 Redis Pub/Sub으로 발행되고, 채널을 구독 중인 모든 애플리케이션 인스턴스가 받아 자신에게 연결된 클라이언트에게 STOMP로 브로드캐스트합니다.
 
+#### 정상 흐름
+
 ```mermaid
 sequenceDiagram
     participant C1 as 발신 클라이언트
-    participant A1 as App #1<br/>(C1 연결)
-    participant DB as RDS<br/>(메시지 · 아웃박스)
+    participant A1 as App #1 (C1 연결)
+    participant DB as RDS (메시지 · 아웃박스)
     participant R as Redis
-    participant A2 as App #2<br/>(C2 연결)
+    participant A2 as App #2 (C2 연결)
     participant C2 as 수신 클라이언트
 
-    C1->>A1: ① STOMP SEND (메시지 전송)
-    A1->>DB: ② 메시지 + 아웃박스 저장 (트랜잭션)
-    A1->>R: ③ 메시지 커밋 후 발행 (채널 토픽 발행)
-    Note over R,A2: 해당 채널을 구독 중인<br/>모든 APP 인스턴스가 수신
-    R-->>A1: ④ 구독 콜백 (메시지 수신)
-    R-->>A2: ④ 구독 콜백 (메시지 수신)
-    A1-->>C1: ⑤ STOMP 브로드캐스트 /sub/{channel}
-    A2-->>C2: ⑤ STOMP 브로드캐스트 /sub/{channel}
+    C1->>A1: STOMP SEND
+    A1->>DB: 메시지 + 아웃박스 저장 (트랜잭션)
+    A1->>R: 커밋 후 즉시 발행
+    R-->>A1: 구독 콜백
+    R-->>A2: 구독 콜백
+    A1-->>C1: STOMP 브로드캐스트
+    A2-->>C2: STOMP 브로드캐스트
 ```
+
+#### 재시도 흐름
+
+```mermaid
+sequenceDiagram
+    participant A1 as App #1
+    participant DB as RDS (아웃박스)
+    participant Sched as Relay Scheduler
+    participant R as Redis
+
+    A1->>R: 발행 시도 실패 (네트워크 장애 등)
+    Note over DB: 아웃박스에 processed=false로 남음
+    loop 1초 주기 스캔 (생성 후 2초 ~ 60초 사이 미처리 건 대상)
+        Sched->>DB: 미처리 아웃박스 조회
+        Sched->>R: 재발행
+        Sched->>DB: processed=true 갱신
+    end
+```
+
+- Redis Pub/Sub은 실시간 브로드캐스트만 담당합니다. 메시지 자체는 이미 DB(아웃박스와 별개의 메시지 테이블)에 커밋되어 있으므로, 발행이 실패해도 메시지가 유실되지는 않습니다. 수신자가 그 순간 실시간으로 못 받을 뿐, 채널 재진입 시 커서 기반 페이징으로 정상 조회됩니다.
+- 재시도 대상은 생성된 지 2초 이상 지난 미처리 건입니다(정상 처리 중인 메시지를 재시도하지 않기 위한 최소 유예). 재시도 지연은 최소 2~3초(유예 시간 + 스케줄러 주기)부터, 최대 60초까지입니다.
+- 60초가 지나도 미처리 상태인 이벤트는 재시도 대상에서 제외됩니다. 이 경우 실시간 브로드캐스트는 전달되지 않을 수 있지만, 메시지 자체는 DB에 저장되어 있어 채널 재진입 시 커서 기반 페이징을 통해 조회할 수 있습니다.
 
 ---
 
 ## 주요 기능
 
-- **인증**: 회원가입 / 로그인 / 로그아웃, JWT(Access·Refresh) 기반 인증, 토큰 재발급 및 블랙리스트 로그아웃
-- **스페이스 · 채널**: 스페이스 생성·초대·탈퇴, 1:1(다이렉트) / 그룹 채널, 채널별 사용자 설정
+- **인증**: 회원가입 / 로그인 / 로그아웃, JWT(Access/Refresh) 기반 인증, 토큰 재발급 및 블랙리스트 로그아웃
+- **스페이스 · 채널**: 스페이스 생성·초대·탈퇴, 1:1(다이렉트) / 그룹 채널
 - **실시간 메시징**: STOMP 웹소켓 기반 송수신, Redis Pub/Sub로 인스턴스 간 메시지 전파
-- **메시지 신뢰성**: 아웃박스 패턴 + 복구 스케줄러로 발행 실패 메시지 재처리
-- **파일 첨부**: S3 presigned URL을 통한 브라우저 직접 업로드, 크기·타입 검증
-- **조회**: 커서 기반 양방향 페이징(무한 스크롤), 읽음 처리
+- **메시지 신뢰성**: 메시지와 Outbox 이벤트를 하나의 트랜잭션으로 저장하고, Redis 발행 실패 시 복구 스케줄러를 통해 재처리
+- **파일 첨부**: S3 presigned URL을 통한 브라우저 직접 업로드, 업로드 이전 크기, 타입 검증
+- **조회**: 커서 기반 양방향 페이징(무한 스크롤), 채널 재진입 시 마지막으로 읽은 메시지 기준 이전/이후 메시지 조회
+
+---
+
+## 스크린샷
+
+| 로그인                        | 개인 채널                                 |
+|----------------------------|---------------------------------------|
+| ![로그인](docs/img/login.png) | ![개인 채널](docs/img/main_private_1.png) |
+
+| 그룹 채널 (1)                            | 그룹 채널 (2)                             |
+|--------------------------------------|---------------------------------------|
+| ![그룹 채널 1](docs/img/main_space_1.png) | ![그룹 채널 2](docs/img/main_space_2.png) |
 
 ---
 
@@ -68,14 +108,14 @@ sequenceDiagram
 
 설계하며 마주친 문제와 선택의 근거를 글로 정리했습니다.
 
-1. **[JWT는 정말로 Stateless한가?](docs/01-jwt-stateless.md)** — 로그아웃·토큰 무효화를 위한 Refresh/블랙리스트 설계
+1. **[JWT는 정말로 Stateless한가?](docs/01-jwt-stateless.md)** — 로그아웃·토큰 무효화를 위한 Refresh/블랙리스트 설계 과정
 2. **[TSID를 도입하며 만난 예상치 못한 문제들](docs/02-db-pk.md)** — 분산 환경 PK 전략과 트레이드오프
-3. **[커서 기반 양방향 페이징 설계](docs/03-paging-strategy.md)** — 무한 스크롤을 위한 커서 페이징
+3. **[커서 기반 양방향 페이징 설계](docs/03-paging-strategy.md)** — 무한 스크롤을 위한 커서 기반 페이징
 
 추가로 적용한 패턴:
 
-- **아웃박스 패턴** — 메시지 DB 커밋과 Pub/Sub 발행의 정합성 보장, 실패 메시지 스케줄러 복구.
-- **분산 락(Redisson)** — 동시성이 필요한 작업을 `@DistributedLock` AOP + SpEL 동적 키로 처리.
+- **아웃박스 패턴** — 메시지 저장과 이벤트 발행 요청을 하나의 트랜잭션으로 처리하고, 발행 실패 이벤트를 스케줄러로 재처리.
+- **분산 락(Redisson)** — 다중 인스턴스 환경에서 Outbox Relay 작업의 중복 실행을 방지하기 위해 Redisson 기반 분산 락 적용.
 - **환경별 스토리지 추상화** — 동일한 S3 SDK 코드로 로컬은 MinIO, 운영은 AWS S3.
 
 ---
@@ -98,49 +138,19 @@ sequenceDiagram
 
 ## ERD
 
-![ERD](docs/erd.png)
+![ERD](docs/img/erd.png)
 
 ---
 
 ## 도메인 구조
 
+도메인 / 애플리케이션 / 인터페이스 / 인프라 계층을 분리해 비즈니스 로직과 외부 기술 의존성을 분리했습니다.
+
 ```text
 src/main/java/me/splleat/messengerproject/
-├── domain/                    # 도메인 모델 및 도메인 서비스
-│   ├── user/                  # 사용자(User), 사용자 프로필(UserProfile)
-│   ├── space/                 # 스페이스(Space), 스페이스 멤버(SpaceMember), 권한(SpaceRole)
-│   ├── channel/               # 채널(Channel), 채널 설정(ChannelUserSetting)
-│   └── message/               # 메시지(Message), 첨부 파일(Attachment)
-│
-├── application/               # 비즈니스 유스케이스 레이어
-│   ├── auth/                  # 회원가입, 로그인, 로그아웃, 토큰 재발급 유스케이스
-│   ├── space/                 # 스페이스 생성, 조회, 초대, 탈퇴 유스케이스
-│   ├── channel/               # 채널 생성, 조회, 읽음 처리 유스케이스
-│   ├── message/               # 메시지 송신 유스케이스
-│   └── profile/               # 프로필 조회, 수정, 이미지 변경 유스케이스
-│
-├── interfaces/                # 외부 클라이언트 진입점
-│   ├── rest/                  # REST API 컨트롤러 (인증, 스페이스, 채널, 첨부, 프로필)
-│   └── websocket/             # STOMP 기반 실시간 웹소켓 컨트롤러
-│
-├── infrastructure/            # 인프라 기술 및 프레임워크 연동
-│   ├── message/               # 실시간 메시지 전달 및 발행 신뢰성 보장
-│   │   ├── outbox/            # 아웃박스 패턴 (메시지 발행 보장)
-│   │   ├── publisher/         # Redis Pub/Sub 발행
-│   │   ├── subscriber/        # Redis 구독 → STOMP 라우팅
-│   │   └── relay/             # 발행 실패 메시지 복구 스케줄러
-│   ├── persistence/           # 영속성 계층
-│   │   ├── entity/            # 공통 추상 엔티티 (BaseEntity, SoftDeletableEntity)
-│   │   ├── jpa/               # Spring Data JPA
-│   │   └── querydsl/          # QueryDSL
-│   ├── security/              # Spring Security 및 JWT 필터/토큰 검증
-│   ├── storage/               # S3/MinIO 스토리지 (presigned URL 발급, 파일 검증)
-│   └── websocket/             # STOMP 메시지 핸들러 및 웹소켓 세션 인증 리졸버
-│
-└── common/                    # 프로젝트 전역 공통 설정 및 예외 처리
-    ├── annotation/            # 커스텀 어노테이션 (@UseCase, @DistributedLock)
-    ├── aop/                   # 분산 락 AOP (DistributedLockAspect)
-    ├── config/                # Redis, S3, Security, WebSocket 등 설정 클래스
-    ├── exception/             # 커스텀 비즈니스 예외 및 GlobalExceptionHandler, 공통 에러 응답
-    └── util/                  # SpEL 동적 Lock Key 파서, 스토리지 URL 매퍼
+├── domain/          # 도메인 모델
+├── application/     # 비즈니스 유스케이스
+├── interfaces/      # REST / WebSocket 진입점
+├── infrastructure/  # JPA / Redis / S3 / Security 등 인프라
+└── common/          # 공통 설정 및 예외 처리
 ```

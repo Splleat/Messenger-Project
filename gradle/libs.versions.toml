@@ -1,0 +1,87 @@
+[versions]
+springBoot = "4.0.6"
+springDependencyManagement = "1.1.7"
+sonarqube = "5.1.0.4882"
+jacoco = "0.8.13"
+
+jjwt = "0.13.0"
+querydsl = "7.1"
+jakartaPersistence = "3.1.0"
+testcontainersBom = "2.0.4"
+redisson = "4.5.0"
+hypersistence = "3.15.2"
+awsSdk = "2.46.10"
+springdoc = "3.0.2"
+archunit = "1.3.0"
+
+[libraries]
+# --- BOM ---
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainersBom" }
+
+# --- Spring Boot 스타터 ---
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
+spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-cache = { module = "org.springframework.boot:spring-boot-starter-cache" }
+spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
+spring-boot-h2console = { module = "org.springframework.boot:spring-boot-h2console" }
+
+# --- 저장소 / 캐시 ---
+mysql-connector = { module = "com.mysql:mysql-connector-j" }
+flyway-mysql = { module = "org.flywaydb:flyway-mysql" }
+h2 = { module = "com.h2database:h2" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
+redisson-spring-boot-starter = { module = "org.redisson:redisson-spring-boot-starter", version.ref = "redisson" }
+hypersistence-utils = { module = "io.hypersistence:hypersistence-utils-hibernate-71", version.ref = "hypersistence" }
+
+# --- QueryDSL ---
+querydsl-jpa = { module = "io.github.openfeign.querydsl:querydsl-jpa", version.ref = "querydsl" }
+querydsl-apt = { module = "io.github.openfeign.querydsl:querydsl-apt", version.ref = "querydsl" }
+jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api", version.ref = "jakartaPersistence" }
+
+# --- Lombok ---
+lombok = { module = "org.projectlombok:lombok" }
+
+# --- JWT ---
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+
+# --- AWS ---
+aws-s3 = { module = "software.amazon.awssdk:s3", version.ref = "awsSdk" }
+
+# --- API 문서 / 메트릭 ---
+springdoc-openapi-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
+
+# --- 테스트 ---
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test" }
+spring-boot-starter-data-jpa-test = { module = "org.springframework.boot:spring-boot-starter-data-jpa-test" }
+spring-boot-starter-data-redis-test = { module = "org.springframework.boot:spring-boot-starter-data-redis-test" }
+spring-boot-testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
+spring-security-test = { module = "org.springframework.security:spring-security-test" }
+spring-restdocs-mockmvc = { module = "org.springframework.restdocs:spring-restdocs-mockmvc" }
+testcontainers-core = { module = "org.testcontainers:testcontainers" }
+testcontainers-mysql = { module = "org.testcontainers:testcontainers-mysql" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:testcontainers-junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "archunit" }
+
+[bundles]
+testcontainers = [
+    "spring-boot-testcontainers",
+    "testcontainers-core",
+    "testcontainers-mysql",
+    "testcontainers-junit-jupiter",
+]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }

@@ -29,25 +29,16 @@ jobs:
         with:
           distribution: temurin
           java-version: "25"
-          cache: maven # ~/.m2 의존성 캐싱 -> 2회차부터 빌드 빨라짐
+          cache: gradle
 
       - name: 빌드 및 테스트
-        run: ./mvnw -B clean verify # clean -> compile -> test -> verify
+        run: ./gradlew build
 
       - name: SonarCloud 분석
         if: ${{ env.SONAR_TOKEN != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./mvnw -B sonar:sonar
-
-      - name: 테스트 리포트 업로드
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: surefire-reports
-          path: target/surefire-reports/
-          if-no-files-found: ignore
-          retention-days: 7
+        run: ./gradlew sonar
 
   build-push:
     name: 이미지 빌드 및 GHCR Push

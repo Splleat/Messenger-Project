@@ -1,12 +1,13 @@
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
+ENV GRADLE_OPTS="-Dorg.gradle.daemon=false"
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+COPY gradle/ gradle
+COPY gradlew build.gradle.kts settings.gradle.kts ./
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
 
 COPY src ./src
-RUN ./mvnw clean package -DskipTests -B
+RUN ./gradlew bootJar --no-daemon
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
@@ -14,7 +15,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /app/target/messenger-project-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/build/libs/*.jar app.jar
 
 USER 1000
 

@@ -29,7 +29,6 @@ spring-boot-starter-validation = { module = "org.springframework.boot:spring-boo
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-cache = { module = "org.springframework.boot:spring-boot-starter-cache" }
 spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
-spring-boot-h2console = { module = "org.springframework.boot:spring-boot-h2console" }
 
 # --- 저장소 / 캐시 ---
 mysql-connector = { module = "com.mysql:mysql-connector-j" }

@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.common.config;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.infrastructure.storage.StorageProperties;
+import me.splleat.messengerproject.common.property.StorageProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;

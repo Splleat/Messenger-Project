@@ -1,7 +1,7 @@
 package me.splleat.messengerproject.common.util;
 
 import lombok.RequiredArgsConstructor;
-import me.splleat.messengerproject.infrastructure.storage.StorageProperties;
+import me.splleat.messengerproject.common.property.StorageProperties;
 import org.springframework.stereotype.Component;
 
 @Component

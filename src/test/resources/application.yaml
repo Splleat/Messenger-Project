@@ -15,14 +15,22 @@ spring:
     type: none
 
 jwt:
-  public-paths: /auth/login, /auth/register, /auth/refresh, /h2-console, /ws-stomp
-  secret: this-is-a-test-secret-key-with-at-least-32-characters-long
+  secretKey: this-is-a-test-secret-key-with-at-least-32-characters-long
   access-token-expiration: 1800000 # 30분 (ms)
   refresh-token-expiration: 604800000 # 7일 (ms)
 
-relay:
-  grace-seconds: 2
-  give-up-seconds: 60
+security:
+  public-paths:
+    - /auth/login
+    - /auth/register
+    - /auth/refresh
+    - /ws-stomp/**
+    - /actuator/health
+    - /actuator/prometheus
+    - /swagger-ui/**
+    - /swagger-ui.html
+    - /v3/api-docs
+    - /v3/api-docs/**
 
 storage:
   endpoint: http://localhost:9000
@@ -32,5 +40,21 @@ storage:
   bucket: messenger
   max-size-bytes: 10485760 # 10MB
 
+tsid:
+  node: 0
+
 cors:
   allowed-origins: http://localhost:3000
+
+relay:
+  grace-seconds: 2
+  give-up-seconds: 60
+
+redis:
+  topic:
+    message: messenger:message
+    typing: messenger:typing
+    notification: messenger:notification
+  prefix:
+    blacklist: "blacklist:"
+    refresh: "refresh:"

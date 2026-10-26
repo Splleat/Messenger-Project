@@ -1,15 +1,18 @@
 package me.splleat.messengerproject.infrastructure.security;
 
+import me.splleat.messengerproject.common.property.RedisKeyPrefixProperties;
 import me.splleat.messengerproject.support.annotation.ContainerDataRedisTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ContainerDataRedisTest
 @Import(BlacklistTokenRepository.class)
+@EnableConfigurationProperties(RedisKeyPrefixProperties.class)
 class BlacklistTokenRepositoryTest {
 
     @Autowired

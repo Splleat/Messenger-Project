@@ -8,7 +8,7 @@ import me.splleat.messengerproject.common.util.StorageUrlMapper;
 import me.splleat.messengerproject.domain.message.Message;
 import me.splleat.messengerproject.domain.message.MessageType;
 import me.splleat.messengerproject.domain.user.UserProfile;
-import me.splleat.messengerproject.infrastructure.storage.StorageProperties;
+import me.splleat.messengerproject.common.property.StorageProperties;
 import me.splleat.messengerproject.interfaces.websocket.message.dto.MessageResponse;
 import me.splleat.messengerproject.support.annotation.ContainerDataJpaTest;
 import me.splleat.messengerproject.support.fixture.UserProfileFixture;

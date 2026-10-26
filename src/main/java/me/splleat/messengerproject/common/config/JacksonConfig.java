@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 @Configuration(proxyBeanMethods = false)
 public class JacksonConfig {
+
     @Bean
     JsonMapper jsonMapper() {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;

@@ -1,64 +1,37 @@
 package me.splleat.messengerproject.common.config;
 
+import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.common.property.CorsProperties;
+import me.splleat.messengerproject.common.property.SecurityProperties;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationEntryPoint;
 import me.splleat.messengerproject.infrastructure.security.JwtAuthenticationFilter;
 import me.splleat.messengerproject.infrastructure.security.JwtValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-    private static final String H2_CONSOLE_PATH = "/h2-console";
-
     private final JwtValidator jwtValidator;
+    private final PathMatcher pathMatcher;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final List<String> publicPaths;
-    private final boolean h2ConsoleEnabled;
-    private final List<String> allowedOrigins;
-
-    @Autowired
-    public SecurityConfig(
-            JwtValidator jwtValidator,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            @Value("${jwt.public-paths}") List<String> publicPaths,
-            @Value("${spring.h2.console.enabled:false}") boolean h2ConsoleEnabled,
-            @Value("${cors.allowed-origins}") List<String> allowedOrigins)
-    {
-        this.jwtValidator = jwtValidator;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.h2ConsoleEnabled = h2ConsoleEnabled;
-        this.allowedOrigins = allowedOrigins.stream()
-                .map(String::trim)
-                .toList();
-
-        List<String> paths = new ArrayList<>(publicPaths.stream()
-                .map(String::trim)
-                .toList());
-
-        if (h2ConsoleEnabled) {
-            paths.add(H2_CONSOLE_PATH);
-        }
-
-        this.publicPaths = List.copyOf(paths);
-    }
+    private final SecurityProperties securityProperties;
+    private final CorsProperties corsProperties;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -69,35 +42,23 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 .cors(Customizer.withDefaults())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtValidator, publicPaths), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtValidator, securityProperties, pathMatcher), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(handler -> handler
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> {
-                    auth
-                            .requestMatchers("/auth/login", "/auth/register", "/auth/refresh").permitAll()
-                            .requestMatchers("/ws-stomp/**").permitAll()
-                            .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").permitAll()
-                            .requestMatchers("/actuator/health", "/actuator/prometheus").permitAll();
-                    if (h2ConsoleEnabled) {
-                        auth.requestMatchers("/h2-console/**").permitAll();
-                    }
-                    auth.anyRequest().authenticated();
-                })
+                .authorizeHttpRequests(auth ->
+                    auth.requestMatchers(securityProperties.publicPaths().toArray(String[]::new)).permitAll()
+                            .anyRequest().authenticated())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
-        if (h2ConsoleEnabled) {
-            http.headers(headers -> headers
-                    .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
-        }
         return http.build();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedOrigins(corsProperties.allowedOrigins());
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

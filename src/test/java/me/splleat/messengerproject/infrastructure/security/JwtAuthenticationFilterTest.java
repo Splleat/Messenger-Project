@@ -1,10 +1,12 @@
 package me.splleat.messengerproject.infrastructure.security;
 
+import me.splleat.messengerproject.common.property.SecurityProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.util.AntPathMatcher;
 
 import java.util.List;
 
@@ -14,7 +16,8 @@ class JwtAuthenticationFilterTest {
 
     private final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(
             null,
-            List.of("/actuator/health", "/auth/login", "/swagger-ui")
+            new SecurityProperties(List.of("/actuator/health", "/auth/login", "/swagger-ui/**")),
+            new AntPathMatcher()
     );
 
     @ParameterizedTest

@@ -84,7 +84,7 @@ services:
       - .env
     environment:
       TZ: Asia/Seoul
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: dev
       TSID_NODE: ${TSID_NODE:-0}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-my_db}
       MYSQL_USER: ${MYSQL_USER:-user}

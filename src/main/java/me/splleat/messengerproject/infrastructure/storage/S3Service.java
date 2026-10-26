@@ -3,6 +3,7 @@ package me.splleat.messengerproject.infrastructure.storage;
 import lombok.RequiredArgsConstructor;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
+import me.splleat.messengerproject.common.property.StorageProperties;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignRequest;
 import me.splleat.messengerproject.interfaces.rest.attachment.dto.PresignResponse;
 import org.springframework.stereotype.Service;

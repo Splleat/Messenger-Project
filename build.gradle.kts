@@ -69,10 +69,6 @@ dependencies {
     implementation(libs.springdoc.openapi.webmvc.ui)
     runtimeOnly(libs.micrometer.registry.prometheus)
 
-    // --- 로컬 개발용 H2 (운영 jar에서 제외됨) ---
-    developmentOnly(libs.h2)
-    developmentOnly(libs.spring.boot.h2console)
-
     // --- 테스트 ---
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.webmvc.test)

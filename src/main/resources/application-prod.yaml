@@ -1,0 +1,6 @@
+storage:
+  region: ${STORAGE_REGION}
+  access-key: ${STORAGE_ACCESS_KEY}
+  secret-key: ${STORAGE_SECRET_KEY}
+  bucket: ${STORAGE_BUCKET}
+  max-size-bytes: 10485760 # 10MB

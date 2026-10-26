@@ -1,5 +1,7 @@
 package me.splleat.messengerproject.common.config;
 
+import lombok.RequiredArgsConstructor;
+import me.splleat.messengerproject.common.property.TopicProperties;
 import me.splleat.messengerproject.infrastructure.message.subscriber.RedisMessageSubscriber;
 import me.splleat.messengerproject.infrastructure.message.subscriber.RedisNotificationSubscriber;
 import me.splleat.messengerproject.infrastructure.message.subscriber.RedisTypingSubscriber;
@@ -12,25 +14,23 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 
 @Configuration
 @EnableRedisRepositories
+@RequiredArgsConstructor
 public class RedisConfig {
-
-    private static final String TOPIC = "messenger:message";
-    private static final String TYPING_TOPIC = "messenger:typing";
-    private static final String NOTIFICATION_TOPIC = "messenger:notification";
+    private final TopicProperties topicProperties;
 
     @Bean("messageTopic")
     ChannelTopic messageTopic() {
-        return new ChannelTopic(TOPIC);
+        return new ChannelTopic(topicProperties.message());
     }
 
     @Bean("typingTopic")
     ChannelTopic typingChannelTopic() {
-        return new ChannelTopic(TYPING_TOPIC);
+        return new ChannelTopic(topicProperties.typing());
     }
 
     @Bean("notificationTopic")
     ChannelTopic notificationTopic() {
-        return new ChannelTopic(NOTIFICATION_TOPIC);
+        return new ChannelTopic(topicProperties.notification());
     }
 
     @Bean

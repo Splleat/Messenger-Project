@@ -19,14 +19,11 @@ services:
       - .env
     environment:
       TZ: Asia/Seoul
-      SPRING_PROFILES_ACTIVE: docker
-      TSID_NODE: ${TSID_NODE:-0}
-      LOG_LEVEL: ${LOG_LEVEL:-INFO}
-      DDL_AUTO: ${DDL_AUTO:-validate}
-      DB_PORT: ${DB_PORT:-3306}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-my_db}
-      STORAGE_ENDPOINT: ""
-      STORAGE_REGION: ${S3_REGION:-ap-northeast-2}
+      SPRING_PROFILES_ACTIVE: prod
+      TSID_NODE: ${TSID_NODE}
+      DB_PORT: ${DB_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      STORAGE_REGION: ${S3_REGION}
       STORAGE_BUCKET: ${S3_BUCKET}
       CORS_ALLOWED_ORIGINS: ${FRONT_ORIGIN}
     depends_on:

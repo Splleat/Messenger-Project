@@ -8,19 +8,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.splleat.messengerproject.common.exception.BusinessException;
 import me.splleat.messengerproject.common.exception.ErrorCode;
+import me.splleat.messengerproject.common.property.SecurityProperties;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtValidator jwtValidator;
-    private final List<String> publicPaths;
+    private final SecurityProperties securityProperties;
+    private final PathMatcher pathMatcher;
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
@@ -28,8 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.debug("[요청 URL]: {} {}", request.getMethod(), path);
 
-        return publicPaths.stream()
-                .anyMatch(publicPath -> path.equals(publicPath) || path.startsWith(publicPath + "/"));
+        return securityProperties.publicPaths().stream()
+                .anyMatch(publicPath -> pathMatcher.match(publicPath, path));
     }
 
     @Override

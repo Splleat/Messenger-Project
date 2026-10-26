@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserPrincipal implements UserDetails {
-
     private final Long userId;
     private final boolean isAdmin;
 

@@ -1,8 +1,8 @@
-package me.splleat.messengerproject.infrastructure.storage;
+package me.splleat.messengerproject.common.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "storage")
+@ConfigurationProperties("storage")
 public record StorageProperties(
         String endpoint,
         String region,

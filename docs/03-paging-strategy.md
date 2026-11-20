@@ -1,17 +1,5 @@
 # 커서 기반 양방향 페이징 설계
 
----
-
-## 목차
-
-1. [배경 - 메시지 목록 조회](#1-배경---메시지-목록-조회)
-2. [TSID와 커서 페이징](#2-tsid와-커서-페이징)
-3. [메시지 서버의 조회 요구사항](#3-메시지-서버의-조회-요구사항)
-4. [양방향 커서 페이징 구현](#4-양방향-커서-페이징-구현)
-5. [결론](#5-결론)
-
----
-
 ## 1. 배경 - 메시지 목록 조회
 
 ### 1.1. 오프셋 페이징의 한계
@@ -96,7 +84,6 @@ API는 두 가지로 분리했다.
 
 1. 채널 입장 API (`ChannelEnterResult`): 최초 진입(`findByNewest`), 재진입(`findByAround`) 시 사용한다. React Query 초기값 설정을 위해 `hasPrev`, `hasNext`, `prevCursorId`, `nextCursorId`, `lastReadMessageId`를 함께 반환한다.
 
-* [[ChannelEnterResult.java](../src/main/java/me/splleat/messengerproject/application/channel/dto/ChannelEnterResult.java)]
     ```java
     public record ChannelEnterResult(
             List<MessageResponse> messages,
@@ -110,7 +97,6 @@ API는 두 가지로 분리했다.
 
 2. 스크롤 페이징 API (`ChannelMessagePageResult`): 스크롤로 이전 / 다음 메시지를 추가로 가져올 때 사용한다. 요청에 방향 정보를 같이 받기 때문에 방향은 명시하지 않는다.
 
-* [[ChannelMessagePageResult.java](../src/main/java/me/splleat/messengerproject/application/channel/dto/ChannelMessagePageResult.java)]
    ```java
     public record ChannelMessagePageResult(
         List<MessageResponse> messages,
@@ -121,7 +107,6 @@ API는 두 가지로 분리했다.
 
 공통 조회 로직은 `findBy()` 메서드로 추상화하고 각각의 조건에 따라 알맞은 파라미터를 넘겨준다.
 
-* [[MessageQueryRepository.java](../src/main/java/me/splleat/messengerproject/infrastructure/persistence/querydsl/MessageQueryRepository.java)]
 ```java
     private MessageSlice findBy(long channelId, Predicate predicate, OrderSpecifier<?> orderSpecifier, boolean reverse) {
         QUserProfile userProfile = QUserProfile.userProfile;

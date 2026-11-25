@@ -6,7 +6,7 @@
 
 메시지 저장과 발행의 원자성을 Outbox 패턴으로 보장하고, TSID 기반 커서 페이징과 Redis Pub/Sub 다중 인스턴스 브로드캐스트를 설계했습니다.
 
-**데모: [www.splleat.com](https://www.splleat.com)** · **API 문서: [Swagger](https://api.splleat.com/swagger-ui/index.html)** · **프론트엔드: [Messenger-Front](https://github.com/Splleat/Messenger-Front)**
+**프론트엔드: [Messenger-Front](https://github.com/Splleat/Messenger-Front)**
 
 ---
 
